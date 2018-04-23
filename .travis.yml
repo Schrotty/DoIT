@@ -1,8 +1,8 @@
 language: java
 sudo: false
 script: mvn clean test
- notifications:
-    slack: infhl:6UeFPwDv5ipdtuhRp9o6Df6s
+notifications:
+  slack: infhl:6UeFPwDv5ipdtuhRp9o6Df6s
 
 #jobs:
   #include:
