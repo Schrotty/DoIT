@@ -1,0 +1,7 @@
+Fixes #<issue>
+
+## Änderungen
+
+  -
+  -
+  -
