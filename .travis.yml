@@ -1,13 +1,17 @@
 language: java
+sudo: false
+script: mvn clean test
+ notifications:
+    slack: infhl:6UeFPwDv5ipdtuhRp9o6Df6s
 
-jobs:
-  include:
-    - stage: compile
-      script: mvn compile
-    - stage: test
-      script: mvn test
-    - stage: deploy
-      script: mvn package
+#jobs:
+  #include:
+    #- stage: compile
+    #  script: mvn compile
+    #- stage: test
+    #  script: mvn test
+    #- stage: deploy
+    #  script: mvn package
       #deploy:
       #  provider: releases
       #  api_key: OAUTH KEY
