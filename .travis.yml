@@ -2,22 +2,9 @@ language: java
 sudo: false
 script: mvn clean test
 notifications:
-  slack: infhl:6UeFPwDv5ipdtuhRp9o6Df6s
-
-#jobs:
-  #include:
-    #- stage: compile
-    #  script: mvn compile
-    #- stage: test
-    #  script: mvn test
-    #- stage: deploy
-    #  script: mvn package
-      #deploy:
-      #  provider: releases
-      #  api_key: OAUTH KEY
-      #  file_glob: true
-      #  file: dir/*
-      #  skip_cleanup: true
-      #  on:
-      #    branch: release
-      #    tags: true
+  slack:
+    rooms:
+      - secure: IV0ksoaZokLyZJN8O5p8eRsDw5huaEISP1a7cAR2loW6MC4V0/Pq+ZKnJeSP4Pz5Esloz7R4041pE4Z95YknF/TRAD4RHoJG4tQM2rBvOMLbhly9IUb7uaPZ2jBh4/ggjx3veuz//aF29gYCYv1LpL2CMKuKTjP/GwlzupQWu6J5HXz2fjhUnuAYkQvOtdee5qBazKgTUK67YHVDrNEjnqYiTaliNyAPK+p4BA3U7lsA8nQ7HmTZkiOdIUwv82zLN4miT3Vo1hhRlIal2l2IHm90f3ZoYZPF3uZpZraGfdm9g8qk0BNgAVj4POyan1jlqRICFdgIVoEQ6rz4pq7KJ6OLhS4cKgw4B9ja6AkcRLMm8E7O83ZjjP1MwmTxy3AwhWI/AagZ1dvewXdXAV4TtaFF7VlkTn0KGmnfhv8YKDXDCWKExAxB4naDnrfykUgVSgxt874C2XXoCgukIL+HMhP89X5kJI73fPJmEKqYJr7p79ItNKMCpqoGAKty5rtJRtW6V+cZCStq8O1SIohLO99zYpjQzagBqgLESQ1HOfMQw+DMjszVJPd07Fu889dcGm95//XsthAjX18iWlP1BQWvlZ7FE57JWy78eOZrsFf8+3RQWWfHd1w4XjNELSyY0UFw5gxkUVEc5Sy1IqrS6Dtii74DRL6wCvQI2cxbg3Q=
+    template:
+      - "%{repository_slug} (%{commit}) : %{message} "
+      - "Build details: %{build_url}"
