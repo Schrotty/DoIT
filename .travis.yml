@@ -1,10 +1,31 @@
 language: java
 sudo: false
-script: mvn clean test
+jobs:
+  include:
+  - stage: compile
+    script: mvn clean compile
+  - stage: test
+    script:
+    - mvn clean test
+    - mvn cobertura:cobertura
+    after_success:
+    - bash <(curl -s https://codecov.io/bash)
+  - stage: deploy
+    script: mvn clean package
+    deploy:
+      provider: releases
+      api_key:
+        secure: pNHmfkfP3hqTFwlGGi2juUcV7mHlughSrecEfuzeh2XuzNZncwsLax6JdnNJxTqlE0TR7AdJEgOt1cb4c/wFSby70W2usCsmtTkJfVrsyrhCpxPlTln1iKoIcNz57HAJCXQFUo4NKYBniqCRwAZgnWQvmaNwauOTlGBWwNyl//DKYRWt8FKMTe9OHMt3n8dSitGF2WIVqAYPq2Pq1Rw9+vGSp/ACEdcN5B2ifW5Z2oQxGjHmLgr73rF/V4k17XEDi7U1cFFC88pYhbEmIlT+0gca/WWiWF/qegoIIbTSH2uO00xDuYDPR7WR/HhnuYqsq5n+xiEFiy6ZcTymKkZj4xdvfFxJQnEL0YAHefBzVMA36knERLoffawFM1Uv+4+Eksn+Ij5v/6w2Y50vR0FKY7SREs5CZrQ7EbzmClJjwNniMIpKEh0kfS/TQ2oq2Psvytr6XxBCAPumBknXTLoZRD+ReWFT1apQqp9tWmUv8eiPlP8GO5oCDHKWU/I4YEMnmBQqIss0fI85P+D6xedaCAtnZytqiA2BLkIBd2r2M6bNrNf3Z4N/c3gIGev7sgngFgaGrNsrgrf1kB3GikfSDspH1jX3HELTzyaIdTITjoWE6Fa19VOHESbeYF35qFsgmY7x7FK42fR0Y0BQmSrI6t+pTD01NY83NB7RLrvp194=
+      file_glob: true
+      file: doIt/DoIt/*
+      skip_cleanup: true
+      on:
+        repo: Schrotty/DoIT
+        tags: true
 notifications:
   slack:
     rooms:
-      - secure: IV0ksoaZokLyZJN8O5p8eRsDw5huaEISP1a7cAR2loW6MC4V0/Pq+ZKnJeSP4Pz5Esloz7R4041pE4Z95YknF/TRAD4RHoJG4tQM2rBvOMLbhly9IUb7uaPZ2jBh4/ggjx3veuz//aF29gYCYv1LpL2CMKuKTjP/GwlzupQWu6J5HXz2fjhUnuAYkQvOtdee5qBazKgTUK67YHVDrNEjnqYiTaliNyAPK+p4BA3U7lsA8nQ7HmTZkiOdIUwv82zLN4miT3Vo1hhRlIal2l2IHm90f3ZoYZPF3uZpZraGfdm9g8qk0BNgAVj4POyan1jlqRICFdgIVoEQ6rz4pq7KJ6OLhS4cKgw4B9ja6AkcRLMm8E7O83ZjjP1MwmTxy3AwhWI/AagZ1dvewXdXAV4TtaFF7VlkTn0KGmnfhv8YKDXDCWKExAxB4naDnrfykUgVSgxt874C2XXoCgukIL+HMhP89X5kJI73fPJmEKqYJr7p79ItNKMCpqoGAKty5rtJRtW6V+cZCStq8O1SIohLO99zYpjQzagBqgLESQ1HOfMQw+DMjszVJPd07Fu889dcGm95//XsthAjX18iWlP1BQWvlZ7FE57JWy78eOZrsFf8+3RQWWfHd1w4XjNELSyY0UFw5gxkUVEc5Sy1IqrS6Dtii74DRL6wCvQI2cxbg3Q=
+    - secure: IV0ksoaZokLyZJN8O5p8eRsDw5huaEISP1a7cAR2loW6MC4V0/Pq+ZKnJeSP4Pz5Esloz7R4041pE4Z95YknF/TRAD4RHoJG4tQM2rBvOMLbhly9IUb7uaPZ2jBh4/ggjx3veuz//aF29gYCYv1LpL2CMKuKTjP/GwlzupQWu6J5HXz2fjhUnuAYkQvOtdee5qBazKgTUK67YHVDrNEjnqYiTaliNyAPK+p4BA3U7lsA8nQ7HmTZkiOdIUwv82zLN4miT3Vo1hhRlIal2l2IHm90f3ZoYZPF3uZpZraGfdm9g8qk0BNgAVj4POyan1jlqRICFdgIVoEQ6rz4pq7KJ6OLhS4cKgw4B9ja6AkcRLMm8E7O83ZjjP1MwmTxy3AwhWI/AagZ1dvewXdXAV4TtaFF7VlkTn0KGmnfhv8YKDXDCWKExAxB4naDnrfykUgVSgxt874C2XXoCgukIL+HMhP89X5kJI73fPJmEKqYJr7p79ItNKMCpqoGAKty5rtJRtW6V+cZCStq8O1SIohLO99zYpjQzagBqgLESQ1HOfMQw+DMjszVJPd07Fu889dcGm95//XsthAjX18iWlP1BQWvlZ7FE57JWy78eOZrsFf8+3RQWWfHd1w4XjNELSyY0UFw5gxkUVEc5Sy1IqrS6Dtii74DRL6wCvQI2cxbg3Q=
     template:
-      - "%{repository_slug} (%{commit}) : %{message} "
-      - "Build details: %{build_url}"
+    - Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch}
+      by %{author} %{result} in %{duration}
