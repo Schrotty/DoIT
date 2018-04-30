@@ -21,6 +21,8 @@
 * Passend zu einer Änderung sind auch entsprechende Tests zu schreiben.
 * Vor dem commiten ist sicherzustellen das der Code sich kompilieren lässt und kein Test fehlschlägt.
 
-## Tests
-* Für jede geschriebene Methode sind passende Unit Tests zu schreiben
+## Tests & Code Coverage
+* Für jede geschriebene Methode sind passende Unit Tests zu schreiben.
+    * Dabei gilt es jede Methode soweit wie möglich abzudecken.
+    * Klassen und Methoden die keine tatsächliche Funktionalität halten (UI-Klassen bzw. Views), können ignoriert werden und werden auch im Code Coverage nicht berücksichtigt.
 * Für UI-Änderungen sind entsprechende UI-Tests zu schreiben. Hier ist lediglich ein positiv Test nötig.
