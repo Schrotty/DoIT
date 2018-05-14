@@ -1,2 +1,5 @@
 ignore:
+  - "src/main/java/de/swtproject/doit/Main.java"
+  - "src/main/java/de/swtproject/doit/core/FilterType.java"
+  - "src/main/java/de/swtproject/doit/core/IntervalType.java"
   - "src/main/java/de/swtproject/doit/gui/.*"  # ignore folders and all its contents
