@@ -15,6 +15,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class DatabaseManagerTest {
 
+    @org.junit.BeforeClass
+    public static void before() throws SQLException {
+        DatabaseManager.phoenix();
+    }
+
     @org.junit.After
     public void tearDown() throws SQLException {
         DatabaseManager.phoenix();
