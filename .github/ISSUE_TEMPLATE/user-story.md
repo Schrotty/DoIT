@@ -1,16 +1,7 @@
 ---
 name: User Story
-about: Describe this issue template's purpose here.
+about: User Story
 
 ---
 
-| Anwendungsfall | - |
-| --------------------------| ------------- |
-| Kurzbeschreibung             | - |
-| Akteur          | - |
-| Priorität | - |
-| Vorbedingung         | - |
-| Normalverlauf                   | - |
-| Alternativablauf                 | - |
-| Qualitätsanforderungen     | - |
-| Nachbedinungen               | - |
+Als <Rolle> möchte ich <Ziel/Wunsch>, um <Nutzen>
