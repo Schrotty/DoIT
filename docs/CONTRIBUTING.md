@@ -26,3 +26,14 @@
     * Dabei gilt es jede Methode soweit wie möglich abzudecken.
     * Klassen und Methoden die keine tatsächliche Funktionalität halten (UI-Klassen bzw. Views), können ignoriert werden und werden auch im Code Coverage nicht berücksichtigt.
 * Für UI-Änderungen sind entsprechende UI-Tests zu schreiben. Hier ist lediglich ein positiv Test nötig.
+
+## Definition of Done (User Story)
+* Anforderungen der User Story erfüllt
+* Unit-Tests geschrieben und grün
+* Code wurde vollständig dokumentiert
+* Product Owner gibt grünes Licht
+
+## Definition of Done (Sprint)
+* Alle geplanten User Stories wurden erledigt
+* Alle Unit-Tests laufen grün
+* Alle Fehler gefixt
