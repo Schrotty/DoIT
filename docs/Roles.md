@@ -2,7 +2,7 @@
 | Role                      | Person        |
 | --------------------------| ------------- |
 | Product Owner             | Martin D.     |
-| Builder Engineer          | Ruben M.      |
+| Build Engineer            | Ruben M.      |
 | Head of Quality Assurance | Timo S.       |
 | Quality Assurance         | Konstantin W. |
 | Lead Developer            | Niklas K.     |
@@ -15,7 +15,7 @@
 | Role                      | Person        |
 | --------------------------| ------------- |
 | Product Owner             | -             |
-| Builder Engineer          | -             |
+| Build Engineer            | -             |
 | Head of Quality Assurance | -             |
 | Quality Assurance         | -             |
 | Lead Developer            | -             |
@@ -27,7 +27,7 @@
 | Role                      | Person        |
 | --------------------------| ------------- |
 | Product Owner             | -             |
-| Builder Engineer          | -             |
+| Build Engineer            | -             |
 | Head of Quality Assurance | -             |
 | Quality Assurance         | -             |
 | Lead Developer            | -             |
