@@ -62,6 +62,12 @@ public class ToDo {
     private Date notifyPoint;
 
     /**
+     * The priority.
+     */
+    @DatabaseField()
+    private Priority priority;
+
+    /**
      * Instantiates a new To do.
      */
     ToDo() {
@@ -75,6 +81,7 @@ public class ToDo {
      */
     public ToDo(String title) {
         this.title = title;
+        this.priority = Priority.DEFAULT;
     }
 
     /**
@@ -193,6 +200,24 @@ public class ToDo {
      */
     public void setNotifyPoint(Date notifyPoint) {
         this.notifyPoint = notifyPoint;
+    }
+
+    /**
+     * Get the priority.
+     *
+     * @return the priority
+     */
+    public Priority getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets the priority.
+     *
+     * @param priority the priority
+     */
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     /**
