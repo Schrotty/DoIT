@@ -3,6 +3,7 @@ package de.swtproject.doit.gui.main;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
+import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import de.swtproject.doit.gui.filter.FilterController;
 
 import javax.swing.*;
@@ -44,13 +45,14 @@ public class MainController {
     private void fillToDoList() {
         try {
             ToDo to = null;
-            DefaultListModel model = new DefaultListModel();
+            DefaultListModel<ToDo> model = new DefaultListModel<>();
             for (ToDo todo : DatabaseManager.getCollection(true)) {
                 if (to == null) to = todo;
 
                 model.addElement(todo);
             }
 
+            mainView.todoTable.setCellRenderer(new PriorityCellRenderer());
             mainView.todoTable.setModel(model);
             displayToDo(to);
         } catch (SQLException e) {
@@ -69,6 +71,7 @@ public class MainController {
 
             mainView.title.setText(todo.getTitle());
             mainView.description.setText(todo.getDescription());
+            mainView.priorityLabel.setText(todo.getPriority().name);
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
@@ -76,17 +79,13 @@ public class MainController {
     }
 
     /**
-     * Update the JList with {@link ToDo}s with a given one.
-     *
-     * @param toDo the given {@link ToDo}
+     * Remove all {@link ToDo}s from list
+     * and re-fill list with todos, now
+     * including the recently added one.
      */
     public void updateList(ToDo toDo) {
-        if (toDo != null) {
-            DefaultListModel model = (DefaultListModel) mainView.todoTable.getModel();
-            model.addElement(toDo);
-
-            displayToDo(toDo);
-        }
+        mainView.todoTable.removeAll();
+        fillToDoList();
     }
 
     /**

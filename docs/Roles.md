@@ -14,13 +14,13 @@
 ## Rollen - 2. Woche
 | Role                      | Person        |
 | --------------------------| ------------- |
-| Product Owner             | -             |
-| Build Engineer            | -             |
-| Head of Quality Assurance | -             |
-| Quality Assurance         | -             |
-| Lead Developer            | -             |
-| Developer                 | -             |
-| Developer                 | -             |	
+| Product Owner             | Jannik S.     |
+| Build Engineer            | Thomas U.     |
+| Head of Quality Assurance | Martin D.     |
+| Quality Assurance         | Ruben M.      |
+| Lead Developer            | Timo S.       |
+| Developer                 | Konastantin W.|
+| Developer                 | Niklas K.     |	
 
 
 ## Rollen -  3. Woche
