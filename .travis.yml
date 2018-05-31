@@ -14,10 +14,12 @@ jobs:
     script: mvn package
     deploy:
       provider: releases
+      draft: true
+      prerelease: true
       api_key:
         secure: pNHmfkfP3hqTFwlGGi2juUcV7mHlughSrecEfuzeh2XuzNZncwsLax6JdnNJxTqlE0TR7AdJEgOt1cb4c/wFSby70W2usCsmtTkJfVrsyrhCpxPlTln1iKoIcNz57HAJCXQFUo4NKYBniqCRwAZgnWQvmaNwauOTlGBWwNyl//DKYRWt8FKMTe9OHMt3n8dSitGF2WIVqAYPq2Pq1Rw9+vGSp/ACEdcN5B2ifW5Z2oQxGjHmLgr73rF/V4k17XEDi7U1cFFC88pYhbEmIlT+0gca/WWiWF/qegoIIbTSH2uO00xDuYDPR7WR/HhnuYqsq5n+xiEFiy6ZcTymKkZj4xdvfFxJQnEL0YAHefBzVMA36knERLoffawFM1Uv+4+Eksn+Ij5v/6w2Y50vR0FKY7SREs5CZrQ7EbzmClJjwNniMIpKEh0kfS/TQ2oq2Psvytr6XxBCAPumBknXTLoZRD+ReWFT1apQqp9tWmUv8eiPlP8GO5oCDHKWU/I4YEMnmBQqIss0fI85P+D6xedaCAtnZytqiA2BLkIBd2r2M6bNrNf3Z4N/c3gIGev7sgngFgaGrNsrgrf1kB3GikfSDspH1jX3HELTzyaIdTITjoWE6Fa19VOHESbeYF35qFsgmY7x7FK42fR0Y0BQmSrI6t+pTD01NY83NB7RLrvp194=
       file_glob: true
-      file: doIt/DoIt/*
+      file: $TRAVIS_BUILD_DIR/target/doIt/*
       skip_cleanup: true
       on:
         repo: Schrotty/DoIT
