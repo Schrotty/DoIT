@@ -1,14 +1,51 @@
 package de.swtproject.doit.core;
 
-enum Priority {
-    URGENT("#9D2933"),
-    IMPORTANT("#F9690E"),
-    DEFAULT("#EEEEEE"),
-    UNIMPORTANT("##4DAF7C");
+/**
+ * Enum for Task Priority.
+ *
+ * @author Ruben Maurer
+ * @version 1.0
+ */
+public enum Priority {
 
-    private final String color;
+    /**
+     * Urgent priority.
+     */
+    URGENT("#9D2933", "Dringend"),
 
-    Priority(String color) {
+    /**
+     * Important priority.
+     */
+    IMPORTANT("#F9690E", "Wichtig"),
+
+    /**
+     * Default priority.
+     */
+    DEFAULT("#FFFFFF", "Normal"),
+
+    /**
+     * Unimportant priority.
+     */
+    UNIMPORTANT("#4DAF7C", "Unwichtig");
+
+    /**
+     * The Name.
+     */
+    public final String name;
+
+    /**
+     * The Color.
+     */
+    public final String color;
+
+    /**
+     * Instantiates a new Priority.
+     *
+     * @param color the color
+     * @param name  the name
+     */
+    Priority(String color, String name) {
         this.color = color;
+        this.name = name;
     }
 }

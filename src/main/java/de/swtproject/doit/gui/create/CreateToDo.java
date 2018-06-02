@@ -2,7 +2,9 @@ package de.swtproject.doit.gui.create;
 
 import com.toedter.calendar.JDateChooser;
 import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.Priority;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
 
 
@@ -15,7 +17,6 @@ public class CreateToDo extends javax.swing.JDialog {
      * The Mainsite.
      */
     private static final int fontsize = 16;
-
     /**
      * The Cancel button.
      */
@@ -81,6 +82,16 @@ public class CreateToDo extends javax.swing.JDialog {
      * The Todo create label.
      */
     private javax.swing.JLabel todoCreateLabel;
+
+    /**
+     * The priority select box.
+     */
+    public JComboBox<String> prioritySelect;
+
+    /**
+     * The priority select box panel.
+     */
+    public JPanel priorityPanel;
     // End of variables declaration
 
     /**
@@ -112,6 +123,8 @@ public class CreateToDo extends javax.swing.JDialog {
         intervalPanel = new javax.swing.JPanel();
         intervalComboBox = new javax.swing.JComboBox<>();
         todoCreateLabel = new javax.swing.JLabel();
+        prioritySelect = new javax.swing.JComboBox<>();
+        priorityPanel = new javax.swing.JPanel();
 
         setTitle("Create ToDo");
 
@@ -207,6 +220,27 @@ public class CreateToDo extends javax.swing.JDialog {
                         .addComponent(intervalComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
         );
 
+        //
+        priorityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder
+                        (javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102),
+                                null, null), "Interval", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
+
+        prioritySelect.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        prioritySelect.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
+                null, new java.awt.Color(102, 102, 102), null, null));
+
+        javax.swing.GroupLayout priorityPanelLayout = new javax.swing.GroupLayout(priorityPanel);
+        priorityPanel.setLayout(priorityPanelLayout);
+        priorityPanelLayout.setHorizontalGroup(
+                priorityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(prioritySelect, 0, 315, Short.MAX_VALUE)
+        );
+        priorityPanelLayout.setVerticalGroup(
+                priorityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(prioritySelect, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+        //
         dateToStartButton.setBorder(javax.swing.BorderFactory.createTitledBorder
                 (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
                                 null, new java.awt.Color(102, 102, 102),
@@ -237,7 +271,8 @@ public class CreateToDo extends javax.swing.JDialog {
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(titlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(milestonePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(milestonePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(priorityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(7, 7, 7)
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(intervalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,6 +298,9 @@ public class CreateToDo extends javax.swing.JDialog {
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(milestonePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(intervalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(4, 4, 4)
+                                .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(priorityPanel, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
@@ -290,6 +328,12 @@ public class CreateToDo extends javax.swing.JDialog {
         for (IntervalType intervalType : IntervalType.values()) {
             intervalComboBox.addItem(
                     String.format("%s%s", intervalType.toString().substring(0, 1), intervalType.toString().substring(1).toLowerCase())
+            );
+        }
+
+        for (Priority priority : Priority.values()) {
+            prioritySelect.addItem(
+                    String.format("%s%s", priority.toString().substring(0, 1), priority.toString().substring(1).toLowerCase())
             );
         }
 
