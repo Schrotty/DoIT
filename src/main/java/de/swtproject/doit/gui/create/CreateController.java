@@ -1,6 +1,7 @@
 package de.swtproject.doit.gui.create;
 
 import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.main.MainController;
@@ -101,6 +102,7 @@ public class CreateController {
                     ToDo todo = ToDo.create(createView.titleTextField.getText());
 
                     todo.setDescription(createView.descriptionTextArea.getText());
+                    todo.setPriority(Priority.valueOf(createView.prioritySelect.getSelectedItem().toString().toUpperCase()));
                     todo.setInterval(IntervalType.valueOf(createView.intervalComboBox.getSelectedItem().toString().toUpperCase()));
                     todo.setStart(createView.dateToStartButton.getDate());
                     todo.setDeadline(createView.deadlineButton.getDate());
