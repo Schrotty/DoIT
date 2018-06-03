@@ -119,7 +119,11 @@ public class DatabaseManager {
         PreparedQuery<ToDo> preparedQuery = queryBuilder.prepare();
 
         selectArg.setValue(loadProduction);
-        return self.todoAccess.query(preparedQuery);
+        List<ToDo> todos = self.todoAccess.query(preparedQuery);
+
+        todos.sort((o1, o2) -> Integer.compare(o2.getPriority().weight, o1.getPriority().weight));
+
+        return todos;
     }
 
     /**
