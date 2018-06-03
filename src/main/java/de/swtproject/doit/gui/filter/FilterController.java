@@ -1,12 +1,10 @@
 package de.swtproject.doit.gui.filter;
 
-import com.toedter.calendar.DateUtil;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.FilterType;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.gui.main.MainController;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -59,7 +57,6 @@ public class FilterController {
         filterView.setCancelButtonListener(new CancelButtonListener());
         filterView.setSubmitButtonListener(new SubmitButtonListener());
         filterView.setComboBoxListener(new ComboBoxListener());
-        filterView.setValueButtonListener(new ValueButtonListener());
     }
 
     class CancelButtonListener implements ActionListener {
@@ -107,7 +104,7 @@ public class FilterController {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     DatabaseManager.getCollection(true).forEach(t -> {
                         if (null != t.getStart()) {
-                            if (sdf.format(t.getStart()).equals(sdf.format(filterView.date.getDate()))) {
+                            if (sdf.format(t.getStart()).equals(sdf.format(filterView.dateButton.getDate()))) {
                                 toDos.add(t);
                             }
                         }
@@ -118,7 +115,7 @@ public class FilterController {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     DatabaseManager.getCollection(true).forEach(t -> {
                         if (null != t.getDeadline()) {
-                            if (sdf.format(t.getDeadline()).equals(sdf.format(filterView.date.getDate()))) {
+                            if (sdf.format(t.getDeadline()).equals(sdf.format(filterView.dateButton.getDate()))) {
                                 toDos.add(t);
                             }
                         }
@@ -137,17 +134,21 @@ public class FilterController {
                 ex.printStackTrace();
             }
 
-            try {
-                if (filterView.getComboBoxChoice().equals("") && null == filterView.date.getDate()) {
-                    parent.alterToDoList(DatabaseManager.getCollection(true));
-                } else {
-                    parent.alterToDoList(toDos);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            if (filterView.getComboBoxChoice().equals("") && null == filterView.dateButton.getDate()) {
+                clearFilter();
+            } else {
+                parent.alterToDoList(toDos);
             }
 
             filterView.dispose();
+        }
+
+        private void clearFilter() {
+            try {
+                parent.alterToDoList(DatabaseManager.getCollection(true));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -164,39 +165,21 @@ public class FilterController {
          *
          * @param e the event
          */
+        @SuppressWarnings("ConstantConditions")
         @Override
         public void actionPerformed(ActionEvent e) {
-            String choice = (String) ((JComboBox) e.getSource()).getSelectedItem();
+            String choice = (String) filterView.chooseComboBox.getSelectedItem();
             filterView.setComboBoxChoice(choice);
 
             if (choice.equals(FilterType.DEADLINE.getName()) || choice.equals(FilterType.START.getName())) {
                 filterView.valueTextField.setVisible(false);
                 filterView.valuePanel.setVisible(false);
-                filterView.date.setVisible(true);
+                filterView.dateButton.setVisible(true);
             } else {
                 filterView.valueTextField.setVisible(true);
                 filterView.valuePanel.setVisible(true);
-                filterView.date.setVisible(false);
+                filterView.dateButton.setVisible(false);
             }
-        }
-    }
-
-    /**
-     * Listener for clicking the ComboBox
-     *
-     * @author Jannik Schwardt
-     * @version 1.0
-     * @since 0.2
-     */
-    class ValueButtonListener implements ActionListener {
-        /**
-         * Invoked when an action occurs.
-         *
-         * @param e the event
-         */
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
         }
     }
 }

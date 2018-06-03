@@ -3,13 +3,10 @@ package de.swtproject.doit.gui.filter;
 
 import com.toedter.calendar.JDateChooser;
 import de.swtproject.doit.core.FilterType;
-import de.swtproject.doit.gui.main.Mainsite;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.EnumSet;
-import java.util.Objects;
 
 import static de.swtproject.doit.gui.main.Mainsite.fontsize;
 
@@ -19,15 +16,10 @@ import static de.swtproject.doit.gui.main.Mainsite.fontsize;
  */
 public class Filter extends javax.swing.JFrame {
 
-    /**
-     * The Mainsite.
-     */
-    protected Mainsite mainsite;
-
+// Variables declaration - do not modify
     /**
      * The Apply button.
      */
-// Variables declaration - do not modify
     private javax.swing.JButton applyButton;
     /**
      * The Cancel button.
@@ -36,7 +28,7 @@ public class Filter extends javax.swing.JFrame {
     /**
      * The Choose combo box.
      */
-    private javax.swing.JComboBox<String> chooseComboBox;
+    protected javax.swing.JComboBox<String> chooseComboBox;
     /**
      * The Filter panel.
      */
@@ -46,18 +38,17 @@ public class Filter extends javax.swing.JFrame {
      */
     private javax.swing.JPanel mainpanel;
     /**
-     * The Value button.
+     * The Date Chooser
      */
-//    private javax.swing.JButton valueButton;
-     JDateChooser date;
+     protected JDateChooser dateButton;
     /**
      * The Value panel.
      */
-     javax.swing.JPanel valuePanel;
+     protected javax.swing.JPanel valuePanel;
     /**
      * The Value text field.
      */
-     javax.swing.JTextField valueTextField;
+     protected javax.swing.JTextField valueTextField;
     // End of variables declaration
 
     private String choice;
@@ -73,7 +64,7 @@ public class Filter extends javax.swing.JFrame {
     /**
      * Init components.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
@@ -82,8 +73,8 @@ public class Filter extends javax.swing.JFrame {
         chooseComboBox = new javax.swing.JComboBox<>();
         valuePanel = new javax.swing.JPanel();
         valueTextField = new javax.swing.JTextField();
-//        valueButton = new javax.swing.JButton();
-        date = new JDateChooser();
+
+        dateButton = new JDateChooser();
         cancelButton = new javax.swing.JButton();
         applyButton = new javax.swing.JButton();
 
@@ -125,15 +116,12 @@ public class Filter extends javax.swing.JFrame {
                         .addComponent(valueTextField)
         );
 
-//        valueButton.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/calendar.png")))); // NOI18N
-//        valueButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null));
-
-        date.setBorder(javax.swing.BorderFactory.createTitledBorder
+        dateButton.setBorder(javax.swing.BorderFactory.createTitledBorder
                 (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
                                 null, new java.awt.Color(102, 102, 102),
                                 null, null), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                         javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
-        date.setVisible(false);
+        dateButton.setVisible(false);
 
         javax.swing.GroupLayout mainpanelLayout = new javax.swing.GroupLayout(mainpanel);
         mainpanel.setLayout(mainpanelLayout);
@@ -146,7 +134,7 @@ public class Filter extends javax.swing.JFrame {
                                         .addGroup(mainpanelLayout.createSequentialGroup()
                                                 .addComponent(valuePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addComponent(dateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())
         );
         mainpanelLayout.setVerticalGroup(
@@ -156,7 +144,7 @@ public class Filter extends javax.swing.JFrame {
                                 .addComponent(filterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(57, 57, 57)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(dateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(valuePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(0, 30, Short.MAX_VALUE))
         );
@@ -216,15 +204,6 @@ public class Filter extends javax.swing.JFrame {
      */
     public void setSubmitButtonListener(ActionListener e) {
         applyButton.addActionListener(e);
-    }
-
-    /**
-     * Choose combo
-     *
-     * @param e the evt
-     */
-    public void setValueButtonListener(ActionListener e) {
-//        valueButton.addActionListener(e);
     }
 
     /**
