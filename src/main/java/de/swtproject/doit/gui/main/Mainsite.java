@@ -461,4 +461,8 @@ public class Mainsite extends javax.swing.JFrame {
     public void setToDoTabelListener(ListSelectionListener e) {
         todoTable.addListSelectionListener(e);
     }
+
+    public void setCreateMilestoneListener(ActionListener e) {
+        createMilestoneMenu.addActionListener(e);
+    }
 }

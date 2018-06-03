@@ -3,6 +3,7 @@ package de.swtproject.doit.gui.main;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
+import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -100,6 +101,7 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setCreateMilestoneListener(new OpenCreateMilestoneViewListener(this));
     }
 
     /**
@@ -118,6 +120,25 @@ public class MainController {
 
         public void actionPerformed(ActionEvent e) {
             CreateController.showView(parent);
+        }
+    }
+
+    /**
+     * Listener for clicking the openCreateMilestoneButton.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     * @since 0.2
+     */
+    class OpenCreateMilestoneViewListener implements ActionListener {
+        private MainController parent;
+
+        OpenCreateMilestoneViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            CreateMilestoneController.showView(parent);
         }
     }
 
