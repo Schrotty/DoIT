@@ -1,6 +1,9 @@
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
+import org.junit.After;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -16,6 +19,11 @@ public class ToDoTest {
     public void beforeEach() throws SQLException {
         todo = ToDo.create("task");
         DatabaseManager.storeToDo(todo);
+    }
+
+    @After
+    public void after() throws SQLException {
+        DatabaseManager.phoenix();
     }
 
     @org.junit.Test
@@ -58,6 +66,15 @@ public class ToDoTest {
 
         todo.setNotifyPoint(d);
         assertEquals(d, todo.getNotifyPoint());
+    }
+
+    @Test
+    public void priorityTest() {
+        ToDo task = ToDo.create("Test");
+        assertEquals(Priority.DEFAULT.name, task.getPriority().name);
+
+        task.setPriority(Priority.URGENT);
+        assertEquals(Priority.URGENT.name, task.getPriority().name);
     }
 
     @org.junit.Test

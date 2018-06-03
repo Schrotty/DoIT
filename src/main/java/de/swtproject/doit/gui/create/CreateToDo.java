@@ -220,10 +220,10 @@ public class CreateToDo extends javax.swing.JDialog {
                         .addComponent(intervalComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
         );
 
-        //
+
         priorityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder
                         (javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102),
-                                null, null), "Interval", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                                null, null), "Priority", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
 
         prioritySelect.setFont(new java.awt.Font("Tahoma", 1, fontsize));
@@ -240,7 +240,7 @@ public class CreateToDo extends javax.swing.JDialog {
                 priorityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(prioritySelect, javax.swing.GroupLayout.Alignment.TRAILING)
         );
-        //
+
         dateToStartButton.setBorder(javax.swing.BorderFactory.createTitledBorder
                 (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
                                 null, new java.awt.Color(102, 102, 102),

@@ -9,16 +9,6 @@ package de.swtproject.doit.core;
 public enum Priority {
 
     /**
-     * Urgent priority.
-     */
-    URGENT("#9D2933", "Dringend"),
-
-    /**
-     * Important priority.
-     */
-    IMPORTANT("#F9690E", "Wichtig"),
-
-    /**
      * Default priority.
      */
     DEFAULT("#FFFFFF", "Normal"),
@@ -26,7 +16,17 @@ public enum Priority {
     /**
      * Unimportant priority.
      */
-    UNIMPORTANT("#4DAF7C", "Unwichtig");
+    UNIMPORTANT("#4DAF7C", "Unwichtig"),
+
+    /**
+     * Important priority.
+     */
+    IMPORTANT("#F9690E", "Wichtig"),
+
+    /**
+     * Urgent priority.
+     */
+    URGENT("#9D2933", "Dringend");
 
     /**
      * The Name.
