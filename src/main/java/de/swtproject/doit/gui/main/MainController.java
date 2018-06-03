@@ -3,6 +3,7 @@ package de.swtproject.doit.gui.main;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
+import de.swtproject.doit.gui.filter.FilterController;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Controller for the {@link Mainsite}.
@@ -88,6 +90,24 @@ public class MainController {
     }
 
     /**
+     * Alter the list
+     * and display them in a JList.
+     */
+    public void alterToDoList(List<ToDo> toDos) {
+        ToDo to = null;
+        DefaultListModel model = new DefaultListModel();
+        for (ToDo toDo : toDos) {
+            if (to == null)
+                to = toDo;
+
+            model.addElement(toDo);
+        }
+
+        mainView.todoTable.setModel(model);
+        displayToDo(to);
+    }
+
+    /**
      * The the managed view.
      */
     public static void showView() {
@@ -100,6 +120,7 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setFilterFrameListener(new FilterViewListener(this));
     }
 
     /**
@@ -137,7 +158,19 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
+        }
+    }
+
+    class FilterViewListener implements ActionListener {
+        private MainController parent;
+
+        FilterViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            FilterController.showView(parent);
         }
     }
 }

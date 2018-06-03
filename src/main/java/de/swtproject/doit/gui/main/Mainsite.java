@@ -1,6 +1,6 @@
 package de.swtproject.doit.gui.main;
 
-import de.swtproject.doit.gui.Filter;
+import de.swtproject.doit.gui.filter.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
 
 import javax.swing.*;
@@ -460,5 +460,9 @@ public class Mainsite extends javax.swing.JFrame {
 
     public void setToDoTabelListener(ListSelectionListener e) {
         todoTable.addListSelectionListener(e);
+    }
+
+    public void setFilterFrameListener(ActionListener e) {
+        filterButton.addActionListener(e);
     }
 }

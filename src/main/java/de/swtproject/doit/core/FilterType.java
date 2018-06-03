@@ -8,30 +8,30 @@ public enum FilterType {
     /**
      * Title filter type.
      */
-    TITLE,
+    TITLE("Title"),
 
     /**
-     * Timespan filter type.
+     * Start Date filter Type
      */
-    TIMESPAN,
+    START("Date to Start"),
+
+    /**
+     * Deadline filter type.
+     */
+    DEADLINE("Deadline"),
 
     /**
      * Day filter type.
      */
-    DAY,
+    PRIORITY("Priority");
 
-    /**
-     * Week filter type.
-     */
-    WEEK,
+    private String name;
 
-    /**
-     * Month filter type.
-     */
-    MONTH,
+    FilterType(String name) {
+        this.name = name;
+    }
 
-    /**
-     * Year filter type.
-     */
-    YEAR
+    public String getName() {
+        return name;
+    }
 }
