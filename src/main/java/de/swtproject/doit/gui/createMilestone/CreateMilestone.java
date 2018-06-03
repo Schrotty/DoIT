@@ -3,6 +3,7 @@ package de.swtproject.doit.gui.createMilestone;
 import com.toedter.calendar.JDateChooser;
 import de.swtproject.doit.core.IntervalType;
 
+
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.event.ActionListener;
@@ -114,7 +115,9 @@ public class CreateMilestone extends javax.swing.JDialog {
 
         todoListPanel = new javax.swing.JPanel();
         todoListScrollPane = new javax.swing.JScrollPane();
-        
+
+
+
         submitButton = new javax.swing.JButton();
         titlePanel = new javax.swing.JPanel();
         titleTextField = new javax.swing.JTextField();
@@ -163,6 +166,8 @@ public class CreateMilestone extends javax.swing.JDialog {
         descriptionTextArea.setWrapStyleWord(true);
         descriptionTextArea.setLineWrap(true);
 
+
+
         descriptionScrollPane.setViewportView(descriptionTextArea);
 
         javax.swing.GroupLayout descriptionPanelLayout = new javax.swing.GroupLayout(descriptionPanel);
@@ -187,12 +192,30 @@ public class CreateMilestone extends javax.swing.JDialog {
                         javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
 
 
-        todoList.setBorder(javax.swing.BorderFactory.createTitledBorder
-                (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
-                                null, new java.awt.Color(102, 102, 102),
-                                null, null), "ToDos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
+        todoList.setVisibleRowCount(5);
 
+
+        todoListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder
+                (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color
+                                (102, 102, 102), null, null),
+                        "ToDos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                        new java.awt.Font("Tahoma", 1, fontsize)));
+
+        javax.swing.GroupLayout todoPanelLayout = new javax.swing.GroupLayout(todoListPanel);
+        todoListPanel.setLayout(todoPanelLayout);
+        todoPanelLayout.setHorizontalGroup(
+                todoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                         .addComponent(todoListScrollPane)
+        );
+        todoPanelLayout.setVerticalGroup(
+                todoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                       .addComponent(todoListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                6, Short.MAX_VALUE)
+        );
+
+        todoListScrollPane.setViewportView(todoList);
+
+        todoList.setFont(new java.awt.Font("Tahoma", 0, fontsize));
 
         javax.swing.GroupLayout mainpanelLayout = new javax.swing.GroupLayout(mainpanel);
         mainpanel.setLayout(mainpanelLayout);
@@ -212,7 +235,7 @@ public class CreateMilestone extends javax.swing.JDialog {
                                                         .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGap(7, 7, 7)
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(todoList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(todoListPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(dateToStartButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addContainerGap(24, Short.MAX_VALUE))))
         );
@@ -229,7 +252,7 @@ public class CreateMilestone extends javax.swing.JDialog {
                                         .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(mainpanelLayout.createSequentialGroup()
                                                 .addGap(8, 8, 8)
-                                                .addComponent(todoList, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(todoListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
