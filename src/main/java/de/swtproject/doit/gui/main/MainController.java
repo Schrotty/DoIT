@@ -77,17 +77,13 @@ public class MainController {
     }
 
     /**
-     * Update the JList with {@link ToDo}s with a given one.
-     *
-     * @param toDo the given {@link ToDo}
+     * Remove all {@link ToDo}s from list
+     * and re-fill list with todos, now
+     * including the recently added one.
      */
     public void updateList(ToDo toDo) {
-        if (toDo != null) {
-            DefaultListModel model = (DefaultListModel) mainView.todoTable.getModel();
-            model.addElement(toDo);
-
-            displayToDo(toDo);
-        }
+        mainView.todoTable.removeAll();
+        fillToDoList();
     }
 
     /**
