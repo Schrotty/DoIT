@@ -25,6 +25,7 @@ jobs:
       on:
         repo: Schrotty/DoIT
         tags: true
+        all_branches: true
 notifications:
   slack:
     rooms:
