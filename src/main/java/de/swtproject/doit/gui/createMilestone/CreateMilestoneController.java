@@ -116,6 +116,26 @@ public class CreateMilestoneController
         private boolean validateForm() {
             boolean isValid = true;
 
+            if (createView.dateToStartButton.getDate() != null) {
+                boolean sameDay = createView.dateToStartButton.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) &&
+                        createView.dateToStartButton.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+
+                if (!sameDay) isValid = createView.dateToStartButton.getDate().after(new Date());
+            }
+
+
+            if (createView.titleTextField.getText() == null ||createView.titleTextField.getText().isEmpty())
+            {
+                isValid = false;
+            }
+
+            int[] selectedTodos = createView.todoList.getSelectedIndices();
+
+
+            for(int idx : selectedTodos)
+            {
+                System.out.println("cons: " + createView.todoList.getModel().getElementAt(idx));
+            }
 
 
             return isValid;
