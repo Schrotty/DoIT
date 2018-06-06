@@ -82,6 +82,7 @@ public class ToDo {
      */
     public ToDo(String title) {
         this.title = title;
+        this.interval = IntervalType.NONE;
         this.priority = Priority.DEFAULT;
     }
 
