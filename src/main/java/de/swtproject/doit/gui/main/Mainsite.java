@@ -503,6 +503,10 @@ public class Mainsite extends javax.swing.JFrame {
         exportJSONMenu.addActionListener(e);
     }
 
+    public void setImportJSONMenuListener(ActionListener e) {
+        importJSONMenu.addActionListener(e);
+    }
+
     public void setToDoTabelListener(ListSelectionListener e) {
         todoTable.addListSelectionListener(e);
     }
