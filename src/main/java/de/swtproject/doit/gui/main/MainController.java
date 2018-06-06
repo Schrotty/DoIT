@@ -153,7 +153,8 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            fillToDoList(true);
+            mainView.isProd = true;
+            fillToDoList(mainView.isProd);
         }
     }
 
@@ -168,7 +169,8 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            fillToDoList(false);
+            mainView.isProd = false;
+            fillToDoList(mainView.isProd);
         }
     }
 }

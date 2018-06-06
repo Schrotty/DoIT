@@ -18,6 +18,11 @@ public class Mainsite extends javax.swing.JFrame {
     public static final int fontsize = 16;
 
     /**
+     * Bool if prod is shown
+     */
+    protected boolean isProd = true;
+
+    /**
      * The Create to do frame.
      */
     protected CreateToDo createToDoFrame;
@@ -114,6 +119,7 @@ public class Mainsite extends javax.swing.JFrame {
      * The Prod button.
      */
     private javax.swing.JButton prodButton;
+
     /**
      * The Right panel.
      */
