@@ -203,6 +203,14 @@ public class ToDo {
     }
 
     /**
+     * Get the database id
+     * @return id
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
      * Sets notify point.
      *
      * @param notifyPoint the notify point
@@ -247,7 +255,7 @@ public class ToDo {
      * @throws SQLException on SQL exception
      */
     public boolean delete() throws SQLException {
-        return DatabaseManager.getInstance().todoAccess.delete(this) == 1;
+        return DatabaseManager.getInstance().deleteToDo(this);
     }
 
     /**

@@ -35,17 +35,17 @@ public class DatabaseManager {
     /**
      * The database access object (ToDo) used by the manager.
      */
-    Dao<ToDo, String> todoAccess;
+    Dao<ToDo, Integer> todoAccess;
 
     /**
      * The database access object (Milestone) used by the manager.
      */
-    Dao<Milestone, String> milestoneAccess;
+    Dao<Milestone, Integer> milestoneAccess;
 
     /**
      * The database access object (MilestoneToDo) used by the manager.
      */
-    Dao<MilestoneToDo, String> milestoneToDoAccess;
+    Dao<MilestoneToDo, Integer> milestoneToDoAccess;
 
     /**
      * The connection source used by the manager.
@@ -140,9 +140,9 @@ public class DatabaseManager {
 
         if(milestone != null)
         {
-            List<MilestoneToDo> currentAssignedToDos = getmilestoneToDos(milestone.getId());
+            List<MilestoneToDo> currentAssignedToDos = getmilestoneToDosByMilestone(milestone.getId());
             List<ToDo> todosToAdd =  milestone.getAssignedToDos();
-            todosToAdd.stream().forEach(x -> {
+            todosToAdd.stream().forEach(x -> { // store mappings
                 try {
                     storeMilestoneToDo(MilestoneToDo.create(x, milestone));
                 } catch (SQLException e) {
@@ -153,7 +153,7 @@ public class DatabaseManager {
 
             currentAssignedToDos.stream().filter(x -> !todosToAdd.contains(x)).forEach(x -> {
                 try {
-                    x.delete();
+                    x.delete(); // remove assigned mapping which got removed
                 } catch (SQLException e) {
                     error[0] = true;
                     e.printStackTrace();
@@ -163,7 +163,49 @@ public class DatabaseManager {
 
         }
 
-        return getInstance().milestoneAccess.update(milestone) == 1 && !error[0];
+        return  !error[0] && getInstance().milestoneAccess.update(milestone) == 1;
+    }
+
+    /**
+     * Delete a milestone
+     * @param milestone
+     * @return success?
+     * @throws SQLException
+     */
+    public static boolean deleteMilestone(Milestone milestone) throws SQLException
+    {
+        // take care of assigned todo mappings
+
+        List<MilestoneToDo> data = getmilestoneToDosByMilestone(milestone.getId());
+
+        for(MilestoneToDo t : data)
+        {
+            if(!t.delete())
+                return false;
+        }
+
+        return self.milestoneAccess.delete(milestone) == 1;
+    }
+
+    /**
+     * Deletes a ToDo
+     * @param todo
+     * @return
+     * @throws SQLException
+     */
+    public static boolean deleteToDo(ToDo todo) throws SQLException
+    {
+        // take care of assigned milstone mappings
+
+        List<MilestoneToDo> data = getmilestoneToDosByToDo(todo.getId());
+
+        for(MilestoneToDo t : data)
+        {
+            if(!t.delete())
+                return false;
+        }
+
+        return self.todoAccess.delete(todo) == 1;
     }
 
     /**
@@ -177,10 +219,15 @@ public class DatabaseManager {
     }
 
 
-
-    private static List<MilestoneToDo> getmilestoneToDos(int milestoneID) throws SQLException {
-        QueryBuilder<MilestoneToDo, String> queryBuilder = self.milestoneToDoAccess.queryBuilder();
-        Where<MilestoneToDo, String> where = queryBuilder.where();
+    /**
+     * Get mappings for milestone
+     * @param milestoneID
+     * @return milestone mappings
+     * @throws SQLException
+     */
+    private static List<MilestoneToDo> getmilestoneToDosByMilestone(int milestoneID) throws SQLException {
+        QueryBuilder<MilestoneToDo, Integer> queryBuilder = self.milestoneToDoAccess.queryBuilder();
+        Where<MilestoneToDo, Integer> where = queryBuilder.where();
 
         where.eq(MilestoneToDo.MILESTONE_ID_FIELD_NAME, milestoneID);
         PreparedQuery<MilestoneToDo> preparedQuery = queryBuilder.prepare();
@@ -188,48 +235,87 @@ public class DatabaseManager {
         return self.milestoneToDoAccess.query(preparedQuery);
     }
 
-    public static List<ToDo> getToDoForMilestone(int milestoneID) throws SQLException {
-        QueryBuilder<MilestoneToDo, String> queryBuilder = self.milestoneToDoAccess.queryBuilder();
-        Where<MilestoneToDo, String> where = queryBuilder.where();
+    /**
+     * Get mapping for Todos
+     * @param toDoID
+     * @return todo mappings
+     * @throws SQLException
+     */
+    private static List<MilestoneToDo> getmilestoneToDosByToDo(int toDoID) throws SQLException {
+        QueryBuilder<MilestoneToDo, Integer> queryBuilder = self.milestoneToDoAccess.queryBuilder();
+        Where<MilestoneToDo, Integer> where = queryBuilder.where();
 
-        where.eq(MilestoneToDo.MILESTONE_ID_FIELD_NAME, milestoneID);
+        where.eq(MilestoneToDo.TODO_ID_FIELD_NAME, toDoID);
         PreparedQuery<MilestoneToDo> preparedQuery = queryBuilder.prepare();
 
-        List<ToDo> ret = new LinkedList<>();
-
-        for(MilestoneToDo m : self.milestoneToDoAccess.query(preparedQuery))
-            ret.add(m.todo);
-
-        return ret;
+        return self.milestoneToDoAccess.query(preparedQuery);
     }
 
-    public static List<Milestone> getCollection(int milestoneID, boolean withToDos) throws SQLException {
-        QueryBuilder<Milestone, String> queryBuilder = self.milestoneAccess.queryBuilder();
-        Where<Milestone, String> where = queryBuilder.where();
 
-        where.eq(Milestone.ID_FIELD_NAME, milestoneID);
+    /**
+     * Get todos assigned to a milestone
+     * @param milestoneID
+     * @return todos
+     * @throws SQLException
+     */
+    public static List<ToDo> getToDoForMilestone(Milestone milestone) throws SQLException {
+
+        QueryBuilder<MilestoneToDo, Integer> milestoneToDoQb = self.milestoneToDoAccess.queryBuilder();
+
+        milestoneToDoQb.selectColumns(MilestoneToDo.TODO_ID_FIELD_NAME);
+        SelectArg userSelectArg = new SelectArg();
+
+        milestoneToDoQb.where().eq(MilestoneToDo.MILESTONE_ID_FIELD_NAME, userSelectArg);
+
+        QueryBuilder<ToDo, Integer> todoQb = self.todoAccess.queryBuilder();
+
+        todoQb.where().in(ToDo.ID_FIELD_NAME, milestoneToDoQb);
+
+
+        PreparedQuery<ToDo> q = todoQb.prepare();
+        q.setArgumentHolderValue(0, milestone);
+        return self.todoAccess.query(q);
+    }
+
+    /**
+     * Get list of a miilestone with all
+     * @param withToDos append all todos?
+     * @return all milestones
+     * @throws SQLException
+     */
+    public static List<Milestone> getAllMilestones(boolean withToDos) throws SQLException {
+        QueryBuilder<Milestone, Integer> queryBuilder = self.milestoneAccess.queryBuilder();
+        Where<Milestone, Integer> where = queryBuilder.where();
+
         PreparedQuery<Milestone> preparedQuery = queryBuilder.prepare();
 
         List<Milestone> ret = self.milestoneAccess.query(preparedQuery);
 
         if(withToDos)
             for(Milestone m : ret)
-                m.setAssignedToDos(getToDoForMilestone(milestoneID));
+                m.setAssignedToDos(getToDoForMilestone(m));
 
         return ret;
     }
 
+    /**
+     * Get a single milestone
+     * @param id milstone id
+     * @param withTodos apend todos?
+     * @return the milestone
+     * @throws SQLException
+     */
     public static Milestone getSingleMilestone(int id, boolean withTodos) throws SQLException {
 
         if(withTodos)
         {
-            Milestone ret = self.milestoneAccess.queryForId(Integer.toString(id));
-            ret.setAssignedToDos(getToDoForMilestone(id));
+            Milestone ret = self.milestoneAccess.queryForId(id);
+            ret.setAssignedToDos(getToDoForMilestone(ret));
             return ret;
         }
         else
         {
-            return self.milestoneAccess.queryForId(Integer.toString(id));
+            return self.milestoneAccess.queryForId(id);
         }
 
     }
@@ -242,7 +328,7 @@ public class DatabaseManager {
      * @throws SQLException on SQL exception
      */
     public static ToDo getSingleToDo(int id) throws SQLException {
-        return self.todoAccess.queryForId(Integer.toString(id));
+        return self.todoAccess.queryForId(id);
     }
 
     /**
@@ -253,8 +339,8 @@ public class DatabaseManager {
      * @throws SQLException on SQL exception
      */
     public static List<ToDo> getCollection(boolean loadProduction) throws SQLException {
-        QueryBuilder<ToDo, String> queryBuilder = self.todoAccess.queryBuilder();
-        Where<ToDo, String> where = queryBuilder.where();
+        QueryBuilder<ToDo, Integer> queryBuilder = self.todoAccess.queryBuilder();
+        Where<ToDo, Integer> where = queryBuilder.where();
         SelectArg selectArg = new SelectArg();
 
         where.eq("production", selectArg);

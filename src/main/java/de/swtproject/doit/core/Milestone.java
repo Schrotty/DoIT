@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -68,6 +69,7 @@ public class Milestone {
      */
     public Milestone(String title) {
         this.title = title;
+        this.assignedToDos = new LinkedList<>();
     }
 
     /**
@@ -197,7 +199,7 @@ public class Milestone {
      * @throws SQLException on SQL exception
      */
     public boolean delete() throws SQLException {
-        return DatabaseManager.getInstance().milestoneAccess.delete(this) == 1;
+        return DatabaseManager.getInstance().deleteMilestone(this);
     }
 
     /**

@@ -1,7 +1,10 @@
 import de.swtproject.doit.core.DatabaseManager;
+import de.swtproject.doit.core.Milestone;
 import de.swtproject.doit.core.ToDo;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -44,5 +47,47 @@ public class DatabaseManagerTest {
         DatabaseManager.storeToDo(ToDo.create("Schrotty")).finish();
 
         assertTrue(DatabaseManager.getCollection(true).isEmpty());
+    }
+
+    @org.junit.Test
+    public void storeMilestone() throws Exception {
+        Milestone m = Milestone.create("Testmilestone");
+
+        assertEquals(m.getTitle(), DatabaseManager.storeMilestone(m).getTitle());
+
+        List<ToDo> ts = new LinkedList<>();
+
+        ts.add(DatabaseManager.storeToDo(ToDo.create("peterfraggin")));
+        ts.add(DatabaseManager.storeToDo(ToDo.create("glennfragmire")));
+
+        Milestone m2 = Milestone.create("Testmilestone2");
+
+        m2.setAssignedToDos(ts);
+
+        assertEquals(m2.getTitle(), DatabaseManager.storeMilestone(m2).getTitle());
+
+
+    }
+
+    @org.junit.Test
+    public void getSingleMilestone() throws SQLException {
+
+        Milestone m = DatabaseManager.storeMilestone(Milestone.create("Testmilestone"));
+
+        assertEquals(m.getId(), DatabaseManager.getSingleMilestone(m.getId(), false).getId());
+
+        List<ToDo> ts = new LinkedList<>();
+
+        ts.add(DatabaseManager.storeToDo(ToDo.create("peterpan")));
+        ts.add(DatabaseManager.storeToDo(ToDo.create("ichtestenichtgerne")));
+
+        Milestone m2 = Milestone.create("Testmilestone2");
+        m2.setAssignedToDos(ts);
+
+        DatabaseManager.storeMilestone(m2);
+
+        assertEquals(m2.getAssignedToDos().size(), DatabaseManager.getSingleMilestone(m2.getId(), true).getAssignedToDos().size());
+
+
     }
 }
