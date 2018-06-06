@@ -101,6 +101,8 @@ public class MainController {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
         mainView.setDeleteButtonListener(new DeleteListener());
+        mainView.setArchivButtonListener(new ArchivListener());
+        mainView.setProdButtonListener(new ProdListener());
     }
 
     /**
@@ -153,6 +155,38 @@ public class MainController {
             }
             // TODO: prod arch choice needed!
             updateList(true);
+        }
+    }
+
+    /**
+     * Listener for clicking the prodButton.
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class ProdListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainView.isProd = true;
+            fillToDoList(mainView.isProd);
+        }
+    }
+
+    /**
+     * Listener for clicking the openCreateButton.
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class ArchivListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainView.isProd = false;
+            fillToDoList(mainView.isProd);
         }
     }
 }

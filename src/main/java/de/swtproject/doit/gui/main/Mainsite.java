@@ -19,6 +19,11 @@ public class Mainsite extends javax.swing.JFrame {
     public static final int fontsize = 16;
 
     /**
+     * Bool if prod is shown
+     */
+    protected boolean isProd = true;
+
+    /**
      * The Create to do frame.
      */
     protected CreateToDo createToDoFrame;
@@ -476,5 +481,13 @@ public class Mainsite extends javax.swing.JFrame {
 
     public void setDeleteButtonListener(ActionListener e) {
         deleteButton.addActionListener(e);
+    }
+
+    public void setArchivButtonListener(ActionListener e) {
+        archivButton.addActionListener( e);
+    }
+
+    public void setProdButtonListener(ActionListener e) {
+        prodButton.addActionListener(e);
     }
 }
