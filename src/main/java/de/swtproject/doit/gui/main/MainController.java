@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
  */
 public class MainController {
 
+    private static ToDo current;
+
     /**
      * The managed {@link Mainsite}.
      */
@@ -101,6 +103,7 @@ public class MainController {
         mainView.setToDoTabelListener(new ChangeToDoListener());
         mainView.setArchivButtonListener(new ArchivListener());
         mainView.setProdButtonListener(new ProdListener());
+        mainView.setFinishButtonListener(new FinishListener());
     }
 
     /**
@@ -139,6 +142,7 @@ public class MainController {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            current = (ToDo)mainView.todoTable.getSelectedValue();
         }
     }
 
@@ -171,6 +175,30 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             mainView.isProd = false;
             fillToDoList(mainView.isProd);
+        }
+    }
+
+    /**
+     * Listener for finish a todo.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     */
+    class FinishListener implements ActionListener {
+
+        /**
+         * Called when user clicks the finish todo button.
+         *
+         * @param e the event that characterizes the action.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                current.finish();
+                fillToDoList(mainView.isProd);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }
