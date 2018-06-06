@@ -97,8 +97,8 @@ public class ToDoTest {
     public void serializeTest() {
         JSONObject ds = todo.serialize();
         assertEquals( todo.getTitle(), (String) ds.get("title") );
-        assertEquals( todo.getDescription(), (String) ds.get("description"));
-        assertEquals( todo.getInterval().toString(), (String) ds.get("interval"));
-        assertEquals( todo.getPriority().toString(), (String) ds.get("priority"));
+        if (ds.has("description")) assertEquals( todo.getDescription(), (String) ds.get("description"));
+        if (ds.has("interval")) assertEquals( todo.getInterval().toString(), (String) ds.get("interval"));
+        if (ds.has("priority")) assertEquals( todo.getPriority().toString(), (String) ds.get("priority"));
     }
 }
