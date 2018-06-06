@@ -13,7 +13,9 @@ import de.swtproject.doit.util.Settings;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Manager controller for accessing the database.
@@ -31,9 +33,19 @@ public class DatabaseManager {
     private static DatabaseManager self = new DatabaseManager();
 
     /**
-     * The database access object used by the manager.
+     * The database access object (ToDo) used by the manager.
      */
     Dao<ToDo, String> todoAccess;
+
+    /**
+     * The database access object (Milestone) used by the manager.
+     */
+    Dao<Milestone, String> milestoneAccess;
+
+    /**
+     * The database access object (MilestoneToDo) used by the manager.
+     */
+    Dao<MilestoneToDo, String> milestoneToDoAccess;
 
     /**
      * The connection source used by the manager.
@@ -49,9 +61,13 @@ public class DatabaseManager {
 
             connectionSource = new JdbcConnectionSource(Settings.getConnectionString().intern());
             todoAccess = DaoManager.createDao(connectionSource, ToDo.class);
+            milestoneAccess = DaoManager.createDao(connectionSource, Milestone.class);
+            milestoneToDoAccess = DaoManager.createDao(connectionSource, MilestoneToDo.class);
 
             //create needed tables
             TableUtils.createTableIfNotExists(connectionSource, ToDo.class);
+            TableUtils.createTableIfNotExists(connectionSource, Milestone.class);
+            TableUtils.createTableIfNotExists(connectionSource, MilestoneToDo.class);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IllegalStateException exception) {
@@ -76,9 +92,12 @@ public class DatabaseManager {
     public static void phoenix() throws SQLException {
         //drop all tables
         TableUtils.dropTable(self.connectionSource, ToDo.class, true);
-
+        TableUtils.dropTable(self.connectionSource, Milestone.class, true);
+        TableUtils.dropTable(self.connectionSource, MilestoneToDo.class, true);
         //re-create all tables with fresh indices
         TableUtils.createTableIfNotExists(self.connectionSource, ToDo.class);
+        TableUtils.createTableIfNotExists(self.connectionSource, Milestone.class);
+        TableUtils.createTableIfNotExists(self.connectionSource, MilestoneToDo.class);
     }
 
     /**
@@ -90,6 +109,129 @@ public class DatabaseManager {
      */
     public static ToDo storeToDo(ToDo todo) throws SQLException {
         return self.todoAccess.createIfNotExists(todo);
+    }
+
+    /**
+     * Save a milestone object
+     * @param milestone
+     * @return the milestone
+     * @throws SQLException
+     */
+    public static Milestone storeMilestone(Milestone milestone) throws SQLException {
+        Milestone createdMilestone = self.milestoneAccess.createIfNotExists(milestone);
+
+
+        updateMilestone(createdMilestone);
+
+
+        return milestone;
+    }
+
+    /**
+     * Update a milestone
+     * @param milestone
+     * @return success?
+     * @throws SQLException
+     */
+    public static boolean updateMilestone(Milestone milestone) throws SQLException {
+
+        boolean[] error = new boolean[1];
+        error[0] = false;
+
+        if(milestone != null)
+        {
+            List<MilestoneToDo> currentAssignedToDos = getmilestoneToDos(milestone.getId());
+            List<ToDo> todosToAdd =  milestone.getAssignedToDos();
+            todosToAdd.stream().forEach(x -> {
+                try {
+                    storeMilestoneToDo(MilestoneToDo.create(x, milestone));
+                } catch (SQLException e) {
+                    error[0] = true;
+                    e.printStackTrace();
+                }
+            });
+
+            currentAssignedToDos.stream().filter(x -> !todosToAdd.contains(x)).forEach(x -> {
+                try {
+                    x.delete();
+                } catch (SQLException e) {
+                    error[0] = true;
+                    e.printStackTrace();
+                }
+            });
+
+
+        }
+
+        return getInstance().milestoneAccess.update(milestone) == 1 && !error[0];
+    }
+
+    /**
+     * Save a milestonetodo object
+     * @param milestoneToDo
+     * @return the milestonetodo
+     * @throws SQLException
+     */
+    private static MilestoneToDo storeMilestoneToDo(MilestoneToDo milestoneToDo) throws SQLException {
+        return self.milestoneToDoAccess.createIfNotExists(milestoneToDo);
+    }
+
+
+
+    private static List<MilestoneToDo> getmilestoneToDos(int milestoneID) throws SQLException {
+        QueryBuilder<MilestoneToDo, String> queryBuilder = self.milestoneToDoAccess.queryBuilder();
+        Where<MilestoneToDo, String> where = queryBuilder.where();
+
+        where.eq(MilestoneToDo.MILESTONE_ID_FIELD_NAME, milestoneID);
+        PreparedQuery<MilestoneToDo> preparedQuery = queryBuilder.prepare();
+
+        return self.milestoneToDoAccess.query(preparedQuery);
+    }
+
+    public static List<ToDo> getToDoForMilestone(int milestoneID) throws SQLException {
+        QueryBuilder<MilestoneToDo, String> queryBuilder = self.milestoneToDoAccess.queryBuilder();
+        Where<MilestoneToDo, String> where = queryBuilder.where();
+
+        where.eq(MilestoneToDo.MILESTONE_ID_FIELD_NAME, milestoneID);
+        PreparedQuery<MilestoneToDo> preparedQuery = queryBuilder.prepare();
+
+        List<ToDo> ret = new LinkedList<>();
+
+        for(MilestoneToDo m : self.milestoneToDoAccess.query(preparedQuery))
+            ret.add(m.todo);
+
+        return ret;
+    }
+
+    public static List<Milestone> getCollection(int milestoneID, boolean withToDos) throws SQLException {
+        QueryBuilder<Milestone, String> queryBuilder = self.milestoneAccess.queryBuilder();
+        Where<Milestone, String> where = queryBuilder.where();
+
+        where.eq(Milestone.ID_FIELD_NAME, milestoneID);
+        PreparedQuery<Milestone> preparedQuery = queryBuilder.prepare();
+
+        List<Milestone> ret = self.milestoneAccess.query(preparedQuery);
+
+        if(withToDos)
+            for(Milestone m : ret)
+                m.setAssignedToDos(getToDoForMilestone(milestoneID));
+
+        return ret;
+    }
+
+    public static Milestone getSingleMilestone(int id, boolean withTodos) throws SQLException {
+
+        if(withTodos)
+        {
+            Milestone ret = self.milestoneAccess.queryForId(Integer.toString(id));
+            ret.setAssignedToDos(getToDoForMilestone(id));
+            return ret;
+        }
+        else
+        {
+            return self.milestoneAccess.queryForId(Integer.toString(id));
+        }
+
     }
 
     /**

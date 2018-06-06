@@ -6,16 +6,14 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The type To do.
+ * The type Milestone
  */
-@DatabaseTable(tableName = "todo")
-public class ToDo {
+@DatabaseTable(tableName = "milestone")
+public class Milestone {
 
-    // query field-name
     public final static String ID_FIELD_NAME = "id";
 
     /**
@@ -36,17 +34,7 @@ public class ToDo {
     @DatabaseField()
     private String description;
 
-    /**
-     * The Interval.
-     */
-    @DatabaseField(dataType = DataType.ENUM_INTEGER)
-    private IntervalType interval;
 
-    /**
-     * The Production.
-     */
-    @DatabaseField(defaultValue = "true")
-    private Boolean production;
 
     /**
      * The Start.
@@ -61,17 +49,15 @@ public class ToDo {
     private Date deadline;
 
     /**
-     * The Notify point.
+     * Assigned todos
      */
-    @DatabaseField()
-    private Date notifyPoint;
-
+    private List<ToDo> assignedToDos;
 
 
     /**
      * Instantiates a new To do.
      */
-    ToDo() {
+    Milestone() {
         //needed for ORMLight
     }
 
@@ -80,21 +66,28 @@ public class ToDo {
      *
      * @param title the title
      */
-    public ToDo(String title) {
+    public Milestone(String title) {
         this.title = title;
     }
 
     /**
-     * Create a new {@link ToDo} with given title.
+     * Get the id of the milestone
+     * @return milestoneid
+     */
+    public int getId()
+    {
+        return this.id;
+    }
+
+    /**
+     * Create a new {@link Milestone} with given title.
      *
      * @param title the given title
      * @return the created TODOGUI
      */
-    public static ToDo create(String title) {
-        return new ToDo(title);
+    public static Milestone create(String title) {
+        return new Milestone(title);
     }
-
-
 
     /**
      * Gets title.
@@ -132,22 +125,21 @@ public class ToDo {
         this.description = description;
     }
 
+
     /**
-     * Gets interval.
-     *
-     * @return the interval
+     * Get the assigned ToDos
+     * @return assigned todos
      */
-    public IntervalType getInterval() {
-        return interval;
+    public List<ToDo> getAssignedToDos() {
+        return assignedToDos;
     }
 
     /**
-     * Sets interval.
-     *
-     * @param interval the interval
+     * Set assigned Todos
+     * @param assigned todos to be set
      */
-    public void setInterval(IntervalType interval) {
-        this.interval = interval;
+    public void setAssignedToDos(List<ToDo> todos) {
+        this.assignedToDos = todos;
     }
 
     /**
@@ -186,23 +178,6 @@ public class ToDo {
         this.deadline = deadline;
     }
 
-    /**
-     * Gets notify point.
-     *
-     * @return the notify point
-     */
-    public Date getNotifyPoint() {
-        return notifyPoint;
-    }
-
-    /**
-     * Sets notify point.
-     *
-     * @param notifyPoint the notify point
-     */
-    public void setNotifyPoint(Date notifyPoint) {
-        this.notifyPoint = notifyPoint;
-    }
 
     /**
      * Finish a todo.
@@ -211,7 +186,7 @@ public class ToDo {
      * @throws SQLException on SQL excetion
      */
     public boolean finish() throws SQLException {
-        production = false;
+
         return update();
     }
 
@@ -222,7 +197,7 @@ public class ToDo {
      * @throws SQLException on SQL exception
      */
     public boolean delete() throws SQLException {
-        return DatabaseManager.getInstance().todoAccess.delete(this) == 1;
+        return DatabaseManager.getInstance().milestoneAccess.delete(this) == 1;
     }
 
     /**
@@ -232,7 +207,7 @@ public class ToDo {
      * @throws SQLException on SQL exception
      */
     private boolean update() throws SQLException {
-        return DatabaseManager.getInstance().todoAccess.update(this) == 1;
+        return DatabaseManager.updateMilestone(this);
     }
 
     /**

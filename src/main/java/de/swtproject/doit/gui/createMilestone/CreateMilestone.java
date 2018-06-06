@@ -1,12 +1,15 @@
 package de.swtproject.doit.gui.createMilestone;
 
 import com.toedter.calendar.JDateChooser;
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.ToDo;
 
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,9 +37,13 @@ public class CreateMilestone extends javax.swing.JDialog {
      */
     JDateChooser dateToStartButton;
     /**
+     * The Deadline button.
+     */
+    JDateChooser deadlineButton;
+    /**
      * The todo list.
      */
-    JList<String> todoList;
+    JList<String> todoList = new JList<>();
     /**
      * The todolist panel.
      */
@@ -87,8 +94,21 @@ public class CreateMilestone extends javax.swing.JDialog {
     /**
      * Instantiates a new Create to do.
      */
-    CreateMilestone() {
+    CreateMilestone(List<String> toDos) {
+        setToDoList(toDos);
         initComponents();
+    }
+
+    private void setToDoList(List<String> l)
+    {
+        DefaultListModel<String> lm = new DefaultListModel();
+        for(String s : l)
+        {
+            lm.addElement(s);
+            System.out.println(s);
+        }
+
+        this.todoList = new JList<String>(lm);
     }
 
     /**
@@ -101,17 +121,8 @@ public class CreateMilestone extends javax.swing.JDialog {
         createToDoLabel = new javax.swing.JLabel();
         cancelButton = new javax.swing.JButton();
         dateToStartButton = new JDateChooser();
+        deadlineButton = new JDateChooser();
 
-
-        List<String> b = new LinkedList<String>();
-        b.add("halo");
-        b.add("2");
-
-        DefaultListModel<String> lm = new DefaultListModel();
-
-        for(int i = 0; i < 25; i++) lm.addElement("hi " + i);
-
-        todoList = new JList<String>(lm);
 
         todoListPanel = new javax.swing.JPanel();
         todoListScrollPane = new javax.swing.JScrollPane();
@@ -182,7 +193,11 @@ public class CreateMilestone extends javax.swing.JDialog {
                                 228, Short.MAX_VALUE)
         );
 
-
+        deadlineButton.setBorder(javax.swing.BorderFactory.createTitledBorder
+                (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
+                                null, new java.awt.Color(102, 102, 102),
+                                null, null), "Deadline", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
 
 
         dateToStartButton.setBorder(javax.swing.BorderFactory.createTitledBorder
@@ -232,11 +247,12 @@ public class CreateMilestone extends javax.swing.JDialog {
                                         .addGroup(mainpanelLayout.createSequentialGroup()
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(titlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(dateToStartButton, GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(7, 7, 7)
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(todoListPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(dateToStartButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(deadlineButton, GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(todoListPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addContainerGap(24, Short.MAX_VALUE))))
         );
         mainpanelLayout.setVerticalGroup(
@@ -245,8 +261,13 @@ public class CreateMilestone extends javax.swing.JDialog {
                                 .addComponent(createToDoLabel)
                                 .addGap(38, 38, 38)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(titlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(dateToStartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(titlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+
+                                .addGap(34, 34, 34)
+                                .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(dateToStartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+
+                                        .addComponent(deadlineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(34, 34, 34)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
