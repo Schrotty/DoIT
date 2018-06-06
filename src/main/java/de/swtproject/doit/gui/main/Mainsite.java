@@ -60,6 +60,14 @@ public class Mainsite extends javax.swing.JFrame {
      */
     private javax.swing.JMenuItem createToDoMenu;
     /**
+     * The JSON-Data Import menu
+     */
+    private javax.swing.JMenuItem importJSONMenu;
+    /**
+     * The JSON-Data Export menu
+     */
+    private javax.swing.JMenuItem exportJSONMenu;
+    /**
      * The Data panel.
      */
     private javax.swing.JPanel dataPanel;
@@ -94,7 +102,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Menu create.
      */
-    private javax.swing.JMenu menuCreate;
+    private javax.swing.JMenu menuButton;
     /**
      * The Menubar.
      */
@@ -210,10 +218,12 @@ public class Mainsite extends javax.swing.JFrame {
         description = new javax.swing.JTextArea();
         editButton = new javax.swing.JButton();
         menubar = new javax.swing.JMenuBar();
-        menuCreate = new javax.swing.JMenu();
+        menuButton = new javax.swing.JMenu();
         createToDoMenu = new javax.swing.JMenuItem();
         createMilestoneMenu = new javax.swing.JMenuItem();
         createNotifiyPointMenu = new javax.swing.JMenuItem();
+        importJSONMenu = new javax.swing.JMenuItem();
+        exportJSONMenu = new javax.swing.JMenuItem();
         priorityLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -426,26 +436,36 @@ public class Mainsite extends javax.swing.JFrame {
                                         .addComponent(editButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                                         .addComponent(finishButton, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)))
         );
-        menuCreate.setFont(new java.awt.Font("Tahoma", 1, fontsize));
-        menuCreate.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/HamburgerMenu.png")))); // NOI18N
-        menuCreate.setText("Menu");
+        menuButton.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        menuButton.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/HamburgerMenu.png")))); // NOI18N
+        menuButton.setText("Menu");
 
         createToDoMenu.setFont(new java.awt.Font("Tahoma", 1, fontsize));
         createToDoMenu.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/ToDoCreate.png")))); // NOI18N
         createToDoMenu.setText("Create ToDo");
-        menuCreate.add(createToDoMenu);
+        menuButton.add(createToDoMenu);
 
         createMilestoneMenu.setFont(new java.awt.Font("Tahoma", 1, fontsize));
         createMilestoneMenu.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/MilesoneCreate.png")))); // NOI18N
         createMilestoneMenu.setText("Create Milestone");
-        menuCreate.add(createMilestoneMenu);
+        menuButton.add(createMilestoneMenu);
 
         createNotifiyPointMenu.setFont(new java.awt.Font("Tahoma", 1, fontsize));
         createNotifiyPointMenu.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/NotificationPointCreate.png")))); // NOI18N
         createNotifiyPointMenu.setText("Create Notification Point");
-        menuCreate.add(createNotifiyPointMenu);
+        menuButton.add(createNotifiyPointMenu);
 
-        menubar.add(menuCreate);
+        importJsonMenu.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        importJsonMenu.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/importIcon.png")))); // NOI18N
+        importJsonMenu.setText("Import JSON File");
+        menuButton.add(importJsonMenu);
+
+        exportJsonMenu.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        exportJsonMenu.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("icon/exportIcon.png")))); // NOI18N
+        exportJsonMenu.setText("Export JSON File");
+        menuButton.add(exportJsonMenu);
+
+        menubar.add(menuButton);
 
         setJMenuBar(menubar);
 
