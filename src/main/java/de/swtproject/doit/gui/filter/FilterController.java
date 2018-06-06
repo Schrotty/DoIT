@@ -100,7 +100,8 @@ public class FilterController {
                     });
                 }
 
-                if (filterView.getComboBoxChoice().equals(FilterType.START.getName())) {
+                if (filterView.getComboBoxChoice().equals(FilterType.START.getName())
+                        && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     DatabaseManager.getCollection(true).forEach(t -> {
                         if (null != t.getStart()) {
@@ -111,7 +112,8 @@ public class FilterController {
                     });
                 }
 
-                if (filterView.getComboBoxChoice().equals(FilterType.DEADLINE.getName())) {
+                if (filterView.getComboBoxChoice().equals(FilterType.DEADLINE.getName())
+                        && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     DatabaseManager.getCollection(true).forEach(t -> {
                         if (null != t.getDeadline()) {
@@ -122,19 +124,19 @@ public class FilterController {
                     });
                 }
 
-//                if(filterView.getComboBoxChoice().equals(FilterType.PRIORITY.getName())) {
-//                    DatabaseManager.getCollection(true).forEach(t -> {
-//                        if (t.getPriority().equals(inputValue)) {
-//                            toDos.add(t);
-//                        }
-//                    });
-//                }
+                if (filterView.getComboBoxChoice().equals(FilterType.PRIORITY.getName())) {
+                    DatabaseManager.getCollection(true).forEach(t -> {
+                        if (t.getPriority().weight == Integer.parseInt(inputValue)) {
+                            toDos.add(t);
+                        }
+                    });
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
-            if (filterView.getComboBoxChoice().equals("") && null == filterView.dateButton.getDate()) {
+            if (toDos.isEmpty()) {
                 clearFilter();
             } else {
                 parent.alterToDoList(toDos);
@@ -172,14 +174,16 @@ public class FilterController {
             filterView.setComboBoxChoice(choice);
 
             if (choice.equals(FilterType.DEADLINE.getName()) || choice.equals(FilterType.START.getName())) {
-                filterView.valueTextField.setVisible(false);
-                filterView.valuePanel.setVisible(false);
-                filterView.dateButton.setVisible(true);
+                changeVisibility(false, true);
             } else {
-                filterView.valueTextField.setVisible(true);
-                filterView.valuePanel.setVisible(true);
-                filterView.dateButton.setVisible(false);
+                changeVisibility(true, false);
             }
+        }
+
+        private void changeVisibility(boolean visInput, boolean visDate) {
+            filterView.valueTextField.setVisible(visInput);
+            filterView.valuePanel.setVisible(visInput);
+            filterView.dateButton.setVisible(visDate);
         }
     }
 }
