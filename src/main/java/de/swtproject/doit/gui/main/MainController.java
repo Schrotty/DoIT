@@ -1,5 +1,6 @@
 package de.swtproject.doit.gui.main;
 
+import com.j256.ormlite.field.types.SqlDateStringType;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
@@ -33,18 +34,18 @@ public class MainController {
     private MainController() {
         this.mainView = new Mainsite();
         this.registerListener();
-        this.fillToDoList();
+        this.fillToDoList(true);
     }
 
     /**
      * Load the production {@link ToDo}s from database
      * and display them in a JList.
      */
-    private void fillToDoList() {
+    private void fillToDoList(boolean isProd) {
         try {
             ToDo to = null;
             DefaultListModel<ToDo> model = new DefaultListModel<>();
-            for (ToDo todo : DatabaseManager.getCollection(true)) {
+            for (ToDo todo : DatabaseManager.getCollection(isProd)) {
                 if (to == null) to = todo;
 
                 model.addElement(todo);
@@ -81,9 +82,9 @@ public class MainController {
      * and re-fill list with todos, now
      * including the recently added one.
      */
-    public void updateList(ToDo toDo) {
+    public void updateList(boolean isProd) {
         mainView.todoTable.removeAll();
-        fillToDoList();
+        fillToDoList(isProd);
     }
 
     /**
@@ -99,6 +100,7 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setDeleteButtonListener(new DeleteListener());
     }
 
     /**
@@ -136,7 +138,21 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
+        }
+    }
+
+    class DeleteListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                ((ToDo) mainView.todoTable.getSelectedValue()).delete();
+            } catch (SQLException sql) {
+                sql.printStackTrace();
+            }
+            // TODO: prod arch choice needed!
+            updateList(true);
         }
     }
 }
