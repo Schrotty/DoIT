@@ -269,11 +269,11 @@ public class ToDo {
         JSONObject ds = new JSONObject();
         ds.put("title",         this.getTitle());
         ds.put("description",   this.getDescription());
-        ds.put("interval",      this.getInterval());
+        ds.put("interval",      this.getInterval().toString());
         ds.put("start",         this.getStart());
         ds.put("deadline",      this.getDeadline());
         ds.put("notifyPoint",   this.getNotifyPoint());
-        ds.put("priority",      this.getPriority());
+        ds.put("priority",      this.getPriority().toString());
         return ds;
     }
 }
