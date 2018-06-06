@@ -486,4 +486,8 @@ public class Mainsite extends javax.swing.JFrame {
     public void setProdButtonListener(ActionListener e) {
         prodButton.addActionListener(e);
     }
+
+    void setFinishButtonListener(ActionListener e) {
+        finishButton.addActionListener(e);
+    }
 }
