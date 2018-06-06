@@ -472,4 +472,12 @@ public class Mainsite extends javax.swing.JFrame {
     public void setToDoTabelListener(ListSelectionListener e) {
         todoTable.addListSelectionListener(e);
     }
+
+    public void setArchivButtonListener(ActionListener e) {
+        archivButton.addActionListener( e);
+    }
+
+    public void setProdButtonListener(ActionListener e) {
+        prodButton.addActionListener(e);
+    }
 }

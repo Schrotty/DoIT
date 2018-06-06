@@ -33,18 +33,18 @@ public class MainController {
     private MainController() {
         this.mainView = new Mainsite();
         this.registerListener();
-        this.fillToDoList();
+        this.fillToDoList(true);
     }
 
     /**
      * Load the production {@link ToDo}s from database
      * and display them in a JList.
      */
-    private void fillToDoList() {
+    private void fillToDoList(boolean isProd) {
         try {
             ToDo to = null;
             DefaultListModel<ToDo> model = new DefaultListModel<>();
-            for (ToDo todo : DatabaseManager.getCollection(true)) {
+            for (ToDo todo : DatabaseManager.getCollection(isProd)) {
                 if (to == null) to = todo;
 
                 model.addElement(todo);
@@ -83,7 +83,7 @@ public class MainController {
      */
     public void updateList(ToDo toDo) {
         mainView.todoTable.removeAll();
-        fillToDoList();
+        fillToDoList(true);
     }
 
     /**
@@ -99,6 +99,8 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setArchivButtonListener(new ArchivListener());
+        mainView.setProdButtonListener(new ProdListener());
     }
 
     /**
@@ -137,6 +139,36 @@ public class MainController {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+        }
+    }
+
+    /**
+     * Listener for clicking the prodButton.
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class ProdListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            fillToDoList(true);
+        }
+    }
+
+    /**
+     * Listener for clicking the openCreateButton.
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class ArchivListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            fillToDoList(false);
         }
     }
 }
