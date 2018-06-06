@@ -3,7 +3,11 @@ package de.swtproject.doit.gui.main;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
+
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
+
+import de.swtproject.doit.gui.util.PriorityCellRenderer;
+
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -33,23 +37,24 @@ public class MainController {
     private MainController() {
         this.mainView = new Mainsite();
         this.registerListener();
-        this.fillToDoList();
+        this.fillToDoList(true);
     }
 
     /**
      * Load the production {@link ToDo}s from database
      * and display them in a JList.
      */
-    private void fillToDoList() {
+    private void fillToDoList(boolean isProd) {
         try {
             ToDo to = null;
-            DefaultListModel model = new DefaultListModel();
-            for (ToDo todo : DatabaseManager.getCollection(true)) {
+            DefaultListModel<ToDo> model = new DefaultListModel<>();
+            for (ToDo todo : DatabaseManager.getCollection(isProd)) {
                 if (to == null) to = todo;
 
                 model.addElement(todo);
             }
 
+            mainView.todoTable.setCellRenderer(new PriorityCellRenderer());
             mainView.todoTable.setModel(model);
             displayToDo(to);
         } catch (SQLException e) {
@@ -68,6 +73,7 @@ public class MainController {
 
             mainView.title.setText(todo.getTitle());
             mainView.description.setText(todo.getDescription());
+            mainView.priorityLabel.setText(todo.getPriority().name);
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
@@ -75,17 +81,13 @@ public class MainController {
     }
 
     /**
-     * Update the JList with {@link ToDo}s with a given one.
-     *
-     * @param toDo the given {@link ToDo}
+     * Remove all {@link ToDo}s from list
+     * and re-fill list with todos, now
+     * including the recently added one.
      */
     public void updateList(ToDo toDo) {
-        if (toDo != null) {
-            DefaultListModel model = (DefaultListModel) mainView.todoTable.getModel();
-            model.addElement(toDo);
-
-            displayToDo(toDo);
-        }
+        mainView.todoTable.removeAll();
+        fillToDoList(true);
     }
 
     /**
@@ -101,7 +103,12 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+
         mainView.setCreateMilestoneListener(new OpenCreateMilestoneViewListener(this));
+
+        mainView.setArchivButtonListener(new ArchivListener());
+        mainView.setProdButtonListener(new ProdListener());
+
     }
 
     /**
@@ -159,6 +166,38 @@ public class MainController {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+        }
+    }
+
+    /**
+     * Listener for clicking the prodButton.
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class ProdListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainView.isProd = true;
+            fillToDoList(mainView.isProd);
+        }
+    }
+
+    /**
+     * Listener for clicking the openCreateButton.
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class ArchivListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainView.isProd = false;
+            fillToDoList(mainView.isProd);
         }
     }
 }

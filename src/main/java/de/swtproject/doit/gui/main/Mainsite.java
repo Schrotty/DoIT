@@ -18,6 +18,11 @@ public class Mainsite extends javax.swing.JFrame {
     public static final int fontsize = 16;
 
     /**
+     * Bool if prod is shown
+     */
+    protected boolean isProd = true;
+
+    /**
      * The Create to do frame.
      */
     protected CreateToDo createToDoFrame;
@@ -114,6 +119,7 @@ public class Mainsite extends javax.swing.JFrame {
      * The Prod button.
      */
     private javax.swing.JButton prodButton;
+
     /**
      * The Right panel.
      */
@@ -140,6 +146,11 @@ public class Mainsite extends javax.swing.JFrame {
      * The Todo scroll pane.
      */
     private javax.swing.JScrollPane todoScrollPane;
+
+    /**
+     * The tasks priority.
+     */
+    javax.swing.JLabel priorityLabel;
     // End of variables declaration
 
     /**
@@ -203,6 +214,7 @@ public class Mainsite extends javax.swing.JFrame {
         createToDoMenu = new javax.swing.JMenuItem();
         createMilestoneMenu = new javax.swing.JMenuItem();
         createNotifiyPointMenu = new javax.swing.JMenuItem();
+        priorityLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ToDo Tool");
@@ -299,6 +311,9 @@ public class Mainsite extends javax.swing.JFrame {
         notifypointLabel.setFont(new java.awt.Font("Tahoma", 1, fontsize));
         notifypointLabel.setText("-");
 
+        priorityLabel.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        priorityLabel.setText("-");
+
         javax.swing.GroupLayout dataPanelLayout = new javax.swing.GroupLayout(dataPanel);
         dataPanel.setLayout(dataPanelLayout);
         dataPanelLayout.setHorizontalGroup(
@@ -362,6 +377,7 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addGroup(todoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(title)
+                                        .addComponent(priorityLabel)
                                         .addComponent(scrollDescription)))
         );
         todoPanelLayout.setVerticalGroup(
@@ -369,6 +385,7 @@ public class Mainsite extends javax.swing.JFrame {
                         .addGroup(todoPanelLayout.createSequentialGroup()
                                 .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(priorityLabel)
                                 .addComponent(scrollDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
@@ -462,7 +479,16 @@ public class Mainsite extends javax.swing.JFrame {
         todoTable.addListSelectionListener(e);
     }
 
+
     public void setCreateMilestoneListener(ActionListener e) {
         createMilestoneMenu.addActionListener(e);
+
+    public void setArchivButtonListener(ActionListener e) {
+        archivButton.addActionListener( e);
+    }
+
+    public void setProdButtonListener(ActionListener e) {
+        prodButton.addActionListener(e);
+
     }
 }
