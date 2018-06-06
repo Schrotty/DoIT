@@ -482,11 +482,10 @@ public class Mainsite extends javax.swing.JFrame {
 
     public void setCreateMilestoneListener(ActionListener e) {
         createMilestoneMenu.addActionListener(e);
-
+    }
     public void setArchivButtonListener(ActionListener e) {
         archivButton.addActionListener( e);
     }
-
     public void setProdButtonListener(ActionListener e) {
         prodButton.addActionListener(e);
 
