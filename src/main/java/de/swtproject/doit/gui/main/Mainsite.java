@@ -499,6 +499,10 @@ public class Mainsite extends javax.swing.JFrame {
         createToDoMenu.addActionListener(e);
     }
 
+    public void setExportJSONMenuListener(ActionListener e) {
+        exportJSONMenu.addActionListener(e);
+    }
+
     public void setToDoTabelListener(ListSelectionListener e) {
         todoTable.addListSelectionListener(e);
     }
