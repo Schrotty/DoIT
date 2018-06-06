@@ -26,7 +26,7 @@ public class MainController {
     /**
      * The managed {@link Mainsite}.
      */
-    private Mainsite mainView;
+    public Mainsite mainView;
 
     /**
      * Constructor for {@link MainController}.
@@ -154,7 +154,7 @@ public class MainController {
                 sql.printStackTrace();
             }
             // TODO: prod arch choice needed!
-            updateList(true);
+            updateList(mainView.isProd());
         }
     }
 
@@ -169,8 +169,8 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            mainView.isProd = true;
-            fillToDoList(mainView.isProd);
+            mainView.setProd(true);
+            fillToDoList(mainView.isProd());
         }
     }
 
@@ -185,8 +185,8 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            mainView.isProd = false;
-            fillToDoList(mainView.isProd);
+            mainView.setProd(false);
+            fillToDoList(mainView.isProd());
         }
     }
 }

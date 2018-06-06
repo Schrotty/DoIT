@@ -21,7 +21,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * Bool if prod is shown
      */
-    protected boolean isProd = true;
+    private boolean isProd = true;
 
     /**
      * The Create to do frame.
@@ -470,6 +470,14 @@ public class Mainsite extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>
+
+    public boolean isProd() {
+        return this.isProd;
+    }
+
+    public void setProd(boolean isProd) {
+        this.isProd = isProd;
+    }
 
     public void setCreateToDoMenuListener(ActionListener e) {
         createToDoMenu.addActionListener(e);
