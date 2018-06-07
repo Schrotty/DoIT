@@ -208,7 +208,7 @@ public class Milestone {
      * @return updating successful?
      * @throws SQLException on SQL exception
      */
-    private boolean update() throws SQLException {
+    public boolean update() throws SQLException {
         return DatabaseManager.updateMilestone(this);
     }
 
@@ -219,5 +219,14 @@ public class Milestone {
      */
     public String toString() {
         return title;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (!(other instanceof Milestone))
+            return false;
+
+        return this.id == ((Milestone) other).id;
     }
 }

@@ -276,4 +276,13 @@ public class ToDo {
     public String toString() {
         return title;
     }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (!(other instanceof ToDo))
+            return false;
+
+        return this.id == ((ToDo) other).id;
+    }
 }

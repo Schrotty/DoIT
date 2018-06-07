@@ -70,7 +70,7 @@ public class DatabaseManagerTest {
     }
 
     @org.junit.Test
-    public void getSingleMilestone() throws SQLException {
+    public void getSingleMilestone_getToDosForMilestone() throws SQLException {
 
         Milestone m = DatabaseManager.storeMilestone(Milestone.create("Testmilestone"));
 
@@ -86,8 +86,48 @@ public class DatabaseManagerTest {
 
         DatabaseManager.storeMilestone(m2);
 
-        assertEquals(m2.getAssignedToDos().size(), DatabaseManager.getSingleMilestone(m2.getId(), true).getAssignedToDos().size());
+        List<ToDo> toDos = DatabaseManager.getSingleMilestone(m2.getId(), true).getAssignedToDos();
+
+        assertEquals(toDos.size(), ts.size());
+
+        for(ToDo t : toDos)
+        {
+            assertTrue(ts.contains(t));
+        }
 
 
+    }
+
+    @org.junit.Test
+    public void updateMilestone() throws SQLException {
+
+        List<ToDo> ts = new LinkedList<>();
+
+        ToDo toRemove = DatabaseManager.storeToDo(ToDo.create("banana"));
+
+        ts.add(toRemove);
+        ts.add(DatabaseManager.storeToDo(ToDo.create("mango")));
+
+        Milestone m = Milestone.create("8mile");
+        m.setAssignedToDos(ts);
+
+        DatabaseManager.storeMilestone(m);
+
+        ts.add(DatabaseManager.storeToDo(ToDo.create("apfel")));
+
+        ts.remove(toRemove);
+
+        m.setAssignedToDos(ts);
+
+        m.update();
+
+        List<ToDo> toDos = DatabaseManager.getSingleMilestone(m.getId(), true).getAssignedToDos();
+
+        assertEquals(toDos.size(), ts.size());
+
+        for(ToDo t : toDos)
+        {
+            assertTrue(ts.contains(t));
+        }
     }
 }
