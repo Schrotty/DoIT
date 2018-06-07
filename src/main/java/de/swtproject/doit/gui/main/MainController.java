@@ -1,5 +1,6 @@
 package de.swtproject.doit.gui.main;
 
+import com.j256.ormlite.field.types.SqlDateStringType;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
@@ -37,7 +38,7 @@ public class MainController {
     /**
      * The managed {@link Mainsite}.
      */
-    private Mainsite mainView;
+    public Mainsite mainView;
 
     /**
      * Constructor for {@link MainController}.
@@ -93,14 +94,15 @@ public class MainController {
      * and re-fill list with todos, now
      * including the recently added one.
      */
-    public void updateList(ToDo toDo) {
+    public void updateList(boolean isProd) {
         mainView.todoTable.removeAll();
-        fillToDoList(true);
+        fillToDoList(isProd);
     }
 
     /**
      * Exports all {@Link ToDo}s to a
      * selectable file on the disk.
+     *
      * @throws IOException on an exception with the IO.
      */
     public void exportToDos() throws IOException {
@@ -132,20 +134,21 @@ public class MainController {
             JSONObject dataset = new JSONObject(json);
             JSONArray todos = (JSONArray) dataset.get("todos");
 
-            for(int i = 0; i < todos.length(); i++) {
+            for (int i = 0; i < todos.length(); i++) {
                 JSONObject data = (JSONObject) todos.get(i);
 
                 if (data.has("title")) {
-                    ToDo todo = ToDo.create( (String)data.get("title") );
+                    ToDo todo = ToDo.create((String) data.get("title"));
 
-                    if (data.has("description"))    todo.setDescription( (String)data.get("description") );
-                    if (data.has("priority"))       todo.setPriority(Priority.valueOf( (String)data.get("priority") ));
-                    if (data.has("interval"))       todo.setInterval(IntervalType.valueOf( (String)data.get("interval") ));
-                    if (data.has("start"))          todo.setStart(Date.valueOf( (String)data.get("start") ));
-                    if (data.has("deadline"))       todo.setDeadline(Date.valueOf( (String)data.get("deadline") ));
-                    if (data.has("notifyPoint"))    todo.setNotifyPoint(Date.valueOf( (String)data.get("notifyPoint") ));
+                    if (data.has("description")) todo.setDescription((String) data.get("description"));
+                    if (data.has("priority")) todo.setPriority(Priority.valueOf((String) data.get("priority")));
+                    if (data.has("interval")) todo.setInterval(IntervalType.valueOf((String) data.get("interval")));
+                    if (data.has("start")) todo.setStart(Date.valueOf((String) data.get("start")));
+                    if (data.has("deadline")) todo.setDeadline(Date.valueOf((String) data.get("deadline")));
+                    if (data.has("notifyPoint")) todo.setNotifyPoint(Date.valueOf((String) data.get("notifyPoint")));
 
-                    updateList(DatabaseManager.storeToDo(todo));
+                    DatabaseManager.storeToDo(todo);
+                    updateList(mainView.isProd());
                 }
             }
         }
@@ -164,6 +167,7 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setDeleteButtonListener(new DeleteListener());
         mainView.setArchivButtonListener(new ArchivListener());
         mainView.setProdButtonListener(new ProdListener());
         mainView.setExportJSONMenuListener(new ExportJSONListener());
@@ -205,7 +209,22 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
+        }
+    }
+
+    class DeleteListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                ToDo toDo = (ToDo) mainView.todoTable.getSelectedValue();
+                if (null != toDo)
+                    toDo.delete();
+            } catch (SQLException sql) {
+                sql.printStackTrace();
+            }
+            updateList(mainView.isProd());
         }
     }
 
@@ -220,8 +239,8 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            mainView.isProd = true;
-            fillToDoList(mainView.isProd);
+            mainView.setProd(true);
+            fillToDoList(mainView.isProd());
         }
     }
 
@@ -236,13 +255,14 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            mainView.isProd = false;
-            fillToDoList(mainView.isProd);
+            mainView.setProd(false);
+            fillToDoList(mainView.isProd());
         }
     }
 
     /**
      * Listener for exporting the {@Link ToDo}s to a JSON file.
+     *
      * @author Niklas Kühtmann
      */
     class ExportJSONListener implements ActionListener {
@@ -251,7 +271,7 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             try {
                 exportToDos();
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to export!");
             }
@@ -260,6 +280,7 @@ public class MainController {
 
     /**
      * Listener for import {@Link ToDo}s from a JSON file.
+     *
      * @author Niklas Kühtmann
      */
     class ImportJSONListener implements ActionListener {
@@ -268,7 +289,7 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             try {
                 importToDos();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to import!");
             }
