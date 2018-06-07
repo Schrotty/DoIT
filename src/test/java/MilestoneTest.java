@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class MilestoneTest {
@@ -71,6 +72,18 @@ public class MilestoneTest {
         milestone.setAssignedToDos(l);
 
         assertEquals(milestone.getAssignedToDos(), l);
+
+    }
+
+    @org.junit.Test
+    public void equal() throws SQLException
+    {
+        List<Milestone> milestones = DatabaseManager.getAllMilestones(false);
+        assertEquals(1, milestones.size());
+        assertTrue(milestones.get(0).equals(milestone));
+
+        assertNotEquals(milestones, milestone);
+
 
     }
 

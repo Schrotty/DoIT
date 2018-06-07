@@ -193,16 +193,5 @@ public class DatabaseManagerTest {
 
     }
 
-    @org.junit.Test
-    public void equal() throws SQLException
-    {
-        Milestone m = Milestone.create("kiwi");
-        m = DatabaseManager.storeMilestone(m);
 
-        List<Milestone> milestones = DatabaseManager.getAllMilestones(false);
-        assertEquals(1, milestones.size());
-        assertTrue(milestones.get(0).equals(m));
-
-
-    }
 }

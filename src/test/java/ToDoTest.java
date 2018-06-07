@@ -1,15 +1,15 @@
-import de.swtproject.doit.core.DatabaseManager;
-import de.swtproject.doit.core.IntervalType;
-import de.swtproject.doit.core.Priority;
-import de.swtproject.doit.core.ToDo;
+
+import de.swtproject.doit.core.*;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ToDoTest {
@@ -102,4 +102,16 @@ public class ToDoTest {
         if (ds.has("interval")) assertEquals( todo.getInterval().toString(), ds.get("interval"));
         if (ds.has("priority")) assertEquals( todo.getPriority().toString(), ds.get("priority"));
     }
+
+    @org.junit.Test
+    public void equal() throws SQLException
+    {
+        List<ToDo> todos = DatabaseManager.getCollection(true);
+        assertEquals(1, todos.size());
+        assertTrue(todos.get(0).equals(todo));
+
+        assertNotEquals(todos, todo);
+
+    }
+
 }

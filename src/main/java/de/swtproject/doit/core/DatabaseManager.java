@@ -142,23 +142,14 @@ public class DatabaseManager {
         {
             List<MilestoneToDo> currentAssignedToDos = getmilestoneToDosByMilestone(milestone.getId());
             List<ToDo> todosToAdd =  milestone.getAssignedToDos();
-            todosToAdd.stream().forEach(x -> { // store mappings
-                try {
-                    storeMilestoneToDo(MilestoneToDo.create(x, milestone));
-                } catch (SQLException e) {
-                    error[0] = true;
-                    e.printStackTrace();
-                }
-            });
 
-            currentAssignedToDos.stream().filter(x -> !todosToAdd.contains(x)).forEach(x -> {
-                try {
-                    x.delete(); // remove assigned mapping which got removed
-                } catch (SQLException e) {
-                    error[0] = true;
-                    e.printStackTrace();
-                }
-            });
+            for(ToDo t : todosToAdd)
+                storeMilestoneToDo(MilestoneToDo.create(t, milestone));
+
+            List<ToDo> filtered =  currentAssignedToDos.stream().map(x->x.todo).filter(x -> !todosToAdd.contains(x)).collect(Collectors.toList());
+
+            for(ToDo t :  filtered)
+                t.delete();
 
 
         }
