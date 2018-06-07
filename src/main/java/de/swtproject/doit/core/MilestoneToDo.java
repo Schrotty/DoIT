@@ -51,7 +51,7 @@ public class MilestoneToDo {
     }
 
     /**
-     * Instantiates a new To do.
+     * Instantiates a new MilestoneToDo.
      *
      * @param todo      the todo
      * @param milestone the milestone
@@ -62,18 +62,7 @@ public class MilestoneToDo {
     }
 
     /**
-     * Finish a todo.
-     *
-     * @return finishing successful?
-     * @throws SQLException on SQL excetion
-     */
-    public boolean finish() throws SQLException {
-
-        return update();
-    }
-
-    /**
-     * Delete a todo.
+     * Delete a MilestoneToDo.
      *
      * @return deleting successful?
      * @throws SQLException on SQL exception
@@ -82,15 +71,7 @@ public class MilestoneToDo {
         return DatabaseManager.getInstance().milestoneToDoAccess.delete(this) == 1;
     }
 
-    /**
-     * Update todo.
-     *
-     * @return updating successful?
-     * @throws SQLException on SQL exception
-     */
-    private boolean update() throws SQLException {
-        return DatabaseManager.getInstance().milestoneToDoAccess.update(this) == 1;
-    }
+
 
 
 
