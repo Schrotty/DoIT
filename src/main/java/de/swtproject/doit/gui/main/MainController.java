@@ -1,10 +1,9 @@
 package de.swtproject.doit.gui.main;
 
-import com.j256.ormlite.field.types.SqlDateStringType;
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
-import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
@@ -174,6 +173,11 @@ public class MainController {
         mainView.setImportJSONMenuListener(new ImportJSONListener());
     }
 
+    private void switchButtonHighlight(JButton activate, JButton deactivate) {
+        activate.setEnabled(true);
+        deactivate.setEnabled(false);
+    }
+
     /**
      * Listener for clicking the openCreateButton.
      *
@@ -241,6 +245,8 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             mainView.setProd(true);
             fillToDoList(mainView.isProd());
+
+            switchButtonHighlight(mainView.archivButton, mainView.prodButton);
         }
     }
 
@@ -257,6 +263,8 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             mainView.setProd(false);
             fillToDoList(mainView.isProd());
+
+            switchButtonHighlight(mainView.prodButton, mainView.archivButton);
         }
     }
 
