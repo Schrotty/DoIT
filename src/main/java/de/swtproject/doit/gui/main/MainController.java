@@ -124,7 +124,7 @@ public class MainController {
         ListModel<ToDo> model = mainView.todoTable.getModel();
         JFileChooser c = new JFileChooser();
 
-        int rVal = c.showSaveDialog(mainView);
+        int rVal = c.showOpenDialog(mainView);
 
         if (rVal == JFileChooser.APPROVE_OPTION) {
             Path file = Paths.get(c.getSelectedFile().getPath());
