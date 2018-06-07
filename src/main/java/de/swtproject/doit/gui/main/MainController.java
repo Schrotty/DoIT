@@ -65,6 +65,9 @@ public class MainController {
             mainView.todoTable.setCellRenderer(new PriorityCellRenderer());
             mainView.todoTable.setModel(model);
             displayToDo(to);
+
+            if (isProd) switchButtonHighlight(mainView.archivButton, mainView.prodButton);
+            if (!isProd) switchButtonHighlight(mainView.prodButton, mainView.archivButton);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -245,8 +248,6 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             mainView.setProd(true);
             fillToDoList(mainView.isProd());
-
-            switchButtonHighlight(mainView.archivButton, mainView.prodButton);
         }
     }
 
@@ -263,8 +264,6 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             mainView.setProd(false);
             fillToDoList(mainView.isProd());
-
-            switchButtonHighlight(mainView.prodButton, mainView.archivButton);
         }
     }
 
