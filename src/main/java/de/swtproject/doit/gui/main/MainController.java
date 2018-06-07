@@ -102,6 +102,7 @@ public class MainController {
     /**
      * Exports all {@Link ToDo}s to a
      * selectable file on the disk.
+     *
      * @throws IOException on an exception with the IO.
      */
     public void exportToDos() throws IOException {
@@ -133,18 +134,18 @@ public class MainController {
             JSONObject dataset = new JSONObject(json);
             JSONArray todos = (JSONArray) dataset.get("todos");
 
-            for(int i = 0; i < todos.length(); i++) {
+            for (int i = 0; i < todos.length(); i++) {
                 JSONObject data = (JSONObject) todos.get(i);
 
                 if (data.has("title")) {
-                    ToDo todo = ToDo.create( (String)data.get("title") );
+                    ToDo todo = ToDo.create((String) data.get("title"));
 
-                    if (data.has("description"))    todo.setDescription( (String)data.get("description") );
-                    if (data.has("priority"))       todo.setPriority(Priority.valueOf( (String)data.get("priority") ));
-                    if (data.has("interval"))       todo.setInterval(IntervalType.valueOf( (String)data.get("interval") ));
-                    if (data.has("start"))          todo.setStart(Date.valueOf( (String)data.get("start") ));
-                    if (data.has("deadline"))       todo.setDeadline(Date.valueOf( (String)data.get("deadline") ));
-                    if (data.has("notifyPoint"))    todo.setNotifyPoint(Date.valueOf( (String)data.get("notifyPoint") ));
+                    if (data.has("description")) todo.setDescription((String) data.get("description"));
+                    if (data.has("priority")) todo.setPriority(Priority.valueOf((String) data.get("priority")));
+                    if (data.has("interval")) todo.setInterval(IntervalType.valueOf((String) data.get("interval")));
+                    if (data.has("start")) todo.setStart(Date.valueOf((String) data.get("start")));
+                    if (data.has("deadline")) todo.setDeadline(Date.valueOf((String) data.get("deadline")));
+                    if (data.has("notifyPoint")) todo.setNotifyPoint(Date.valueOf((String) data.get("notifyPoint")));
 
                     DatabaseManager.storeToDo(todo);
                     updateList(mainView.isProd());
@@ -217,11 +218,12 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                ((ToDo) mainView.todoTable.getSelectedValue()).delete();
+                ToDo toDo = (ToDo) mainView.todoTable.getSelectedValue();
+                if (null != toDo)
+                    toDo.delete();
             } catch (SQLException sql) {
                 sql.printStackTrace();
             }
-            // TODO: prod arch choice needed!
             updateList(mainView.isProd());
         }
     }
@@ -260,6 +262,7 @@ public class MainController {
 
     /**
      * Listener for exporting the {@Link ToDo}s to a JSON file.
+     *
      * @author Niklas Kühtmann
      */
     class ExportJSONListener implements ActionListener {
@@ -268,7 +271,7 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             try {
                 exportToDos();
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to export!");
             }
@@ -277,6 +280,7 @@ public class MainController {
 
     /**
      * Listener for import {@Link ToDo}s from a JSON file.
+     *
      * @author Niklas Kühtmann
      */
     class ImportJSONListener implements ActionListener {
@@ -285,7 +289,7 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             try {
                 importToDos();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to import!");
             }
