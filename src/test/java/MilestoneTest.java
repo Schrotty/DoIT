@@ -7,9 +7,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class MilestoneTest {
 
@@ -64,7 +62,7 @@ public class MilestoneTest {
     @Test
     public void setToDos() throws SQLException {
         ToDo t = ToDo.create("hallo");
-        ToDo t2 = ToDo.create("hallo");
+        ToDo t2 = ToDo.create("hallo2");
         List<ToDo> l = new LinkedList<>();
         l.add(t);
         l.add(t2);
@@ -82,7 +80,7 @@ public class MilestoneTest {
         assertEquals(1, milestones.size());
         assertTrue(milestones.get(0).equals(milestone));
 
-        assertNotEquals(milestones, milestone);
+        assertFalse(milestones.get(0).equals(new LinkedList<String>()));
 
 
     }

@@ -170,10 +170,8 @@ public class DatabaseManager {
         List<MilestoneToDo> data = getmilestoneToDosByMilestone(milestone.getId());
 
         for(MilestoneToDo t : data)
-        {
-            if(!t.delete())
-                return false;
-        }
+            t.delete();
+
 
         return self.milestoneAccess.delete(milestone) == 1;
     }
@@ -192,8 +190,7 @@ public class DatabaseManager {
 
         for(MilestoneToDo t : data)
         {
-            if(!t.delete())
-                return false;
+            t.delete();
         }
 
         return self.todoAccess.delete(todo) == 1;

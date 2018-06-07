@@ -6,11 +6,10 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ToDoTest {
 
@@ -110,7 +109,7 @@ public class ToDoTest {
         assertEquals(1, todos.size());
         assertTrue(todos.get(0).equals(todo));
 
-        assertNotEquals(todos, todo);
+        assertFalse(todos.get(0).equals(new LinkedList<String>()));
 
     }
 
