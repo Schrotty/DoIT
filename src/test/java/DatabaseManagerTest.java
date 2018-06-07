@@ -130,4 +130,39 @@ public class DatabaseManagerTest {
             assertTrue(ts.contains(t));
         }
     }
+
+    @org.junit.Test
+    public void getAllMilestones() throws SQLException {
+
+        List<ToDo> ts = new LinkedList<>();
+
+        ToDo toAdd = DatabaseManager.storeToDo(ToDo.create("banana"));
+
+        ts.add(toAdd);
+
+        Milestone m = Milestone.create("kiwi");
+        m.setAssignedToDos(ts);
+
+        m = DatabaseManager.storeMilestone(m);
+        Milestone m2 = DatabaseManager.storeMilestone(Milestone.create("nix"));
+
+        List<Milestone> milestones = DatabaseManager.getAllMilestones(true);
+
+        assertEquals(milestones.size(), 2);
+
+        boolean found = false;
+
+        for(Milestone tm : milestones)
+        {
+            if(tm.getAssignedToDos().size() > 0)
+            {
+                assertEquals(m.getAssignedToDos(), tm.getAssignedToDos());
+                found = true;
+            }
+
+        }
+
+        assertTrue(found);
+
+    }
 }

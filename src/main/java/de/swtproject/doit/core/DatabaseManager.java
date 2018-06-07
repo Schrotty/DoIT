@@ -285,7 +285,6 @@ public class DatabaseManager {
      */
     public static List<Milestone> getAllMilestones(boolean withToDos) throws SQLException {
         QueryBuilder<Milestone, Integer> queryBuilder = self.milestoneAccess.queryBuilder();
-        Where<Milestone, Integer> where = queryBuilder.where();
 
         PreparedQuery<Milestone> preparedQuery = queryBuilder.prepare();
 

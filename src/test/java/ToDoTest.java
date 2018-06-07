@@ -17,6 +17,7 @@ public class ToDoTest {
 
     @org.junit.Before
     public void beforeEach() throws SQLException {
+        DatabaseManager.phoenix();
         todo = ToDo.create("task");
         DatabaseManager.storeToDo(todo);
     }
