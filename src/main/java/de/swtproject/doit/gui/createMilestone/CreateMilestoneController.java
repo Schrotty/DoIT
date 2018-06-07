@@ -151,6 +151,9 @@ public class CreateMilestoneController
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
+
+                parent.updateMilestoneList();
+
                 createView.dispose();
                 return;
             }

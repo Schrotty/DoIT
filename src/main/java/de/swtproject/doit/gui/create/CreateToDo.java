@@ -2,10 +2,12 @@ package de.swtproject.doit.gui.create;
 
 import com.toedter.calendar.JDateChooser;
 import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.Milestone;
 import de.swtproject.doit.core.Priority;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 
 /**
@@ -65,7 +67,7 @@ public class CreateToDo extends javax.swing.JDialog {
     /**
      * The Milestones options combo box.
      */
-    private javax.swing.JComboBox<String> milestonesOptionsComboBox;
+    javax.swing.JComboBox<String> milestonesOptionsComboBox;
     /**
      * The Submit button.
      */
@@ -97,8 +99,11 @@ public class CreateToDo extends javax.swing.JDialog {
     /**
      * Instantiates a new Create to do.
      */
-    CreateToDo() {
+    CreateToDo(List<Milestone> milestones) {
         initComponents();
+
+        for(Milestone m : milestones)
+            milestonesOptionsComboBox.addItem(m.toString());
     }
 
     /**

@@ -51,6 +51,7 @@ public class MainController {
         this.mainView = new Mainsite();
         this.registerListener();
         this.fillToDoList(true);
+        this.updateMilestoneList();
     }
 
     /**
@@ -130,6 +131,18 @@ public class MainController {
             }
             Path file = Paths.get(c.getSelectedFile().getPath());
             Files.write(file, Arrays.asList(dataset.toString()), Charset.forName("UTF-8"));
+        }
+    }
+
+    public void updateMilestoneList()
+    {
+        try
+        {
+            mainView.setMilestoneList(DatabaseManager.getAllMilestones(true));
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
         }
     }
 

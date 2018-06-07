@@ -1,16 +1,16 @@
 package de.swtproject.doit.gui.create;
 
-import de.swtproject.doit.core.IntervalType;
-import de.swtproject.doit.core.Priority;
-import de.swtproject.doit.core.ToDo;
-import de.swtproject.doit.core.DatabaseManager;
+import de.swtproject.doit.core.*;
 import de.swtproject.doit.gui.main.MainController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Controller for the {@link CreateToDo}.
@@ -26,6 +26,8 @@ public class CreateController {
      */
     private CreateToDo createView;
 
+    private List<Milestone> milestones;
+
     /**
      * The parent {@link MainController}.
      */
@@ -36,8 +38,19 @@ public class CreateController {
      *
      * @param parent the parent {@link MainController}
      */
-    private CreateController(MainController parent) {
-        this.createView = new CreateToDo();
+    private CreateController(MainController parent)
+    {
+        try
+        {
+            milestones = DatabaseManager.getAllMilestones(true);
+            this.createView = new CreateToDo(milestones);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            milestones = new LinkedList<>();
+        }
+
         this.createView.setModal(true);
 
         this.parent = parent;
@@ -108,6 +121,18 @@ public class CreateController {
                     todo.setDeadline(createView.deadlineButton.getDate());
 
                     DatabaseManager.storeToDo(todo);
+
+                    int idx = createView.milestonesOptionsComboBox.getSelectedIndex();
+
+
+                    if(idx != 0)
+                    {
+                        List<ToDo> oldTodosOfMilestone = milestones.get(idx - 1).getAssignedToDos();
+                        oldTodosOfMilestone.add(todo);
+                        milestones.get(idx - 1).setAssignedToDos(oldTodosOfMilestone);
+                        milestones.get(idx - 1).update();
+                    }
+
                     parent.updateList(parent.mainView.isProd());
                 } catch (Exception exception) {
                     exception.printStackTrace();
