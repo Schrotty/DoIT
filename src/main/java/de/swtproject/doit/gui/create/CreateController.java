@@ -107,7 +107,8 @@ public class CreateController {
                     todo.setStart(createView.dateToStartButton.getDate());
                     todo.setDeadline(createView.deadlineButton.getDate());
 
-                    parent.updateList(DatabaseManager.storeToDo(todo));
+                    DatabaseManager.storeToDo(todo);
+                    parent.updateList(parent.mainView.isProd());
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }

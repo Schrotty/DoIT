@@ -2,6 +2,7 @@ import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 
@@ -90,5 +91,14 @@ public class ToDoTest {
     @org.junit.Test
     public void toStringTest() {
         assertEquals("task", todo.toString());
+    }
+
+    @org.junit.Test
+    public void serializeTest() {
+        JSONObject ds = todo.serialize();
+        assertEquals( todo.getTitle(), ds.get("title") );
+        if (ds.has("description")) assertEquals( todo.getDescription(), ds.get("description"));
+        if (ds.has("interval")) assertEquals( todo.getInterval().toString(), ds.get("interval"));
+        if (ds.has("priority")) assertEquals( todo.getPriority().toString(), ds.get("priority"));
     }
 }
