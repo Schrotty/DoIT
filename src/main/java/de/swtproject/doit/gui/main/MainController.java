@@ -1,10 +1,9 @@
 package de.swtproject.doit.gui.main;
 
-import com.j256.ormlite.field.types.SqlDateStringType;
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
-import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
@@ -76,7 +75,7 @@ public class MainController {
      *
      * @param todo the {@link ToDo} to display.
      */
-    private void displayToDo(ToDo todo) {
+    public void displayToDo(ToDo todo) {
         if (todo != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
