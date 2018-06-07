@@ -3,6 +3,7 @@ package de.swtproject.doit.core;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -81,6 +82,7 @@ public class ToDo {
      */
     public ToDo(String title) {
         this.title = title;
+        this.interval = IntervalType.NONE;
         this.priority = Priority.DEFAULT;
     }
 
@@ -258,5 +260,21 @@ public class ToDo {
      */
     public String toString() {
         return title;
+    }
+
+    /**
+     * Setializes this into a JSONObject.
+     * @return JSONObject Serialized object.
+     */
+    public JSONObject serialize() {
+        JSONObject ds = new JSONObject();
+        ds.put("title",         this.getTitle());
+        ds.put("description",   this.getDescription());
+        ds.put("interval",      this.getInterval().toString());
+        ds.put("start",         this.getStart());
+        ds.put("deadline",      this.getDeadline());
+        ds.put("notifyPoint",   this.getNotifyPoint());
+        ds.put("priority",      this.getPriority().toString());
+        return ds;
     }
 }
