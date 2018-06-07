@@ -25,7 +25,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * Bool if prod is shown
      */
-    private boolean isProd = true;
+    public boolean isProd = true;
 
     /**
      * The Create to do frame.
