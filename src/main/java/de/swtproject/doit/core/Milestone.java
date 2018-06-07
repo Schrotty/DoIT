@@ -181,19 +181,9 @@ public class Milestone {
     }
 
 
-    /**
-     * Finish a todo.
-     *
-     * @return finishing successful?
-     * @throws SQLException on SQL excetion
-     */
-    public boolean finish() throws SQLException {
-
-        return update();
-    }
 
     /**
-     * Delete a todo.
+     * Delete a milestone.
      *
      * @return deleting successful?
      * @throws SQLException on SQL exception
@@ -203,7 +193,7 @@ public class Milestone {
     }
 
     /**
-     * Update todo.
+     * Update milestone.
      *
      * @return updating successful?
      * @throws SQLException on SQL exception

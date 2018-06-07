@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -119,10 +120,21 @@ public class DatabaseManagerTest {
 
         m.setAssignedToDos(ts);
 
+        String oldT = m.getTitle();
+        String oldD = m.getDescription();
+
+        m.setDescription("neu");
+        m.setTitle("titleeeeee");
+
         m.update();
 
-        List<ToDo> toDos = DatabaseManager.getSingleMilestone(m.getId(), true).getAssignedToDos();
+        Milestone dbMilestone =  DatabaseManager.getSingleMilestone(m.getId(), true);
 
+        List<ToDo> toDos = dbMilestone.getAssignedToDos();
+        
+        assertEquals(m.getId(), dbMilestone.getId());
+        assertNotEquals(m.getTitle(), oldT);
+        assertNotEquals(m.getDescription(), oldD);
         assertEquals(toDos.size(), ts.size());
 
         for(ToDo t : toDos)
