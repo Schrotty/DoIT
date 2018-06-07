@@ -146,7 +146,8 @@ public class MainController {
                     if (data.has("deadline"))       todo.setDeadline(Date.valueOf( (String)data.get("deadline") ));
                     if (data.has("notifyPoint"))    todo.setNotifyPoint(Date.valueOf( (String)data.get("notifyPoint") ));
 
-                    updateList(DatabaseManager.storeToDo(todo));
+                    DatabaseManager.storeToDo(todo);
+                    updateList(mainView.isProd());
                 }
             }
         }
