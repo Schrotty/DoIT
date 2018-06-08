@@ -127,6 +127,20 @@ public class DatabaseManager {
     }
 
     /**
+     * Get a collection of {@link ToDo}s which are
+     * not yet notified.
+     *
+     * @return the todo collection
+     * @throws SQLException on SQL exception
+     */
+    public static List<ToDo> getNotNotifiedTasks() throws SQLException {
+        List<ToDo> list = getCollection(true);
+        list.removeIf(ToDo::isNotified);
+
+        return list;
+    }
+
+    /**
      * Create the data directory if it's missing
      *
      * @throws IllegalStateException the illegal state exception

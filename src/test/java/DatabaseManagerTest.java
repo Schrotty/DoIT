@@ -4,6 +4,7 @@ import de.swtproject.doit.core.ToDo;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -44,5 +45,18 @@ public class DatabaseManagerTest {
         DatabaseManager.storeToDo(ToDo.create("Schrotty")).finish();
 
         assertTrue(DatabaseManager.getCollection(true).isEmpty());
+    }
+
+    @org.junit.Test
+    public void getNotNotifiedTasks() throws SQLException {
+        ToDo example = ToDo.create("Schrotty");
+        DatabaseManager.storeToDo(example);
+
+        assertFalse(DatabaseManager.getNotNotifiedTasks().isEmpty());
+
+        example.setNotified(true);
+        example.update();
+
+        assertTrue(DatabaseManager.getNotNotifiedTasks().isEmpty());
     }
 }

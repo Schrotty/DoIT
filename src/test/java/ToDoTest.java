@@ -9,8 +9,7 @@ import org.junit.Test;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ToDoTest {
 
@@ -100,5 +99,14 @@ public class ToDoTest {
         if (ds.has("description")) assertEquals( todo.getDescription(), ds.get("description"));
         if (ds.has("interval")) assertEquals( todo.getInterval().toString(), ds.get("interval"));
         if (ds.has("priority")) assertEquals( todo.getPriority().toString(), ds.get("priority"));
+    }
+
+    @org.junit.Test
+    public void notifyTest() {
+        ToDo task = ToDo.create("Test");
+        assertFalse(task.isNotified());
+
+        task.setNotified(true);
+        assertTrue(task.isNotified());
     }
 }
