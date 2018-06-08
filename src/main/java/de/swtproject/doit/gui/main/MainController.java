@@ -88,6 +88,13 @@ public class MainController {
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
+        } else {
+            mainView.title.setText("");
+            mainView.description.setText("");
+            mainView.priorityLabel.setText("");
+
+            mainView.dateLabel.setText("-");
+            mainView.notifypointLabel.setText("-");
         }
     }
 
