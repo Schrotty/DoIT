@@ -1,5 +1,7 @@
 package de.swtproject.doit.core;
 
+import de.swtproject.doit.gui.notification.NotificationController;
+
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,16 +25,23 @@ public class NotificationTimer {
 
     public static void checkToDos() throws SQLException{
         for (ToDo todo :
-                DatabaseManager.getCollection(true)) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(todo.getStart());
-            calendar.roll(Calendar.DAY_OF_MONTH, 1);
+                DatabaseManager.getNotNotifiedTasks()) {
+            if(todo.getStart() != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(todo.getStart());
+                calendar.add(Calendar.DAY_OF_YEAR, -1);
 
-            if(calendar.after(new Date())){
-                System.out.println("Nachricht");
+                if(calendar.before(Calendar.getInstance())){
+                    NotificationController.notifier.add(todo);
+                }
             }
 
+
         }
+        if(!NotificationController.notifier.isEmpty()){
+            NotificationController.showDialog();
+        }
+
     }
 
     private class LoopTask extends TimerTask {
