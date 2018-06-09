@@ -34,6 +34,8 @@ import java.util.Arrays;
  */
 public class MainController {
 
+    private static ToDo current;
+
     /**
      * The managed {@link Mainsite}.
      */
@@ -179,6 +181,7 @@ public class MainController {
         mainView.setDeleteButtonListener(new DeleteListener());
         mainView.setArchivButtonListener(new ArchivListener());
         mainView.setProdButtonListener(new ProdListener());
+        mainView.setFinishButtonListener(new FinishListener());
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
     }
@@ -223,7 +226,8 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
+            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            current = (ToDo)mainView.todoTable.getSelectedValue();
         }
     }
 
@@ -306,6 +310,30 @@ public class MainController {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to import!");
+            }
+        }
+    }
+
+    /**
+     * Listener for finish a todo.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     */
+    class FinishListener implements ActionListener {
+
+        /**
+         * Called when user clicks the finish todo button.
+         *
+         * @param e the event that characterizes the action.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                current.finish();
+                fillToDoList(mainView.isProd);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
     }
