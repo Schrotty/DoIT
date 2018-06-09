@@ -1,10 +1,9 @@
 package de.swtproject.doit.gui.main;
 
-import com.j256.ormlite.field.types.SqlDateStringType;
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
-import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
@@ -68,6 +67,9 @@ public class MainController {
             mainView.todoTable.setCellRenderer(new PriorityCellRenderer());
             mainView.todoTable.setModel(model);
             displayToDo(to);
+
+            if (isProd) switchButtonHighlight(mainView.archivButton, mainView.prodButton);
+            if (!isProd) switchButtonHighlight(mainView.prodButton, mainView.archivButton);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -182,6 +184,11 @@ public class MainController {
         mainView.setFinishButtonListener(new FinishListener());
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
+    }
+
+    private void switchButtonHighlight(JButton activate, JButton deactivate) {
+        activate.setEnabled(true);
+        deactivate.setEnabled(false);
     }
 
     /**

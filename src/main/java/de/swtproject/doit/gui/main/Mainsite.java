@@ -1,6 +1,5 @@
 package de.swtproject.doit.gui.main;
 
-import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
 
@@ -47,7 +46,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Archiv button.
      */
-    private javax.swing.JButton archivButton;
+    javax.swing.JButton archivButton;
     /**
      * The Edit button.
      */
@@ -131,7 +130,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Prod button.
      */
-    private javax.swing.JButton prodButton;
+    javax.swing.JButton prodButton;
     /**
      * The Right panel.
      */
@@ -248,6 +247,7 @@ public class Mainsite extends javax.swing.JFrame {
         prodButton.setFont(new Font("Tahoma", 1, fontsize));
         prodButton.setText("Prod");
         prodButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        prodButton.setEnabled(false);
 
         archivButton.setFont(new Font("Tahoma", 1, fontsize));
         archivButton.setText("Archiv");
