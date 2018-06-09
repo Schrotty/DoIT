@@ -1,60 +1,69 @@
-package de.swtproject.doit.gui.create;
+package de.swtproject.doit.gui.createMilestone;
 
-import de.swtproject.doit.core.*;
+import de.swtproject.doit.core.DatabaseManager;
+import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.Milestone;
+import de.swtproject.doit.core.ToDo;
+import de.swtproject.doit.gui.create.CreateToDo;
 import de.swtproject.doit.gui.main.MainController;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the {@link CreateToDo}.
  *
- * @author Ruben Maurer
+ * @author Hans Wurst
  * @version 1.0
  * @since 0.2
  */
-public class CreateController {
+public class CreateMilestoneController
+{
 
     /**
      * The managed {@link CreateToDo}.
      */
-    private CreateToDo createView;
-
-    private List<Milestone> milestones;
+    private CreateMilestone createView;
 
     /**
      * The parent {@link MainController}.
      */
     private MainController parent;
 
+    private List<ToDo> toDoList = new LinkedList<>();
+
     /**
-     * Constructor for {@link CreateController}.
+     * Constructor for {@link CreateMilestoneController}.
      *
      * @param parent the parent {@link MainController}
      */
-    private CreateController(MainController parent)
-    {
-        try
-        {
-            milestones = DatabaseManager.getAllMilestones(true);
-            this.createView = new CreateToDo(milestones);
-        }
-        catch (SQLException e)
-        {
+    private CreateMilestoneController(MainController parent) {
+
+
+        try {
+            toDoList.addAll(DatabaseManager.getCollection(false));
+            toDoList.addAll(DatabaseManager.getCollection(true));
+            this.createView = new CreateMilestone(toDoList.stream().map(x-> x.toString()).collect(Collectors.toList()));
+
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            milestones = new LinkedList<>();
         }
+
 
         this.createView.setModal(true);
 
         this.parent = parent;
         this.registerListener();
+
+
+
+
     }
 
     /**
@@ -63,7 +72,7 @@ public class CreateController {
      * @param parent the parent
      */
     public static void showView(MainController parent) {
-        new CreateController(parent).createView.setVisible(true);
+        new CreateMilestoneController(parent).createView.setVisible(true);
     }
 
     /**
@@ -111,34 +120,39 @@ public class CreateController {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (validateForm()) {
+
+                Milestone m = Milestone.create(createView.titleTextField.getText());
+
+                m.setDescription(createView.descriptionTextArea.getText());
+
+                m.setStart(createView.dateToStartButton.getDate());
+                m.setDeadline(createView.deadlineButton.getDate());
+
+                int[] selectedTodos = createView.todoList.getSelectedIndices();
+
+
+
+
                 try {
-                    ToDo todo = ToDo.create(createView.titleTextField.getText());
-
-                    todo.setDescription(createView.descriptionTextArea.getText());
-                    todo.setPriority(Priority.valueOf(createView.prioritySelect.getSelectedItem().toString().toUpperCase()));
-                    todo.setInterval(IntervalType.valueOf(createView.intervalComboBox.getSelectedItem().toString().toUpperCase()));
-                    todo.setStart(createView.dateToStartButton.getDate());
-                    todo.setDeadline(createView.deadlineButton.getDate());
-
-                    DatabaseManager.storeToDo(todo);
-                    parent.mainView.setProd(true);
-
-                    int idx = createView.milestonesOptionsComboBox.getSelectedIndex();
 
 
-                    if(idx != 0)
+                    List<ToDo> milestoneToDos = new LinkedList<>();
+
+                    for(int i : selectedTodos)
                     {
-                        List<ToDo> oldTodosOfMilestone = milestones.get(idx - 1).getAssignedToDos();
-                        oldTodosOfMilestone.add(todo);
-                        milestones.get(idx - 1).setAssignedToDos(oldTodosOfMilestone);
-                        milestones.get(idx - 1).update();
+                        milestoneToDos.add(toDoList.get(i));
                     }
 
-                    parent.updateList(parent.mainView.isProd());
-                    parent.displayToDo(todo);
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+                    m.setAssignedToDos(milestoneToDos);
+
+                    DatabaseManager.storeMilestone(m);
+
+
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
                 }
+
+                parent.updateMilestoneList();
 
                 createView.dispose();
                 return;
@@ -162,13 +176,13 @@ public class CreateController {
                 if (!sameDay) isValid = createView.dateToStartButton.getDate().after(new Date());
             }
 
-            if (createView.dateToStartButton.getDate() != null && createView.deadlineButton.getDate() != null && isValid) {
-                isValid = createView.dateToStartButton.getDate().before(createView.deadlineButton.getDate());
-            }
 
-            if (createView.titleTextField.getText().isEmpty() || createView.titleTextField.getText() == null) {
+            if (createView.titleTextField.getText() == null ||createView.titleTextField.getText().isEmpty())
+            {
                 isValid = false;
             }
+
+
 
             return isValid;
         }

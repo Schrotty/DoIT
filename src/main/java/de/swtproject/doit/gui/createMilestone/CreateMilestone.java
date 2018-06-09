@@ -1,24 +1,28 @@
-package de.swtproject.doit.gui.create;
+package de.swtproject.doit.gui.createMilestone;
 
 import com.toedter.calendar.JDateChooser;
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
-import de.swtproject.doit.core.Milestone;
-import de.swtproject.doit.core.Priority;
+import de.swtproject.doit.core.ToDo;
+
 
 import javax.swing.*;
+import javax.swing.event.ListDataListener;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
-
 
 /**
  * The type Create to do.
  */
-public class CreateToDo extends javax.swing.JDialog {
+public class CreateMilestone extends javax.swing.JDialog {
 
     /**
      * The Mainsite.
      */
     private static final int fontsize = 16;
+
     /**
      * The Cancel button.
      */
@@ -37,6 +41,18 @@ public class CreateToDo extends javax.swing.JDialog {
      */
     JDateChooser deadlineButton;
     /**
+     * The todo list.
+     */
+    JList<String> todoList = new JList<>();
+    /**
+     * The todolist panel.
+     */
+    private javax.swing.JPanel todoListPanel;
+    /**
+     * The todolist scroll pane.
+     */
+    private javax.swing.JScrollPane todoListScrollPane;
+    /**
      * The Description panel.
      */
     private javax.swing.JPanel descriptionPanel;
@@ -48,14 +64,7 @@ public class CreateToDo extends javax.swing.JDialog {
      * The Description text area.
      */
     javax.swing.JTextArea descriptionTextArea;
-    /**
-     * The Interval combo box.
-     */
-    javax.swing.JComboBox<String> intervalComboBox;
-    /**
-     * The Interval panel.
-     */
-    private javax.swing.JPanel intervalPanel;
+
     /**
      * The Mainpanel.
      */
@@ -63,11 +72,7 @@ public class CreateToDo extends javax.swing.JDialog {
     /**
      * The Milestone panel.
      */
-    private javax.swing.JPanel milestonePanel;
-    /**
-     * The Milestones options combo box.
-     */
-    javax.swing.JComboBox<String> milestonesOptionsComboBox;
+
     /**
      * The Submit button.
      */
@@ -84,26 +89,26 @@ public class CreateToDo extends javax.swing.JDialog {
      * The Todo create label.
      */
     private javax.swing.JLabel todoCreateLabel;
-
-    /**
-     * The priority select box.
-     */
-    public JComboBox<String> prioritySelect;
-
-    /**
-     * The priority select box panel.
-     */
-    public JPanel priorityPanel;
     // End of variables declaration
 
     /**
      * Instantiates a new Create to do.
      */
-    CreateToDo(List<Milestone> milestones) {
+    CreateMilestone(List<String> toDos) {
+        setToDoList(toDos);
         initComponents();
+    }
 
-        for(Milestone m : milestones)
-            milestonesOptionsComboBox.addItem(m.toString());
+    private void setToDoList(List<String> l)
+    {
+        DefaultListModel<String> lm = new DefaultListModel();
+        for(String s : l)
+        {
+            lm.addElement(s);
+            System.out.println(s);
+        }
+
+        this.todoList = new JList<String>(lm);
     }
 
     /**
@@ -117,21 +122,24 @@ public class CreateToDo extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
         dateToStartButton = new JDateChooser();
         deadlineButton = new JDateChooser();
+
+
+        todoListPanel = new javax.swing.JPanel();
+        todoListScrollPane = new javax.swing.JScrollPane();
+
+
+
         submitButton = new javax.swing.JButton();
         titlePanel = new javax.swing.JPanel();
         titleTextField = new javax.swing.JTextField();
         descriptionPanel = new javax.swing.JPanel();
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextArea = new javax.swing.JTextArea();
-        milestonePanel = new javax.swing.JPanel();
-        milestonesOptionsComboBox = new javax.swing.JComboBox<>();
-        intervalPanel = new javax.swing.JPanel();
-        intervalComboBox = new javax.swing.JComboBox<>();
-        todoCreateLabel = new javax.swing.JLabel();
-        prioritySelect = new javax.swing.JComboBox<>();
-        priorityPanel = new javax.swing.JPanel();
 
-        setTitle("Create ToDo");
+
+        todoCreateLabel = new javax.swing.JLabel();
+
+        setTitle("Create Milestone");
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 1, fontsize));
         cancelButton.setText("Cancel");
@@ -169,6 +177,8 @@ public class CreateToDo extends javax.swing.JDialog {
         descriptionTextArea.setWrapStyleWord(true);
         descriptionTextArea.setLineWrap(true);
 
+
+
         descriptionScrollPane.setViewportView(descriptionTextArea);
 
         javax.swing.GroupLayout descriptionPanelLayout = new javax.swing.GroupLayout(descriptionPanel);
@@ -183,68 +193,12 @@ public class CreateToDo extends javax.swing.JDialog {
                                 228, Short.MAX_VALUE)
         );
 
-        milestonePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
-                        null, new java.awt.Color(102, 102, 102), null, null),
-                "Milestone", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font
-                        ("Tahoma", 1, fontsize)));
+        deadlineButton.setBorder(javax.swing.BorderFactory.createTitledBorder
+                (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
+                                null, new java.awt.Color(102, 102, 102),
+                                null, null), "Deadline", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
 
-        milestonesOptionsComboBox.setFont(new java.awt.Font("Tahoma", 1, fontsize));
-        milestonesOptionsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"None"}));
-        milestonesOptionsComboBox.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
-                null, new java.awt.Color(102, 102, 102), null, null));
-
-        javax.swing.GroupLayout milestonePanelLayout = new javax.swing.GroupLayout(milestonePanel);
-        milestonePanel.setLayout(milestonePanelLayout);
-        milestonePanelLayout.setHorizontalGroup(
-                milestonePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(milestonesOptionsComboBox, 0, 315, Short.MAX_VALUE)
-        );
-        milestonePanelLayout.setVerticalGroup(
-                milestonePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(milestonesOptionsComboBox, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
-
-        intervalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder
-                        (javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102),
-                                null, null), "Interval", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
-
-        intervalComboBox.setFont(new java.awt.Font("Tahoma", 1, fontsize));
-        //intervalComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nothing Selected" }));
-        intervalComboBox.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
-                null, new java.awt.Color(102, 102, 102), null, null));
-
-        javax.swing.GroupLayout intervalPanelLayout = new javax.swing.GroupLayout(intervalPanel);
-        intervalPanel.setLayout(intervalPanelLayout);
-        intervalPanelLayout.setHorizontalGroup(
-                intervalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(intervalComboBox, 0, 298, Short.MAX_VALUE)
-        );
-        intervalPanelLayout.setVerticalGroup(
-                intervalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(intervalComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-        );
-
-
-        priorityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder
-                        (javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102),
-                                null, null), "Priority", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
-
-        prioritySelect.setFont(new java.awt.Font("Tahoma", 1, fontsize));
-        prioritySelect.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
-                null, new java.awt.Color(102, 102, 102), null, null));
-
-        javax.swing.GroupLayout priorityPanelLayout = new javax.swing.GroupLayout(priorityPanel);
-        priorityPanel.setLayout(priorityPanelLayout);
-        priorityPanelLayout.setHorizontalGroup(
-                priorityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(prioritySelect, 0, 315, Short.MAX_VALUE)
-        );
-        priorityPanelLayout.setVerticalGroup(
-                priorityPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(prioritySelect, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
 
         dateToStartButton.setBorder(javax.swing.BorderFactory.createTitledBorder
                 (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
@@ -253,12 +207,30 @@ public class CreateToDo extends javax.swing.JDialog {
                         javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
 
 
-        deadlineButton.setBorder(javax.swing.BorderFactory.createTitledBorder
-                (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
-                                null, new java.awt.Color(102, 102, 102),
-                                null, null), "Deadline", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
+        todoList.setVisibleRowCount(5);
 
+
+        todoListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder
+                (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color
+                                (102, 102, 102), null, null),
+                        "ToDos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                        new java.awt.Font("Tahoma", 1, fontsize)));
+
+        javax.swing.GroupLayout todoPanelLayout = new javax.swing.GroupLayout(todoListPanel);
+        todoListPanel.setLayout(todoPanelLayout);
+        todoPanelLayout.setHorizontalGroup(
+                todoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                         .addComponent(todoListScrollPane)
+        );
+        todoPanelLayout.setVerticalGroup(
+                todoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                       .addComponent(todoListScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                6, Short.MAX_VALUE)
+        );
+
+        todoListScrollPane.setViewportView(todoList);
+
+        todoList.setFont(new java.awt.Font("Tahoma", 0, fontsize));
 
         javax.swing.GroupLayout mainpanelLayout = new javax.swing.GroupLayout(mainpanel);
         mainpanel.setLayout(mainpanelLayout);
@@ -276,13 +248,11 @@ public class CreateToDo extends javax.swing.JDialog {
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(titlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(descriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(milestonePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(priorityPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(dateToStartButton, GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(7, 7, 7)
                                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(intervalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(deadlineButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(dateToStartButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(deadlineButton, GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(todoListPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addContainerGap(24, Short.MAX_VALUE))))
         );
         mainpanelLayout.setVerticalGroup(
@@ -291,21 +261,19 @@ public class CreateToDo extends javax.swing.JDialog {
                                 .addComponent(createToDoLabel)
                                 .addGap(38, 38, 38)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(titlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(dateToStartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(titlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+
+                                .addGap(34, 34, 34)
+                                .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(dateToStartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+
+                                        .addComponent(deadlineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(34, 34, 34)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(mainpanelLayout.createSequentialGroup()
                                                 .addGap(8, 8, 8)
-                                                .addComponent(deadlineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(4, 4, 4)
-                                .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(milestonePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(intervalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(4, 4, 4)
-                                .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(priorityPanel, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(todoListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
@@ -330,17 +298,7 @@ public class CreateToDo extends javax.swing.JDialog {
                                 .addComponent(mainpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        for (IntervalType intervalType : IntervalType.values()) {
-            intervalComboBox.addItem(
-                    String.format("%s%s", intervalType.toString().substring(0, 1), intervalType.toString().substring(1).toLowerCase())
-            );
-        }
 
-        for (Priority priority : Priority.values()) {
-            prioritySelect.addItem(
-                    String.format("%s%s", priority.toString().substring(0, 1), priority.toString().substring(1).toLowerCase())
-            );
-        }
 
 
         pack();

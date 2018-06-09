@@ -5,9 +5,13 @@ import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.gui.create.CreateController;
+
+import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
+
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -34,6 +38,8 @@ import java.util.Arrays;
  */
 public class MainController {
 
+    private static ToDo current;
+
     /**
      * The managed {@link Mainsite}.
      */
@@ -46,6 +52,7 @@ public class MainController {
         this.mainView = new Mainsite();
         this.registerListener();
         this.fillToDoList(true);
+        this.updateMilestoneList();
     }
 
     /**
@@ -65,6 +72,9 @@ public class MainController {
             mainView.todoTable.setCellRenderer(new PriorityCellRenderer());
             mainView.todoTable.setModel(model);
             displayToDo(to);
+
+            if (isProd) switchButtonHighlight(mainView.archivButton, mainView.prodButton);
+            if (!isProd) switchButtonHighlight(mainView.prodButton, mainView.archivButton);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,6 +95,13 @@ public class MainController {
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
+        } else {
+            mainView.title.setText("");
+            mainView.description.setText("");
+            mainView.priorityLabel.setText("");
+
+            mainView.dateLabel.setText("-");
+            mainView.notifypointLabel.setText("-");
         }
     }
 
@@ -118,6 +135,18 @@ public class MainController {
             }
             Path file = Paths.get(c.getSelectedFile().getPath());
             Files.write(file, Arrays.asList(dataset.toString()), Charset.forName("UTF-8"));
+        }
+    }
+
+    public void updateMilestoneList()
+    {
+        try
+        {
+            mainView.setMilestoneList(DatabaseManager.getAllMilestones(true));
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -166,11 +195,18 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setCreateMilestoneListener(new OpenCreateMilestoneViewListener(this));
         mainView.setDeleteButtonListener(new DeleteListener());
         mainView.setArchivButtonListener(new ArchivListener());
         mainView.setProdButtonListener(new ProdListener());
+        mainView.setFinishButtonListener(new FinishListener());
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
+    }
+
+    private void switchButtonHighlight(JButton activate, JButton deactivate) {
+        activate.setEnabled(true);
+        deactivate.setEnabled(false);
     }
 
     /**
@@ -193,6 +229,25 @@ public class MainController {
     }
 
     /**
+     * Listener for clicking the openCreateMilestoneButton.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     * @since 0.2
+     */
+    class OpenCreateMilestoneViewListener implements ActionListener {
+        private MainController parent;
+
+        OpenCreateMilestoneViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            CreateMilestoneController.showView(parent);
+        }
+    }
+
+    /**
      * Listener for changing the selected item in the todoList.
      *
      * @author Ruben Maurer
@@ -208,7 +263,8 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
+            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            current = (ToDo)mainView.todoTable.getSelectedValue();
         }
     }
 
@@ -291,6 +347,30 @@ public class MainController {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to import!");
+            }
+        }
+    }
+
+    /**
+     * Listener for finish a todo.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     */
+    class FinishListener implements ActionListener {
+
+        /**
+         * Called when user clicks the finish todo button.
+         *
+         * @param e the event that characterizes the action.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                current.finish();
+                fillToDoList(mainView.isProd);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
     }

@@ -1,6 +1,9 @@
 package de.swtproject.doit.gui.main;
 
+
+import de.swtproject.doit.core.Milestone;
 import de.swtproject.doit.core.ToDo;
+
 import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
 
@@ -9,8 +12,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -25,7 +30,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * Bool if prod is shown
      */
-    private boolean isProd = true;
+    public boolean isProd = true;
 
     /**
      * The Create to do frame.
@@ -47,7 +52,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Archiv button.
      */
-    private javax.swing.JButton archivButton;
+    javax.swing.JButton archivButton;
     /**
      * The Edit button.
      */
@@ -56,6 +61,12 @@ public class Mainsite extends javax.swing.JFrame {
      * The Create milestone menu.
      */
     private javax.swing.JMenuItem createMilestoneMenu;
+
+    /**
+     * all milestones
+     */
+    private List<Milestone> milestones;
+
     /**
      * The Create notifiy point menu.
      */
@@ -131,7 +142,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Prod button.
      */
-    private javax.swing.JButton prodButton;
+    javax.swing.JButton prodButton;
     /**
      * The Right panel.
      */
@@ -192,6 +203,19 @@ public class Mainsite extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Mainsite().setVisible(true));
     }
 
+    public void setMilestoneList(List<Milestone> l)
+    {
+        this.milestones = l;
+
+        milestoneComboBox.removeAllItems();
+
+        for(Milestone m : l)
+        {
+            milestoneComboBox.addItem(m.toString());
+        }
+
+    }
+
     /**
      * Init components.
      */
@@ -248,6 +272,7 @@ public class Mainsite extends javax.swing.JFrame {
         prodButton.setFont(new Font("Tahoma", 1, fontsize));
         prodButton.setText("Prod");
         prodButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        prodButton.setEnabled(false);
 
         archivButton.setFont(new Font("Tahoma", 1, fontsize));
         archivButton.setText("Archiv");
@@ -519,6 +544,10 @@ public class Mainsite extends javax.swing.JFrame {
         todoTable.addListSelectionListener(e);
     }
 
+    public void setCreateMilestoneListener(ActionListener e) {
+        createMilestoneMenu.addActionListener(e);
+    }
+  
     public void setDeleteButtonListener(ActionListener e) {
         deleteButton.addActionListener(e);
     }
@@ -526,8 +555,12 @@ public class Mainsite extends javax.swing.JFrame {
     public void setArchivButtonListener(ActionListener e) {
         archivButton.addActionListener( e);
     }
-
     public void setProdButtonListener(ActionListener e) {
         prodButton.addActionListener(e);
+
+    }
+
+    void setFinishButtonListener(ActionListener e) {
+        finishButton.addActionListener(e);
     }
 }
