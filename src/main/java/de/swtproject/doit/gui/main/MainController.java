@@ -1,10 +1,9 @@
 package de.swtproject.doit.gui.main;
 
-import com.j256.ormlite.field.types.SqlDateStringType;
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
-import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.gui.create.CreateController;
 
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
@@ -39,6 +38,8 @@ import java.util.Arrays;
  */
 public class MainController {
 
+    private static ToDo current;
+
     /**
      * The managed {@link Mainsite}.
      */
@@ -71,6 +72,9 @@ public class MainController {
             mainView.todoTable.setCellRenderer(new PriorityCellRenderer());
             mainView.todoTable.setModel(model);
             displayToDo(to);
+
+            if (isProd) switchButtonHighlight(mainView.archivButton, mainView.prodButton);
+            if (!isProd) switchButtonHighlight(mainView.prodButton, mainView.archivButton);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -195,8 +199,14 @@ public class MainController {
         mainView.setDeleteButtonListener(new DeleteListener());
         mainView.setArchivButtonListener(new ArchivListener());
         mainView.setProdButtonListener(new ProdListener());
+        mainView.setFinishButtonListener(new FinishListener());
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
+    }
+
+    private void switchButtonHighlight(JButton activate, JButton deactivate) {
+        activate.setEnabled(true);
+        deactivate.setEnabled(false);
     }
 
     /**
@@ -253,7 +263,8 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
+            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
+            current = (ToDo)mainView.todoTable.getSelectedValue();
         }
     }
 
@@ -336,6 +347,30 @@ public class MainController {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(mainView, "Unable to import!");
+            }
+        }
+    }
+
+    /**
+     * Listener for finish a todo.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     */
+    class FinishListener implements ActionListener {
+
+        /**
+         * Called when user clicks the finish todo button.
+         *
+         * @param e the event that characterizes the action.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                current.finish();
+                fillToDoList(mainView.isProd);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
         }
     }
