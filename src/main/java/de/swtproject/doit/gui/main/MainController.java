@@ -85,7 +85,7 @@ public class MainController {
      *
      * @param todo the {@link ToDo} to display.
      */
-    private void displayToDo(ToDo todo) {
+    public void displayToDo(ToDo todo) {
         if (todo != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 

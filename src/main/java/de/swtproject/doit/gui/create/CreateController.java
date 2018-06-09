@@ -121,6 +121,7 @@ public class CreateController {
                     todo.setDeadline(createView.deadlineButton.getDate());
 
                     DatabaseManager.storeToDo(todo);
+                    parent.mainView.setProd(true);
 
                     int idx = createView.milestonesOptionsComboBox.getSelectedIndex();
 
@@ -134,6 +135,7 @@ public class CreateController {
                     }
 
                     parent.updateList(parent.mainView.isProd());
+                    parent.displayToDo(todo);
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
