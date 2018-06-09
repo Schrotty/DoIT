@@ -5,9 +5,13 @@ import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.gui.create.CreateController;
+
+import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
+
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -48,6 +52,7 @@ public class MainController {
         this.mainView = new Mainsite();
         this.registerListener();
         this.fillToDoList(true);
+        this.updateMilestoneList();
     }
 
     /**
@@ -133,6 +138,18 @@ public class MainController {
         }
     }
 
+    public void updateMilestoneList()
+    {
+        try
+        {
+            mainView.setMilestoneList(DatabaseManager.getAllMilestones(true));
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void importToDos() throws IOException, SQLException {
         ListModel<ToDo> model = mainView.todoTable.getModel();
         JFileChooser c = new JFileChooser();
@@ -178,6 +195,7 @@ public class MainController {
     private void registerListener() {
         mainView.setCreateToDoMenuListener(new OpenCreateViewListener(this));
         mainView.setToDoTabelListener(new ChangeToDoListener());
+        mainView.setCreateMilestoneListener(new OpenCreateMilestoneViewListener(this));
         mainView.setDeleteButtonListener(new DeleteListener());
         mainView.setArchivButtonListener(new ArchivListener());
         mainView.setProdButtonListener(new ProdListener());
@@ -207,6 +225,25 @@ public class MainController {
 
         public void actionPerformed(ActionEvent e) {
             CreateController.showView(parent);
+        }
+    }
+
+    /**
+     * Listener for clicking the openCreateMilestoneButton.
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     * @since 0.2
+     */
+    class OpenCreateMilestoneViewListener implements ActionListener {
+        private MainController parent;
+
+        OpenCreateMilestoneViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            CreateMilestoneController.showView(parent);
         }
     }
 

@@ -7,6 +7,8 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * The type To do.
@@ -14,10 +16,13 @@ import java.util.Date;
 @DatabaseTable(tableName = "todo")
 public class ToDo {
 
+    // query field-name
+    public final static String ID_FIELD_NAME = "id";
+
     /**
      * The Id.
      */
-    @DatabaseField(generatedId = true)
+    @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
     private int id;
 
     /**
@@ -62,6 +67,8 @@ public class ToDo {
     @DatabaseField()
     private Date notifyPoint;
 
+
+
     /**
      * The priority.
      */
@@ -95,6 +102,8 @@ public class ToDo {
     public static ToDo create(String title) {
         return new ToDo(title);
     }
+
+
 
     /**
      * Gets title.
@@ -196,6 +205,14 @@ public class ToDo {
     }
 
     /**
+     * Get the database id
+     * @return id
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
      * Sets notify point.
      *
      * @param notifyPoint the notify point
@@ -240,7 +257,7 @@ public class ToDo {
      * @throws SQLException on SQL exception
      */
     public boolean delete() throws SQLException {
-        return DatabaseManager.getInstance().todoAccess.delete(this) == 1;
+        return DatabaseManager.getInstance().deleteToDo(this);
     }
 
     /**
@@ -262,6 +279,15 @@ public class ToDo {
         return title;
     }
 
+    @Override
+    public boolean equals(Object other)
+    {
+        if (!(other instanceof ToDo))
+            return false;
+
+        return this.id == ((ToDo) other).id;
+    }
+  
     /**
      * Setializes this into a JSONObject.
      * @return JSONObject Serialized object.
