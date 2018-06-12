@@ -26,6 +26,11 @@ public class CreateMilestoneController
 {
 
     /**
+     * optional milestone to edit
+     */
+    private Milestone currentMilestoneToEdit;
+
+    /**
      * The managed {@link CreateToDo}.
      */
     private CreateMilestone createView;
@@ -42,13 +47,14 @@ public class CreateMilestoneController
      *
      * @param parent the parent {@link MainController}
      */
-    private CreateMilestoneController(MainController parent) {
+    private CreateMilestoneController(MainController parent, Milestone optMilestoneToEdit) {
 
+        currentMilestoneToEdit = optMilestoneToEdit;
 
         try {
             toDoList.addAll(DatabaseManager.getCollection(false));
             toDoList.addAll(DatabaseManager.getCollection(true));
-            this.createView = new CreateMilestone(toDoList.stream().map(x-> x.toString()).collect(Collectors.toList()));
+            this.createView = new CreateMilestone(this.toDoList, optMilestoneToEdit);
 
 
         } catch (SQLException e) {
@@ -71,8 +77,8 @@ public class CreateMilestoneController
      *
      * @param parent the parent
      */
-    public static void showView(MainController parent) {
-        new CreateMilestoneController(parent).createView.setVisible(true);
+    public static void showView(MainController parent, Milestone optMilestone) {
+        new CreateMilestoneController(parent, optMilestone).createView.setVisible(true);
     }
 
     /**
@@ -121,7 +127,10 @@ public class CreateMilestoneController
         public void actionPerformed(ActionEvent e) {
             if (validateForm()) {
 
-                Milestone m = Milestone.create(createView.titleTextField.getText());
+
+                Milestone m = currentMilestoneToEdit == null ? Milestone.create(createView.titleTextField.getText()) : currentMilestoneToEdit;
+
+                m.setTitle(createView.titleTextField.getText());
 
                 m.setDescription(createView.descriptionTextArea.getText());
 
@@ -130,11 +139,10 @@ public class CreateMilestoneController
 
                 int[] selectedTodos = createView.todoList.getSelectedIndices();
 
-
-
-
                 try {
 
+                    if(currentMilestoneToEdit != null)
+                        currentMilestoneToEdit.getAssignedToDos().clear();
 
                     List<ToDo> milestoneToDos = new LinkedList<>();
 

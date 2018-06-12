@@ -1,9 +1,6 @@
 package de.swtproject.doit.gui.main;
 
-import de.swtproject.doit.core.DatabaseManager;
-import de.swtproject.doit.core.IntervalType;
-import de.swtproject.doit.core.Priority;
-import de.swtproject.doit.core.ToDo;
+import de.swtproject.doit.core.*;
 import de.swtproject.doit.gui.create.CreateController;
 
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
@@ -39,6 +36,7 @@ import java.util.Arrays;
 public class MainController {
 
     private static ToDo current;
+    private static Milestone currSelectedMilestone = null;
 
     /**
      * The managed {@link Mainsite}.
@@ -53,6 +51,7 @@ public class MainController {
         this.registerListener();
         this.fillToDoList(true);
         this.updateMilestoneList();
+
     }
 
     /**
@@ -238,12 +237,13 @@ public class MainController {
     class OpenCreateMilestoneViewListener implements ActionListener {
         private MainController parent;
 
+
         OpenCreateMilestoneViewListener(MainController mainController) {
             this.parent = mainController;
         }
 
         public void actionPerformed(ActionEvent e) {
-            CreateMilestoneController.showView(parent);
+            CreateMilestoneController.showView(parent, MainController.currSelectedMilestone);
         }
     }
 
