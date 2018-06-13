@@ -26,10 +26,10 @@
 ## Rollen -  3. Woche
 | Role                      | Person        |
 | --------------------------| ------------- |
-| Product Owner             | -             |
-| Build Engineer            | -             |
-| Head of Quality Assurance | -             |
-| Quality Assurance         | -             |
-| Lead Developer            | -             |
-| Developer                 | -             |
-| Developer                 | -             |	
+| Product Owner             | Konstantin W. |
+| Build Engineer            | Niklas K.     |
+| Head of Quality Assurance | Jannik S.     |
+| Quality Assurance         | Thomas U.     |
+| Lead Developer            | Martin D.     |
+| Developer                 | Ruben M.      |
+| Developer                 | Timo S.       |	
