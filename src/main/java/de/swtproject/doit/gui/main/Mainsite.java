@@ -2,20 +2,17 @@ package de.swtproject.doit.gui.main;
 
 
 import de.swtproject.doit.core.Milestone;
-import de.swtproject.doit.core.ToDo;
-
-import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
+import de.swtproject.doit.gui.filter.Filter;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
-import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -562,5 +559,12 @@ public class Mainsite extends javax.swing.JFrame {
 
     void setFinishButtonListener(ActionListener e) {
         finishButton.addActionListener(e);
+    }
+
+
+    public void setFilterButtonListener(ActionListener e) {
+
+        filterButton.addActionListener(e);
+
     }
 }
