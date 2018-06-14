@@ -10,11 +10,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class NotificationController {
+    private ToDo display;
     private NotificationDialog dialog;
     public static List<ToDo> notifier = new LinkedList<>();
-    private NotificationController(){
+
+
+    private NotificationController(ToDo display){
             this.dialog = new NotificationDialog();
             this.dialog.setModal(true);
+            this.dialog.title.setText(String.format("%s - has to be done", display.getTitle()));
+            this.display = display;
             this.registerListener();
     }
 
@@ -22,19 +27,14 @@ public class NotificationController {
         dialog.setSubmittonButtonListener(new SubmitButtonListener());
     }
 
-    private void addRow(ToDo toDo){
-        String start  = toDo.getStart() == null ? "" : toDo.getStart().toString();
-        String end  = toDo.getDeadline() == null ? "" : toDo.getDeadline().toString();
 
-        ((DefaultTableModel) dialog.toDoTable.getModel()).addRow(new Object []{toDo.getTitle(), start, end});
-    }
     public static void showDialog(){
 
-        NotificationController c = new NotificationController();
+
 
         notifier.forEach(toDo -> {
-            c.addRow(toDo);
-
+            NotificationController c = new NotificationController(toDo);
+            c.dialog.setVisible(true);
             toDo.setNotified(true);
             try {
                 toDo.update();
@@ -43,7 +43,7 @@ public class NotificationController {
             }
         });
         NotificationController.notifier.clear();
-        c.dialog.setVisible(true);
+
     }
 
 
