@@ -87,6 +87,7 @@ public class MainController {
      */
     public void displayToDo(ToDo todo) {
         if (todo != null) {
+            current = todo;
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
             mainView.title.setText(todo.getTitle());
@@ -264,7 +265,6 @@ public class MainController {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             displayToDo((ToDo)mainView.todoTable.getSelectedValue());
-            current = (ToDo)mainView.todoTable.getSelectedValue();
         }
     }
 
