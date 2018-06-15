@@ -2,8 +2,8 @@ package de.swtproject.doit.gui.main;
 
 
 import de.swtproject.doit.core.Milestone;
-import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
+import de.swtproject.doit.gui.filter.Filter;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -562,5 +562,12 @@ public class Mainsite extends javax.swing.JFrame {
 
     void setFinishButtonListener(ActionListener e) {
         finishButton.addActionListener(e);
+    }
+
+
+    public void setFilterButtonListener(ActionListener e) {
+
+        filterButton.addActionListener(e);
+
     }
 }

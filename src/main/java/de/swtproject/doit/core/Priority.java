@@ -11,27 +11,27 @@ public enum Priority {
     /**
      * Default priority.
      */
-    DEFAULT("#FFFFFF", "Normal", 1),
+    DEFAULT("#FFFFFF", "Default", 1),
 
     /**
      * Unimportant priority.
      */
-    UNIMPORTANT("#4DAF7C", "Unwichtig", 0),
+    UNIMPORTANT("#4DAF7C", "Unimportant", 0),
 
     /**
      * Important priority.
      */
-    IMPORTANT("#F9690E", "Wichtig", 2),
+    IMPORTANT("#F9690E", "Important", 2),
 
     /**
      * Urgent priority.
      */
-    URGENT("#9D2933", "Dringend", 3);
+    URGENT("#9D2933", "Urgent", 3);
 
     /**
      * The Name.
      */
-    public final String name;
+    private final String name;
 
     /**
      * The Color.
@@ -41,7 +41,7 @@ public enum Priority {
     /**
      * The weight.
      */
-    public final int weight;
+    private final int weight;
 
     /**
      * Instantiates a new Priority.
@@ -55,4 +55,13 @@ public enum Priority {
         this.name = name;
         this.weight = weight;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getWeight() {
+        return this.weight;
+    }
+
 }
