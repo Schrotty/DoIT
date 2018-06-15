@@ -72,10 +72,10 @@ public class ToDoTest {
     @Test
     public void priorityTest() {
         ToDo task = ToDo.create("Test");
-        assertEquals(Priority.DEFAULT.name, task.getPriority().name);
+        assertEquals(Priority.DEFAULT.getName(), task.getPriority().getName());
 
         task.setPriority(Priority.URGENT);
-        assertEquals(Priority.URGENT.name, task.getPriority().name);
+        assertEquals(Priority.URGENT.getName(), task.getPriority().getWeight());
     }
 
     @org.junit.Test

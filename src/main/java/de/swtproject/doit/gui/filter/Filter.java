@@ -3,8 +3,10 @@ package de.swtproject.doit.gui.filter;
 
 import com.toedter.calendar.JDateChooser;
 import de.swtproject.doit.core.FilterType;
+import de.swtproject.doit.core.Priority;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.EnumSet;
 
@@ -40,18 +42,28 @@ public class Filter extends javax.swing.JFrame {
     /**
      * The Date Chooser
      */
-     protected JDateChooser dateButton;
+    protected JDateChooser dateButton;
+    /**
+     * The Priority Chooser
+     */
+    protected javax.swing.JComboBox<String> priorityComboBox;
     /**
      * The Value panel.
      */
-     protected javax.swing.JPanel valuePanel;
+    protected javax.swing.JPanel valuePanel;
     /**
      * The Value text field.
      */
-     protected javax.swing.JTextField valueTextField;
+    protected javax.swing.JTextField valueTextField;
+    /**
+     * The chosen Filter.
+     */
+    private String filterChoice;
+    /**
+     * The chosen Priority
+     */
+    private String priorityChoice;
     // End of variables declaration
-
-    private String choice;
 
     /**
      * Creates new form Filter
@@ -59,6 +71,7 @@ public class Filter extends javax.swing.JFrame {
     public Filter() {
         initComponents();
         initFilterValues();
+        initPriorityValues();
     }
 
     /**
@@ -73,8 +86,8 @@ public class Filter extends javax.swing.JFrame {
         chooseComboBox = new javax.swing.JComboBox<>();
         valuePanel = new javax.swing.JPanel();
         valueTextField = new javax.swing.JTextField();
-
         dateButton = new JDateChooser();
+        priorityComboBox = new javax.swing.JComboBox<>();
         cancelButton = new javax.swing.JButton();
         applyButton = new javax.swing.JButton();
 
@@ -83,10 +96,11 @@ public class Filter extends javax.swing.JFrame {
         setResizable(false);
 
         mainpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose Filter"));
+        mainpanel.setPreferredSize(new Dimension(500, 300));
 
         filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null), "Filter"));
 
-        chooseComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Please Choose"}));
+        chooseComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"No Filter"}));
         chooseComboBox.setBorder(null);
 
         javax.swing.GroupLayout filterPanelLayout = new javax.swing.GroupLayout(filterPanel);
@@ -109,7 +123,8 @@ public class Filter extends javax.swing.JFrame {
         valuePanel.setLayout(valuePanelLayout);
         valuePanelLayout.setHorizontalGroup(
                 valuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(valueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                        .addComponent(valueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+
         );
         valuePanelLayout.setVerticalGroup(
                 valuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,9 +134,16 @@ public class Filter extends javax.swing.JFrame {
         dateButton.setBorder(javax.swing.BorderFactory.createTitledBorder
                 (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
                                 null, new java.awt.Color(102, 102, 102),
-                                null, null), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, fontsize)));
+                                null, null), "Date", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11)));
         dateButton.setVisible(false);
+
+        priorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Priority"}));
+        priorityComboBox.setBorder(null);
+        priorityComboBox.setVisible(false);
+
+        valueTextField.setVisible(false);
+        valuePanel.setVisible(false);
 
         javax.swing.GroupLayout mainpanelLayout = new javax.swing.GroupLayout(mainpanel);
         mainpanel.setLayout(mainpanelLayout);
@@ -132,20 +154,23 @@ public class Filter extends javax.swing.JFrame {
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(filterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(mainpanelLayout.createSequentialGroup()
-                                                .addComponent(valuePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(dateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                        .addComponent(valuePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(dateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(priorityComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        ))
                                 .addContainerGap())
         );
         mainpanelLayout.setVerticalGroup(
                 mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(mainpanelLayout.createSequentialGroup()
-                                .addGap(55, 55, 55)
+//                                .addGap(55, 55, 55)
                                 .addComponent(filterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(57, 57, 57)
                                 .addGroup(mainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(valuePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(dateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(valuePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(priorityComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE))
                                 .addGap(0, 30, Short.MAX_VALUE))
         );
 
@@ -215,6 +240,10 @@ public class Filter extends javax.swing.JFrame {
         chooseComboBox.addActionListener(e);
     }
 
+    public void setPriorityListener(ActionListener e) {
+        priorityComboBox.addActionListener(e);
+    }
+
     /**
      * Init ComboBox
      */
@@ -222,16 +251,29 @@ public class Filter extends javax.swing.JFrame {
         EnumSet.allOf(FilterType.class).forEach(type -> this.chooseComboBox.addItem(type.getName()));
     }
 
+    private void initPriorityValues() {
+        EnumSet.allOf(Priority.class).forEach(type -> this.priorityComboBox.addItem(type.getName()));
+    }
+
     public JTextField getValueTextField() {
         return valueTextField;
     }
 
     public String getComboBoxChoice() {
-        if (null == choice) return "";
-        return choice;
+        if (null == filterChoice) return "";
+        return filterChoice;
     }
 
     public void setComboBoxChoice(String choice) {
-        this.choice = choice;
+        this.filterChoice = choice;
+    }
+
+    public String getPriorityChoice() {
+        if (null == priorityChoice) return "";
+        return priorityChoice;
+    }
+
+    public void setPriorityChoice(String choice) {
+        this.priorityChoice = choice;
     }
 }

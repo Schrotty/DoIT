@@ -336,7 +336,7 @@ public class DatabaseManager {
         selectArg.setValue(loadProduction);
         List<ToDo> todos = self.todoAccess.query(preparedQuery);
 
-        todos.sort((o1, o2) -> Integer.compare(o2.getPriority().weight, o1.getPriority().weight));
+        todos.sort((o1, o2) -> Integer.compare(o2.getPriority().getWeight(), o1.getPriority().getWeight()));
 
         return todos;
     }

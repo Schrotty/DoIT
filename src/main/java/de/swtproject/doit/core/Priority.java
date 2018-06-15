@@ -31,7 +31,7 @@ public enum Priority {
     /**
      * The Name.
      */
-    public final String name;
+    private final String name;
 
     /**
      * The Color.
@@ -41,7 +41,7 @@ public enum Priority {
     /**
      * The weight.
      */
-    public final int weight;
+    private final int weight;
 
     /**
      * Instantiates a new Priority.
@@ -55,4 +55,13 @@ public enum Priority {
         this.name = name;
         this.weight = weight;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getWeight() {
+        return this.weight;
+    }
+
 }

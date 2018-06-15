@@ -57,6 +57,7 @@ public class FilterController {
         filterView.setCancelButtonListener(new CancelButtonListener());
         filterView.setSubmitButtonListener(new SubmitButtonListener());
         filterView.setComboBoxListener(new ComboBoxListener());
+        filterView.setPriorityListener(new PriorityListener());
     }
 
     class CancelButtonListener implements ActionListener {
@@ -126,7 +127,7 @@ public class FilterController {
 
                 if (filterView.getComboBoxChoice().equals(FilterType.PRIORITY.getName())) {
                     DatabaseManager.getCollection(true).forEach(t -> {
-                        if (t.getPriority().weight == Integer.parseInt(inputValue)) {
+                        if (t.getPriority().getName().equals(filterView.getPriorityChoice())) {
                             toDos.add(t);
                         }
                     });
@@ -174,16 +175,40 @@ public class FilterController {
             filterView.setComboBoxChoice(choice);
 
             if (choice.equals(FilterType.DEADLINE.getName()) || choice.equals(FilterType.START.getName())) {
-                changeVisibility(false, true);
+                changeVisibility(false, true, false);
+            } else if (choice.equals(FilterType.PRIORITY.getName())) {
+                changeVisibility(false, false, true);
             } else {
-                changeVisibility(true, false);
+                changeVisibility(true, false, false);
             }
         }
 
-        private void changeVisibility(boolean visInput, boolean visDate) {
-            filterView.valueTextField.setVisible(visInput);
-            filterView.valuePanel.setVisible(visInput);
-            filterView.dateButton.setVisible(visDate);
+        private void changeVisibility(boolean textVisible, boolean dateVisible, boolean prioVisible) {
+            filterView.valueTextField.setVisible(textVisible);
+            filterView.valuePanel.setVisible(textVisible);
+            filterView.dateButton.setVisible(dateVisible);
+            filterView.priorityComboBox.setVisible(prioVisible);
+        }
+    }
+
+    /**
+     * Listener for clicking the PriorityComboBox
+     *
+     * @author Jannik Schwardt
+     * @version 1.0
+     * @since 0.2
+     */
+    class PriorityListener implements ActionListener {
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event
+         */
+        @SuppressWarnings("ConstantConditions")
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String choice = (String) filterView.priorityComboBox.getSelectedItem();
+            filterView.setPriorityChoice(choice);
         }
     }
 }

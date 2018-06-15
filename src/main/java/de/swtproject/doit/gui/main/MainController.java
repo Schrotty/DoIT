@@ -93,7 +93,7 @@ public class MainController {
 
             mainView.title.setText(todo.getTitle());
             mainView.description.setText(todo.getDescription());
-            mainView.priorityLabel.setText(todo.getPriority().name);
+            mainView.priorityLabel.setText(todo.getPriority().getName());
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
