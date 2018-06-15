@@ -220,6 +220,12 @@ public class MainController {
         deactivate.setEnabled(false);
     }
 
+    private void switchCurrentButtonsState() {
+        mainView.finishButton.setEnabled(current != null);
+        mainView.editButton.setEnabled(current != null);
+        mainView.deleteButton.setEnabled(current != null);
+    }
+
     /**
      * Listener for clicking the openCreateButton.
      *
@@ -274,8 +280,10 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo) mainView.todoTable.getSelectedValue());
-            current = (ToDo) mainView.todoTable.getSelectedValue();
+            current = (ToDo)mainView.todoTable.getSelectedValue();
+            displayToDo(current);
+
+            switchCurrentButtonsState();
         }
     }
 
@@ -284,13 +292,14 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                ToDo toDo = (ToDo) mainView.todoTable.getSelectedValue();
-                if (null != toDo)
-                    toDo.delete();
+                if (current != null)
+                    current.delete();
             } catch (SQLException sql) {
                 sql.printStackTrace();
             }
+
             updateList(mainView.isProd());
+            switchCurrentButtonsState();
         }
     }
 
@@ -379,10 +388,12 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             try {
                 current.finish();
-                fillToDoList(mainView.isProd);
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+
+            switchCurrentButtonsState();
+            fillToDoList(mainView.isProd);
         }
     }
 

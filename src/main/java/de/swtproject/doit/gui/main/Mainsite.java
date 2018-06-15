@@ -2,6 +2,7 @@ package de.swtproject.doit.gui.main;
 
 
 import de.swtproject.doit.core.Milestone;
+import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
 import de.swtproject.doit.gui.filter.Filter;
 
@@ -53,7 +54,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Edit button.
      */
-    private javax.swing.JButton editButton;
+    javax.swing.JButton editButton;
     /**
      * The Create milestone menu.
      */
@@ -95,7 +96,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Delete button.
      */
-    private javax.swing.JButton deleteButton;
+    javax.swing.JButton deleteButton;
     /**
      * The Description.
      */
@@ -107,7 +108,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Finish button.
      */
-    private javax.swing.JButton finishButton;
+    javax.swing.JButton finishButton;
     /**
      * The Left panel.
      */
@@ -324,10 +325,12 @@ public class Mainsite extends javax.swing.JFrame {
         deleteButton.setFont(new Font("Tahoma", 1, fontsize));
         deleteButton.setText("Delete");
         deleteButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        deleteButton.setEnabled(false);
 
         finishButton.setFont(new Font("Tahoma", 1, fontsize));
         finishButton.setText("Finish");
         finishButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        finishButton.setEnabled(false);
 
         startLabel.setFont(new Font("Tahoma", 1, fontsize)); // NOI18N
         startLabel.setText("Date to Start:");
@@ -429,6 +432,7 @@ public class Mainsite extends javax.swing.JFrame {
         editButton.setFont(new Font("Tahoma", 1, fontsize));
         editButton.setText("Edit");
         editButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        editButton.setEnabled(false);
 
         GroupLayout rightPanelLayout = new GroupLayout(rightPanel);
         rightPanel.setLayout(rightPanelLayout);
