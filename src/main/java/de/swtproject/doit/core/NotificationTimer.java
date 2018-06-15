@@ -1,6 +1,7 @@
 package de.swtproject.doit.core;
 
 import de.swtproject.doit.gui.notification.NotificationController;
+import de.swtproject.doit.util.Settings;
 
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -12,20 +13,13 @@ import java.util.TimerTask;
  * Created by Martin on 07.06.2018.
  */
 public class NotificationTimer {
-    long delay = 10 * 1000;
-    LoopTask task = new LoopTask();
-    Timer timer = new Timer();
 
-    public void start(){
-        timer.cancel();
-        timer = new Timer();
-        Date execdate = new Date();
-        timer.scheduleAtFixedRate(task, execdate, delay);
+    public static void start(){
+        new Timer().scheduleAtFixedRate(new LoopTask(), new Date(), Settings.getNotificationInterval());
     }
 
-    public static void checkToDos() throws SQLException{
-        for (ToDo todo :
-                DatabaseManager.getNotNotifiedTasks()) {
+    private static void checkToDos() throws SQLException{
+        for (ToDo todo : DatabaseManager.getNotNotifiedTasks()) {
             if(todo.getStart() != null){
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(todo.getStart());
@@ -35,16 +29,14 @@ public class NotificationTimer {
                     NotificationController.notifier.add(todo);
                 }
             }
-
-
         }
+
         if(!NotificationController.notifier.isEmpty()){
             NotificationController.showDialog();
         }
-
     }
 
-    private class LoopTask extends TimerTask {
+    private static class LoopTask extends TimerTask {
         public void run(){
             try {
                 checkToDos();
@@ -52,9 +44,5 @@ public class NotificationTimer {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String args[]){
-        new NotificationTimer().start();
     }
 }
