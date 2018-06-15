@@ -75,7 +75,7 @@ public class ToDoTest {
         assertEquals(Priority.DEFAULT.getName(), task.getPriority().getName());
 
         task.setPriority(Priority.URGENT);
-        assertEquals(Priority.URGENT.getName(), task.getPriority().getWeight());
+        assertEquals(Priority.URGENT.getName(), task.getPriority().getName());
     }
 
     @org.junit.Test
