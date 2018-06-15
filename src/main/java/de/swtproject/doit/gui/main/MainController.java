@@ -37,13 +37,13 @@ public class MainController {
     /**
      * The managed {@link Mainsite}.
      */
-    private Mainsite mainView;
+    static Mainsite mainView;
 
     /**
      * Constructor for {@link MainController}.
      */
     private MainController() {
-        this.mainView = new Mainsite();
+        mainView = new Mainsite();
         this.registerListener();
         this.fillToDoList(true);
     }

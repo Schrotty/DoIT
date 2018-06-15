@@ -1,6 +1,6 @@
 package de.swtproject.doit;
 
-import de.swtproject.doit.core.NotificationTimer;
+import de.swtproject.doit.gui.main.NotificationTimer;
 import de.swtproject.doit.gui.main.MainController;
 
 /**
