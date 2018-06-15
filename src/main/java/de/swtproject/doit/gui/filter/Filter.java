@@ -6,6 +6,7 @@ import de.swtproject.doit.core.FilterType;
 import de.swtproject.doit.core.Priority;
 
 import javax.swing.*;
+import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.EnumSet;
@@ -16,7 +17,7 @@ import static de.swtproject.doit.gui.main.Mainsite.fontsize;
 /**
  * The type Filter.
  */
-public class Filter extends javax.swing.JFrame {
+public class Filter extends javax.swing.JDialog {
 
 // Variables declaration - do not modify
     /**
@@ -74,6 +75,8 @@ public class Filter extends javax.swing.JFrame {
         initPriorityValues();
     }
 
+    Font font = new java.awt.Font("Tahoma", Font.PLAIN, fontsize);
+
     /**
      * Init components.
      */
@@ -91,14 +94,16 @@ public class Filter extends javax.swing.JFrame {
         cancelButton = new javax.swing.JButton();
         applyButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Choose Filter");
         setResizable(false);
 
         mainpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose Filter"));
-        mainpanel.setPreferredSize(new Dimension(500, 300));
+        mainpanel.setPreferredSize(new Dimension(350, 300));
+        mainpanel.setFont(font);
 
-        filterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null), "Filter"));
+        SoftBevelBorder sbbFilter = new SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null);
+        filterPanel.setBorder(BorderFactory.createTitledBorder(sbbFilter, "Filter", 0, 0, font));
 
         chooseComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"No Filter"}));
         chooseComboBox.setBorder(null);
@@ -113,17 +118,17 @@ public class Filter extends javax.swing.JFrame {
                 filterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(chooseComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
         );
+        SoftBevelBorder sbbValue = new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null);
+        valuePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(sbbValue, "Value", 0, 0,font));
 
-        valuePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null), "Value"));
-
-        valueTextField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        valueTextField.setFont(font);
         valueTextField.setBorder(null);
 
         javax.swing.GroupLayout valuePanelLayout = new javax.swing.GroupLayout(valuePanel);
         valuePanel.setLayout(valuePanelLayout);
         valuePanelLayout.setHorizontalGroup(
                 valuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(valueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                        .addComponent(valueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
 
         );
         valuePanelLayout.setVerticalGroup(
@@ -135,10 +140,10 @@ public class Filter extends javax.swing.JFrame {
                 (new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED,
                                 null, new java.awt.Color(102, 102, 102),
                                 null, null), "Date", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                        javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11)));
+                        javax.swing.border.TitledBorder.DEFAULT_POSITION, font));
         dateButton.setVisible(false);
 
-        priorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Priority"}));
+        priorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Choose a priority"}));
         priorityComboBox.setBorder(null);
         priorityComboBox.setVisible(false);
 
@@ -174,11 +179,11 @@ public class Filter extends javax.swing.JFrame {
                                 .addGap(0, 30, Short.MAX_VALUE))
         );
 
-        cancelButton.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        cancelButton.setFont(font);
         cancelButton.setText("Cancel");
         cancelButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null));
 
-        applyButton.setFont(new java.awt.Font("Tahoma", 1, fontsize));
+        applyButton.setFont(font);
         applyButton.setText("Apply");
         applyButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), null, null));
 
@@ -201,7 +206,7 @@ public class Filter extends javax.swing.JFrame {
                                         .addComponent(cancelButton)
                                         .addComponent(applyButton)))
         );
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {

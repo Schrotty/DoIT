@@ -39,6 +39,7 @@ public class FilterController {
         this.filterView = new Filter();
         this.parent = parent;
         this.registerListener();
+        this.filterView.setModal(true);
     }
 
     /**
@@ -144,7 +145,6 @@ public class FilterController {
             } else {
                 parent.alterToDoList(toDos);
             }
-
             filterView.dispose();
         }
 
