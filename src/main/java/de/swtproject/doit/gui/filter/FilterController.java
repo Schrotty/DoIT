@@ -92,9 +92,11 @@ public class FilterController {
             String inputValue = filterView.getValueTextField().getText();
             List<ToDo> toDos = new ArrayList<>();
 
+            boolean isProd = parent.mainView.isProd();
+
             try {
                 if (filterView.getComboBoxChoice().equals(FilterType.TITLE.getName())) {
-                    DatabaseManager.getCollection(true).forEach(t -> {
+                    DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (t.getTitle().toLowerCase().contains(inputValue.toLowerCase())) {
                             toDos.add(t);
                         }
@@ -104,7 +106,7 @@ public class FilterController {
                 if (filterView.getComboBoxChoice().equals(FilterType.START.getName())
                         && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                    DatabaseManager.getCollection(true).forEach(t -> {
+                    DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (null != t.getStart()) {
                             if (sdf.format(t.getStart()).equals(sdf.format(filterView.dateButton.getDate()))) {
                                 toDos.add(t);
@@ -116,7 +118,7 @@ public class FilterController {
                 if (filterView.getComboBoxChoice().equals(FilterType.DEADLINE.getName())
                         && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                    DatabaseManager.getCollection(true).forEach(t -> {
+                    DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (null != t.getDeadline()) {
                             if (sdf.format(t.getDeadline()).equals(sdf.format(filterView.dateButton.getDate()))) {
                                 toDos.add(t);
@@ -126,7 +128,7 @@ public class FilterController {
                 }
 
                 if (filterView.getComboBoxChoice().equals(FilterType.PRIORITY.getName())) {
-                    DatabaseManager.getCollection(true).forEach(t -> {
+                    DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (t.getPriority().getName().equals(filterView.getPriorityChoice())) {
                             toDos.add(t);
                         }
