@@ -2,7 +2,6 @@ package de.swtproject.doit.gui.main;
 
 
 import de.swtproject.doit.core.Milestone;
-import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
 import de.swtproject.doit.gui.filter.Filter;
 
