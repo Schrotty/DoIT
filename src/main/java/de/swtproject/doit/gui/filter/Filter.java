@@ -56,14 +56,7 @@ public class Filter extends javax.swing.JDialog {
      * The Value text field.
      */
     protected javax.swing.JTextField valueTextField;
-    /**
-     * The chosen Filter.
-     */
-    private String filterChoice;
-    /**
-     * The chosen Priority
-     */
-    private String priorityChoice;
+
     // End of variables declaration
 
     /**
@@ -266,30 +259,5 @@ public class Filter extends javax.swing.JDialog {
      */
     private void initPriorityValues() {
         EnumSet.allOf(Priority.class).forEach(type -> this.priorityComboBox.addItem(type.getName()));
-    }
-
-    /**
-     * Getters & Setters
-     */
-    public JTextField getValueTextField() {
-        return valueTextField;
-    }
-
-    public String getComboBoxChoice() {
-        if (null == filterChoice) return "";
-        return filterChoice;
-    }
-
-    public void setComboBoxChoice(String choice) {
-        this.filterChoice = choice;
-    }
-
-    public String getPriorityChoice() {
-        if (null == priorityChoice) return "";
-        return priorityChoice;
-    }
-
-    public void setPriorityChoice(String choice) {
-        this.priorityChoice = choice;
     }
 }

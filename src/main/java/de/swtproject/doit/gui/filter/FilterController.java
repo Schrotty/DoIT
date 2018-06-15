@@ -29,6 +29,14 @@ public class FilterController {
      * The parent {@link MainController}.
      */
     private MainController parent;
+    /**
+     * The chosen Filter.
+     */
+    private String filterChoice;
+    /**
+     * The chosen Priority
+     */
+    private String priorityChoice;
 
     /**
      * Constructor for {@link FilterController}.
@@ -90,14 +98,14 @@ public class FilterController {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            String inputValue = filterView.getValueTextField().getText();
+            String inputValue = filterView.valueTextField.getText();
             List<ToDo> toDos = new ArrayList<>();
 
             boolean isProd = parent.mainView.isProd();
 
             try {
                 // Filter for title
-                if (filterView.getComboBoxChoice().equals(FilterType.TITLE.getName())) {
+                if (filterChoice.equals(FilterType.TITLE.getName())) {
                     DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (t.getTitle().toLowerCase().contains(inputValue.toLowerCase())) {
                             toDos.add(t);
@@ -106,7 +114,7 @@ public class FilterController {
                 }
 
                 // Filter for start date
-                if (filterView.getComboBoxChoice().equals(FilterType.START.getName())
+                if (filterChoice.equals(FilterType.START.getName())
                         && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     DatabaseManager.getCollection(isProd).forEach(t -> {
@@ -119,7 +127,7 @@ public class FilterController {
                 }
 
                 // Filter for deadline
-                if (filterView.getComboBoxChoice().equals(FilterType.DEADLINE.getName())
+                if (filterChoice.equals(FilterType.DEADLINE.getName())
                         && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     DatabaseManager.getCollection(isProd).forEach(t -> {
@@ -132,9 +140,9 @@ public class FilterController {
                 }
 
                 // Filter for priority
-                if (filterView.getComboBoxChoice().equals(FilterType.PRIORITY.getName())) {
+                if (filterChoice.equals(FilterType.PRIORITY.getName())) {
                     DatabaseManager.getCollection(isProd).forEach(t -> {
-                        if (t.getPriority().getName().equals(filterView.getPriorityChoice())) {
+                        if (t.getPriority().getName().equals(priorityChoice)) {
                             toDos.add(t);
                         }
                     });
@@ -177,12 +185,11 @@ public class FilterController {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void actionPerformed(ActionEvent e) {
-            String choice = (String) filterView.chooseComboBox.getSelectedItem();
-            filterView.setComboBoxChoice(choice);
+            filterChoice = (String) filterView.chooseComboBox.getSelectedItem();
 
-            if (choice.equals(FilterType.DEADLINE.getName()) || choice.equals(FilterType.START.getName())) {
+            if (filterChoice.equals(FilterType.DEADLINE.getName()) || filterChoice.equals(FilterType.START.getName())) {
                 changeVisibility(false, true, false);
-            } else if (choice.equals(FilterType.PRIORITY.getName())) {
+            } else if (filterChoice.equals(FilterType.PRIORITY.getName())) {
                 changeVisibility(false, false, true);
             } else {
                 changeVisibility(true, false, false);
@@ -219,8 +226,7 @@ public class FilterController {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void actionPerformed(ActionEvent e) {
-            String choice = (String) filterView.priorityComboBox.getSelectedItem();
-            filterView.setPriorityChoice(choice);
+            priorityChoice = (String) filterView.priorityComboBox.getSelectedItem();
         }
     }
 }
