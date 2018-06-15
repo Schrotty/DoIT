@@ -237,29 +237,40 @@ public class Filter extends javax.swing.JDialog {
     }
 
     /**
-     * Choose combo
+     * Choose Filter Combo
      *
-     * @param e the evt
+     * @param e the event
      */
     public void setComboBoxListener(ActionListener e) {
         chooseComboBox.addActionListener(e);
     }
 
+    /**
+     * Choose Priority Combo
+     *
+     * @param e the event
+     */
     public void setPriorityListener(ActionListener e) {
         priorityComboBox.addActionListener(e);
     }
 
     /**
-     * Init ComboBox
+     * Init FilterComboBox
      */
     private void initFilterValues() {
         EnumSet.allOf(FilterType.class).forEach(type -> this.chooseComboBox.addItem(type.getName()));
     }
 
+    /**
+     * Init PriorityComboBox
+     */
     private void initPriorityValues() {
         EnumSet.allOf(Priority.class).forEach(type -> this.priorityComboBox.addItem(type.getName()));
     }
 
+    /**
+     * Getters & Setters
+     */
     public JTextField getValueTextField() {
         return valueTextField;
     }

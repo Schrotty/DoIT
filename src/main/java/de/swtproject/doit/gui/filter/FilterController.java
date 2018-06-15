@@ -96,6 +96,7 @@ public class FilterController {
             boolean isProd = parent.mainView.isProd();
 
             try {
+                // Filter for title
                 if (filterView.getComboBoxChoice().equals(FilterType.TITLE.getName())) {
                     DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (t.getTitle().toLowerCase().contains(inputValue.toLowerCase())) {
@@ -104,6 +105,7 @@ public class FilterController {
                     });
                 }
 
+                // Filter for start date
                 if (filterView.getComboBoxChoice().equals(FilterType.START.getName())
                         && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -116,6 +118,7 @@ public class FilterController {
                     });
                 }
 
+                // Filter for deadline
                 if (filterView.getComboBoxChoice().equals(FilterType.DEADLINE.getName())
                         && null != filterView.dateButton.getDate()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -128,6 +131,7 @@ public class FilterController {
                     });
                 }
 
+                // Filter for priority
                 if (filterView.getComboBoxChoice().equals(FilterType.PRIORITY.getName())) {
                     DatabaseManager.getCollection(isProd).forEach(t -> {
                         if (t.getPriority().getName().equals(filterView.getPriorityChoice())) {
@@ -150,7 +154,7 @@ public class FilterController {
 
         private void clearFilter() {
             try {
-                parent.alterToDoList(DatabaseManager.getCollection(true));
+                parent.alterToDoList(DatabaseManager.getCollection(parent.mainView.isProd()));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -185,6 +189,12 @@ public class FilterController {
             }
         }
 
+        /**
+         * Sets the visibility for given components
+         * @param textVisible text input visibility
+         * @param dateVisible date input visibility
+         * @param prioVisible priority input visibility
+         */
         private void changeVisibility(boolean textVisible, boolean dateVisible, boolean prioVisible) {
             filterView.valueTextField.setVisible(textVisible);
             filterView.valuePanel.setVisible(textVisible);
