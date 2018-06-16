@@ -103,6 +103,15 @@ public class ToDoTest {
     }
 
     @org.junit.Test
+    public void notifyTest() {
+        ToDo task = ToDo.create("Test");
+        assertFalse(task.isNotified());
+
+        task.setNotified(true);
+        assertTrue(task.isNotified());
+    }
+
+    @Test
     public void equal() throws SQLException
     {
         List<ToDo> todos = DatabaseManager.getCollection(true);
@@ -112,5 +121,4 @@ public class ToDoTest {
         assertFalse(todos.get(0).equals(new LinkedList<String>()));
 
     }
-
 }

@@ -56,6 +56,15 @@ public class Settings {
     }
 
     /**
+     * Get the notification interval.
+     *
+     * @return the interval
+     */
+    public static int getNotificationInterval() {
+        return Integer.parseInt(self.get("notificationInterval")) * 1000;
+    }
+
+    /**
      * Get the value of a given property.
      *
      * @param key the property

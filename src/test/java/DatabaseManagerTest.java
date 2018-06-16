@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -51,6 +52,18 @@ public class DatabaseManagerTest {
     }
 
     @org.junit.Test
+    public void getNotNotifiedTasks() throws SQLException {
+        ToDo example = ToDo.create("Schrotty");
+        DatabaseManager.storeToDo(example);
+
+        assertFalse(DatabaseManager.getNotNotifiedTasks().isEmpty());
+
+        example.setNotified(true);
+        example.update();
+
+        assertTrue(DatabaseManager.getNotNotifiedTasks().isEmpty());
+    }
+
     public void storeMilestone() throws Exception {
         Milestone m = Milestone.create("Testmilestone");
 
@@ -192,6 +205,4 @@ public class DatabaseManagerTest {
         assertTrue(found);
 
     }
-
-
 }
