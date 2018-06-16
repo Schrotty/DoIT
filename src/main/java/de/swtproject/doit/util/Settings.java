@@ -3,6 +3,7 @@ package de.swtproject.doit.util;
 import de.swtproject.doit.core.NotificationPoint;
 import de.swtproject.doit.core.ToDo;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -87,7 +88,11 @@ public class Settings {
      * @return the notification point
      */
     public static NotificationPoint getNotificationPoint() {
-        return NotificationPoint.create("Days", Calendar.DAY_OF_YEAR);
+        return NotificationPoint.create(
+                self.properties.getProperty(NOTIFY_DISPLAY, "Days"),
+                self.properties.getProperty(NOTIFY_TYPE, String.valueOf(Calendar.DAY_OF_YEAR)),
+                self.properties.getProperty(NOTIFY_VALUE, "1")
+        );
     }
 
     /**
@@ -95,8 +100,18 @@ public class Settings {
      *
      * @param point the notification point to store
      */
-    public static void setNotificationPoint(NotificationPoint point) {
-        //nothing
+    public static boolean setNotificationPoint(NotificationPoint point) {
+        self.properties.setProperty(NOTIFY_DISPLAY, point.getDisplayName());
+        self.properties.setProperty(NOTIFY_TYPE, String.valueOf(point.getCalenderType()));
+        self.properties.setProperty(NOTIFY_VALUE, String.valueOf(point.getRawValue()));
+
+        try {
+            self.properties.store(new FileOutputStream("config.properties"), null);
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
