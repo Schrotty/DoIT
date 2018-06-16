@@ -5,6 +5,7 @@ import de.swtproject.doit.gui.create.CreateController;
 
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
 
+import de.swtproject.doit.gui.filter.FilterController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +25,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -41,13 +43,13 @@ public class MainController {
     /**
      * The managed {@link Mainsite}.
      */
-    public Mainsite mainView;
+    public static Mainsite mainView;
 
     /**
      * Constructor for {@link MainController}.
      */
     private MainController() {
-        this.mainView = new Mainsite();
+        mainView = new Mainsite();
         this.registerListener();
         this.fillToDoList(true);
         this.updateMilestoneList();
@@ -90,7 +92,7 @@ public class MainController {
 
             mainView.title.setText(todo.getTitle());
             mainView.description.setText(todo.getDescription());
-            mainView.priorityLabel.setText(todo.getPriority().name);
+            mainView.priorityLabel.setText(todo.getPriority().getName());
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
@@ -102,6 +104,18 @@ public class MainController {
             mainView.dateLabel.setText("-");
             mainView.notifypointLabel.setText("-");
         }
+    }
+
+    public void alterToDoList(List<ToDo> toDos) {
+        ToDo to = null;
+        DefaultListModel model = new DefaultListModel();
+        for (ToDo toDo : toDos) {
+            if (to == null)
+                to = toDo;
+            model.addElement(toDo);
+        }
+        mainView.todoTable.setModel(model);
+        displayToDo(to);
     }
 
     /**
@@ -137,14 +151,10 @@ public class MainController {
         }
     }
 
-    public void updateMilestoneList()
-    {
-        try
-        {
+    public void updateMilestoneList() {
+        try {
             mainView.setMilestoneList(DatabaseManager.getAllMilestones(true));
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -201,11 +211,18 @@ public class MainController {
         mainView.setFinishButtonListener(new FinishListener());
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
+        mainView.setFilterButtonListener(new FilterListener(this));
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
         activate.setEnabled(true);
         deactivate.setEnabled(false);
+    }
+
+    private void switchCurrentButtonsState() {
+        mainView.finishButton.setEnabled(current != null);
+        mainView.editToDoButton.setEnabled(current != null);
+        mainView.deleteToDoButton.setEnabled(current != null);
     }
 
     /**
@@ -263,8 +280,10 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            displayToDo((ToDo)mainView.todoTable.getSelectedValue());
             current = (ToDo)mainView.todoTable.getSelectedValue();
+            displayToDo(current);
+
+            switchCurrentButtonsState();
         }
     }
 
@@ -273,13 +292,14 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                ToDo toDo = (ToDo) mainView.todoTable.getSelectedValue();
-                if (null != toDo)
-                    toDo.delete();
+                if (current != null)
+                    current.delete();
             } catch (SQLException sql) {
                 sql.printStackTrace();
             }
+
             updateList(mainView.isProd());
+            switchCurrentButtonsState();
         }
     }
 
@@ -368,10 +388,25 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             try {
                 current.finish();
-                fillToDoList(mainView.isProd);
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+
+            switchCurrentButtonsState();
+            fillToDoList(mainView.isProd);
         }
     }
+
+    class FilterListener implements ActionListener {
+        private MainController parent;
+
+        FilterListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            FilterController.showView(parent);
+        }
+    }
+
 }

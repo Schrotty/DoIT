@@ -336,9 +336,23 @@ public class DatabaseManager {
         selectArg.setValue(loadProduction);
         List<ToDo> todos = self.todoAccess.query(preparedQuery);
 
-        todos.sort((o1, o2) -> Integer.compare(o2.getPriority().weight, o1.getPriority().weight));
+        todos.sort((o1, o2) -> Integer.compare(o2.getPriority().getWeight(), o1.getPriority().getWeight()));
 
         return todos;
+    }
+
+    /**
+     * Get a collection of {@link ToDo}s which are
+     * not yet notified.
+     *
+     * @return the todo collection
+     * @throws SQLException on SQL exception
+     */
+    public static List<ToDo> getNotNotifiedTasks() throws SQLException {
+        List<ToDo> list = getCollection(true);
+        list.removeIf(ToDo::isNotified);
+
+        return list;
     }
 
     /**

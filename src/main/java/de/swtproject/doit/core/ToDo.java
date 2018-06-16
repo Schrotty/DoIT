@@ -76,6 +76,12 @@ public class ToDo {
     private Priority priority;
 
     /**
+     * Notification for this task shown?
+     */
+    @DatabaseField(defaultValue = "false")
+    private boolean notified;
+
+    /**
      * Instantiates a new To do.
      */
     ToDo() {
@@ -239,6 +245,25 @@ public class ToDo {
         this.priority = priority;
     }
 
+
+    /**
+     * Is notified boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isNotified() {
+        return notified;
+    }
+
+    /**
+     * Sets notified.
+     *
+     * @param notified the notified
+     */
+    public void setNotified(boolean notified) {
+        this.notified = notified;
+    }
+
     /**
      * Finish a todo.
      *
@@ -266,7 +291,7 @@ public class ToDo {
      * @return updating successful?
      * @throws SQLException on SQL exception
      */
-    private boolean update() throws SQLException {
+    public boolean update() throws SQLException {
         return DatabaseManager.getInstance().todoAccess.update(this) == 1;
     }
 
@@ -290,6 +315,7 @@ public class ToDo {
   
     /**
      * Setializes this into a JSONObject.
+     *
      * @return JSONObject Serialized object.
      */
     public JSONObject serialize() {

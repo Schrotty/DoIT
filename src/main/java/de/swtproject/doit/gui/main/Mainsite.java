@@ -3,17 +3,19 @@ package de.swtproject.doit.gui.main;
 
 import de.swtproject.doit.core.Milestone;
 
-import de.swtproject.doit.gui.Filter;
 import de.swtproject.doit.gui.create.CreateToDo;
+import de.swtproject.doit.gui.filter.Filter;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
-import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionListener;
+
+import java.util.List;
+
 import java.util.Objects;
 
 /**
@@ -54,15 +56,17 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Milestone-Button-Panel
      */
+
     private javax.swing.JPanel milestoneButtonPanel;
     /**
      * The Edit-ToDo Button.
      */
-    private javax.swing.JButton editToDoButton;
+    javax.swing.JButton editToDoButton;
     /**
      * The Edit-Milestone Button
      */
-    private javax.swing.JButton editMilestoneButton;
+    javax.swing.JButton editMilestoneButton;
+
     /**
      * The Create milestone menu.
      */
@@ -104,11 +108,13 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Delete-ToDo Button.
      */
-    private javax.swing.JButton deleteToDoButton;
+
+    javax.swing.JButton deleteToDoButton;
     /**
      * The Delete-Milestone Button
      */
     private javax.swing.JButton deleteMilestoneButton;
+
     /**
      * The Description.
      */
@@ -120,7 +126,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Finish button.
      */
-    private javax.swing.JButton finishButton;
+    javax.swing.JButton finishButton;
     /**
      * The Left panel.
      */
@@ -337,13 +343,16 @@ public class Mainsite extends javax.swing.JFrame {
 
         rightPanel.setPreferredSize(new Dimension(600, 60));
 
+
         deleteToDoButton.setFont(new Font("Tahoma", 1, fontsize));
         deleteToDoButton.setText("Delete ToDo");
         deleteToDoButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
 
+
         finishButton.setFont(new Font("Tahoma", 1, fontsize));
         finishButton.setText("Finish");
         finishButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        finishButton.setEnabled(false);
 
         editToDoButton.setFont(new Font("Tahoma", 1, fontsize));
         editToDoButton.setText("Edit ToDo");
@@ -482,6 +491,13 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addContainerGap())
         );
 
+
+        editToDoButton.setFont(new Font("Tahoma", 1, fontsize));
+        editToDoButton.setText("Edit");
+        editToDoButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        editToDoButton.setEnabled(false);
+
+
         GroupLayout rightPanelLayout = new GroupLayout(rightPanel);
         rightPanel.setLayout(rightPanelLayout);
         rightPanelLayout.setHorizontalGroup(
@@ -616,5 +632,12 @@ public class Mainsite extends javax.swing.JFrame {
 
     void setFinishButtonListener(ActionListener e) {
         finishButton.addActionListener(e);
+    }
+
+
+    public void setFilterButtonListener(ActionListener e) {
+
+        filterButton.addActionListener(e);
+
     }
 }
