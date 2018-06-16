@@ -3,9 +3,7 @@ package de.swtproject.doit.util;
 import de.swtproject.doit.core.NotificationPoint;
 import de.swtproject.doit.core.ToDo;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -25,34 +23,64 @@ public class Settings {
     private static Settings self = new Settings();
 
     /**
-     * The loaded properties
+     * The loaded system properties
      */
-    private Properties properties = new Properties();
+    private Properties sysProps = new Properties();
+
+    /**
+     * The loaded user properties
+     */
+    private Properties usrProps = new Properties();
 
     /**
      * Keyword for the notify display preference.
      */
-    private static final String NOTIFY_DISPLAY = "display";
+    private static final String NOTIFY_DISPLAY = "USER_NOTIFICATION_DISPLAY";
 
     /**
      * Keyword for the notify display preference.
      */
-    private static final String NOTIFY_TYPE = "type";
+    private static final String NOTIFY_TYPE = "USER_NOTIFICATION_TYPE";
 
     /**
      * Keyword for the notify value preference.
      */
-    private static final String NOTIFY_VALUE = "value";
+    private static final String NOTIFY_VALUE = "USER_NOTIFICATION_VALUE";
 
     /**
      * Constructor for new settings singleton.
      */
     private Settings() {
-        try (InputStream input = ToDo.class.getClassLoader().getResourceAsStream("config.properties")) {
-            properties.load(input);
+        try (InputStream sysProps = ToDo.class.getClassLoader().getResourceAsStream("config.properties")) {
+            this.sysProps.load(sysProps);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public static boolean initUsrSettings() {
+        File usrConfig = new File(Settings.getUserPropertiesPath());
+
+        if (!usrConfig.exists()) {
+            try {
+                usrConfig.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try (InputStream usrProps = new FileInputStream(usrConfig)) {
+            self.usrProps.load(usrProps);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isUsrSettingsInit() {
+        return new File(Settings.getUserPropertiesPath()).exists();
     }
 
     /**
@@ -83,15 +111,24 @@ public class Settings {
     }
 
     /**
+     * Get the users properties file path.
+     *
+     * @return the file path
+     */
+    public static String getUserPropertiesPath() {
+        return self.get("usrFile");
+    }
+
+    /**
      * Get the stored notification point.
      *
      * @return the notification point
      */
     public static NotificationPoint getNotificationPoint() {
         return NotificationPoint.create(
-                self.properties.getProperty(NOTIFY_DISPLAY, "Days"),
-                self.properties.getProperty(NOTIFY_TYPE, String.valueOf(Calendar.DAY_OF_YEAR)),
-                self.properties.getProperty(NOTIFY_VALUE, "1")
+                self.usrProps.getProperty(NOTIFY_DISPLAY, "Days"),
+                self.usrProps.getProperty(NOTIFY_TYPE, String.valueOf(Calendar.DAY_OF_YEAR)),
+                self.usrProps.getProperty(NOTIFY_VALUE, "1")
         );
     }
 
@@ -101,12 +138,12 @@ public class Settings {
      * @param point the notification point to store
      */
     public static boolean setNotificationPoint(NotificationPoint point) {
-        self.properties.setProperty(NOTIFY_DISPLAY, point.getDisplayName());
-        self.properties.setProperty(NOTIFY_TYPE, String.valueOf(point.getCalenderType()));
-        self.properties.setProperty(NOTIFY_VALUE, String.valueOf(point.getRawValue()));
+        self.usrProps.setProperty(NOTIFY_DISPLAY, point.getDisplayName());
+        self.usrProps.setProperty(NOTIFY_TYPE, String.valueOf(point.getCalenderType()));
+        self.usrProps.setProperty(NOTIFY_VALUE, String.valueOf(point.getRawValue()));
 
         try {
-            self.properties.store(new FileOutputStream("config.properties"), null);
+            self.usrProps.store(new FileOutputStream(Settings.getUserPropertiesPath()), null);
         } catch (IOException e) {
             return false;
         }
@@ -121,6 +158,6 @@ public class Settings {
      * @return the loaded value
      */
     private String get(String key) {
-        return properties.getProperty(key);
+        return sysProps.getProperty(key);
     }
 }
