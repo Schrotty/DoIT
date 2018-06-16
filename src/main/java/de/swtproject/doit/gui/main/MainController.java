@@ -43,6 +43,20 @@ public class MainController {
     private static Milestone currentMilestone;
 
     /**
+     * Sets the current selected milestone
+     * @param ms the milstone
+     */
+    public static void setCurrentMilestone(Milestone ms)
+    {
+        currentMilestone = ms;
+    }
+
+    public static Milestone getCurrentMilestone()
+    {
+        return currentMilestone;
+    }
+
+    /**
      * The managed {@link Mainsite}.
      */
     public static Mainsite mainView;
@@ -55,6 +69,7 @@ public class MainController {
         this.registerListener();
         this.fillToDoList(true);
         this.updateMilestoneList();
+
     }
 
     public ToDo getCurrentToDo() {
@@ -197,6 +212,8 @@ public class MainController {
     public void updateMilestoneList() {
         try {
             mainView.setMilestoneList(DatabaseManager.getAllMilestones(true));
+            if(currentMilestone != null)
+                alterToDoList(currentMilestone.getAssignedToDos());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -256,6 +273,7 @@ public class MainController {
         mainView.setImportJSONMenuListener(new ImportJSONListener());
         mainView.setFilterButtonListener(new FilterListener(this));
         mainView.setMilestoneSelectListener(new MilestoneSelectListener());
+        mainView.setEditMilestoneButtonListener(new OpenEditMilestoneViewListener(this));
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -265,8 +283,8 @@ public class MainController {
 
     private void switchCurrentButtonsState() {
         mainView.finishButton.setEnabled(current != null);
-        mainView.editButton.setEnabled(current != null);
-        mainView.deleteButton.setEnabled(current != null);
+        mainView.editToDoButton.setEnabled(current != null);
+        mainView.deleteToDoButton.setEnabled(current != null);
     }
 
     /**
@@ -298,12 +316,31 @@ public class MainController {
     class OpenCreateMilestoneViewListener implements ActionListener {
         private MainController parent;
 
+
         OpenCreateMilestoneViewListener(MainController mainController) {
             this.parent = mainController;
         }
 
         public void actionPerformed(ActionEvent e) {
-            CreateMilestoneController.showView(parent);
+            CreateMilestoneController.showView(parent, null);
+        }
+    }
+
+    /**
+     * Listener edit milestone.
+     *
+     */
+    class OpenEditMilestoneViewListener implements ActionListener {
+        private MainController parent;
+
+
+        OpenEditMilestoneViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if(MainController.currentMilestone != null)
+                CreateMilestoneController.showView(parent, MainController.currentMilestone);
         }
     }
 

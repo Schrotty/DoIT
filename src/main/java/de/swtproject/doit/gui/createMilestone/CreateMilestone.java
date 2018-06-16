@@ -1,8 +1,10 @@
 package de.swtproject.doit.gui.createMilestone;
 
+
 import com.toedter.calendar.JDateChooser;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
+import de.swtproject.doit.core.Milestone;
 import de.swtproject.doit.core.ToDo;
 
 
@@ -22,6 +24,17 @@ public class CreateMilestone extends javax.swing.JDialog {
      * The Mainsite.
      */
     private static final int fontsize = 16;
+
+
+    /**
+     * optional milestone to edit
+     */
+    private Milestone optMilestone;
+
+    /**
+     * List of current todos in db
+     */
+    private List<ToDo> todosInDatabase;
 
     /**
      * The Cancel button.
@@ -94,19 +107,21 @@ public class CreateMilestone extends javax.swing.JDialog {
     /**
      * Instantiates a new Create to do.
      */
-    CreateMilestone(List<String> toDos) {
+    CreateMilestone(List<ToDo> toDos, Milestone optMilestone) {
+        this.optMilestone = optMilestone;
         setToDoList(toDos);
         initComponents();
     }
 
-    private void setToDoList(List<String> l)
+    private void setToDoList(List<ToDo> l)
     {
         DefaultListModel<String> lm = new DefaultListModel();
-        for(String s : l)
+        for(ToDo t : l)
         {
-            lm.addElement(s);
-            System.out.println(s);
+            lm.addElement(t.toString());
         }
+
+        this.todosInDatabase = l;
 
         this.todoList = new JList<String>(lm);
     }
@@ -127,8 +142,6 @@ public class CreateMilestone extends javax.swing.JDialog {
         todoListPanel = new javax.swing.JPanel();
         todoListScrollPane = new javax.swing.JScrollPane();
 
-
-
         submitButton = new javax.swing.JButton();
         titlePanel = new javax.swing.JPanel();
         titleTextField = new javax.swing.JTextField();
@@ -136,8 +149,21 @@ public class CreateMilestone extends javax.swing.JDialog {
         descriptionScrollPane = new javax.swing.JScrollPane();
         descriptionTextArea = new javax.swing.JTextArea();
 
-
         todoCreateLabel = new javax.swing.JLabel();
+
+
+        // init if is modifying milestone
+        if(optMilestone != null)
+        {
+            titleTextField.setText(optMilestone.getTitle());
+            dateToStartButton.setDate(optMilestone.getStart());
+            deadlineButton.setDate(optMilestone.getDeadline());
+            descriptionTextArea.setText(optMilestone.getDescription());
+
+            int[] selectedIdc = this.optMilestone.getAssignedToDos().stream().map(x -> this.todosInDatabase.indexOf(x)).mapToInt(Integer::intValue).toArray();
+
+            this.todoList.setSelectedIndices(selectedIdc);
+        }
 
         setTitle("Create Milestone");
 

@@ -2,6 +2,7 @@ package de.swtproject.doit.gui.main;
 
 
 import de.swtproject.doit.core.Milestone;
+
 import de.swtproject.doit.gui.create.CreateToDo;
 import de.swtproject.doit.gui.filter.Filter;
 
@@ -12,7 +13,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+
 import java.util.List;
+
 import java.util.Objects;
 
 /**
@@ -54,9 +57,19 @@ public class Mainsite extends javax.swing.JFrame {
      */
     javax.swing.JButton archivButton;
     /**
-     * The Edit button.
+     * The Milestone-Button-Panel
      */
-    javax.swing.JButton editButton;
+
+    private javax.swing.JPanel milestoneButtonPanel;
+    /**
+     * The Edit-ToDo Button.
+     */
+    javax.swing.JButton editToDoButton;
+    /**
+     * The Edit-Milestone Button
+     */
+    javax.swing.JButton editMilestoneButton;
+
     /**
      * The Create milestone menu.
      */
@@ -96,9 +109,15 @@ public class Mainsite extends javax.swing.JFrame {
      */
     private javax.swing.JLabel deadlineLabel;
     /**
-     * The Delete button.
+     * The Delete-ToDo Button.
      */
-    javax.swing.JButton deleteButton;
+
+    javax.swing.JButton deleteToDoButton;
+    /**
+     * The Delete-Milestone Button
+     */
+    private javax.swing.JButton deleteMilestoneButton;
+
     /**
      * The Description.
      */
@@ -214,6 +233,15 @@ public class Mainsite extends javax.swing.JFrame {
             milestoneComboBox.addItem(m.toString());
         }
 
+        for(int i = 0; i < this.milestones.size(); i++)
+        {
+            if(this.milestones.get(i).equals(MainController.getCurrentMilestone()))
+                milestoneComboBox.setSelectedIndex(i+1);
+
+        }
+
+
+
     }
 
     /**
@@ -231,7 +259,8 @@ public class Mainsite extends javax.swing.JFrame {
         milestonePanel = new JPanel();
         milestoneComboBox = new JComboBox<>();
         rightPanel = new JPanel();
-        deleteButton = new JButton();
+        deleteToDoButton = new JButton();
+        deleteMilestoneButton = new JButton();
         finishButton = new JButton();
         dataPanel = new JPanel();
         startLabel = new JLabel();
@@ -244,7 +273,9 @@ public class Mainsite extends javax.swing.JFrame {
         title = new JLabel();
         scrollDescription = new JScrollPane();
         description = new JTextArea();
-        editButton = new JButton();
+        milestoneButtonPanel = new JPanel();
+        editToDoButton = new JButton();
+        editMilestoneButton = new JButton();
         menubar = new JMenuBar();
         menuButton = new JMenu();
         createToDoMenu = new JMenuItem();
@@ -322,17 +353,30 @@ public class Mainsite extends javax.swing.JFrame {
                                         .addComponent(archivButton, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)))
         );
 
-        rightPanel.setPreferredSize(new Dimension(600, 32));
+        rightPanel.setPreferredSize(new Dimension(600, 60));
 
-        deleteButton.setFont(new Font("Tahoma", 1, fontsize));
-        deleteButton.setText("Delete");
-        deleteButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
-        deleteButton.setEnabled(false);
+
+        deleteToDoButton.setFont(new Font("Tahoma", 1, fontsize));
+        deleteToDoButton.setText("Delete ToDo");
+        deleteToDoButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+
 
         finishButton.setFont(new Font("Tahoma", 1, fontsize));
         finishButton.setText("Finish");
         finishButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
         finishButton.setEnabled(false);
+
+        editToDoButton.setFont(new Font("Tahoma", 1, fontsize));
+        editToDoButton.setText("Edit ToDo");
+        editToDoButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+
+        deleteMilestoneButton.setFont(new Font("Tahoma", 1, fontsize));
+        deleteMilestoneButton.setText("Delete Milestone");
+        deleteMilestoneButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+
+        editMilestoneButton.setFont(new Font("Tahoma", 1, fontsize));
+        editMilestoneButton.setText("Edit Milestone");
+        editMilestoneButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
 
         startLabel.setFont(new Font("Tahoma", 1, fontsize)); // NOI18N
         startLabel.setText("Date to Start:");
@@ -359,6 +403,7 @@ public class Mainsite extends javax.swing.JFrame {
         dataPanelLayout.setHorizontalGroup(
                 dataPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(dataPanelLayout.createSequentialGroup()
+
                                 .addContainerGap()
                                 .addGroup(dataPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                         .addComponent(milestoneLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -372,7 +417,12 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(notifypointLabel)
                                 .addGap(214, 214, 214))
-        );
+                        .addGap(5,5,5)
+                        .addGroup(dataPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false))
+                                .addComponent(milestoneButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+
+                         );
+
         dataPanelLayout.setVerticalGroup(
                 dataPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(dataPanelLayout.createSequentialGroup()
@@ -388,6 +438,28 @@ public class Mainsite extends javax.swing.JFrame {
                                         .addComponent(milestoneLabel, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(affilationLabel, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(39, Short.MAX_VALUE))
+                        .addComponent(milestoneButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(dataPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE))
+                        .addGap(5,5,5)
+
+        );
+
+        GroupLayout milestoneButtonPanelLayout = new GroupLayout(milestoneButtonPanel);
+        milestoneButtonPanel.setLayout(milestoneButtonPanelLayout);
+        milestoneButtonPanelLayout.setHorizontalGroup(
+                milestoneButtonPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(milestoneButtonPanelLayout.createSequentialGroup()
+                                .addComponent(editMilestoneButton, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(deleteMilestoneButton, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+        );
+
+        milestoneButtonPanelLayout.setVerticalGroup(
+                milestoneButtonPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(milestoneButtonPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(editMilestoneButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(deleteMilestoneButton, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
         );
 
 
@@ -430,10 +502,12 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addContainerGap())
         );
 
-        editButton.setFont(new Font("Tahoma", 1, fontsize));
-        editButton.setText("Edit");
-        editButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
-        editButton.setEnabled(false);
+
+        editToDoButton.setFont(new Font("Tahoma", 1, fontsize));
+        editToDoButton.setText("Edit");
+        editToDoButton.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, new Color(102, 102, 102), null, null));
+        editToDoButton.setEnabled(false);
+
 
         GroupLayout rightPanelLayout = new GroupLayout(rightPanel);
         rightPanel.setLayout(rightPanelLayout);
@@ -447,12 +521,17 @@ public class Mainsite extends javax.swing.JFrame {
                                                 .addGroup(rightPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                         .addComponent(dataPanel, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addGroup(rightPanelLayout.createSequentialGroup()
-                                                                .addComponent(editButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                               .addComponent(editToDoButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(deleteButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(deleteToDoButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                                 .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)))))
-                                .addContainerGap())
+
+
+
+
+
+                        .addContainerGap())
         );
         rightPanelLayout.setVerticalGroup(
                 rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -463,8 +542,8 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addComponent(dataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 23, Short.MAX_VALUE)
                                 .addGroup(rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(deleteButton, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                                        .addComponent(editButton, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                                     .addComponent(deleteToDoButton, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                                        .addComponent(editToDoButton, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                                         .addComponent(finishButton, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)))
         );
         menuButton.setFont(new Font("Tahoma", 1, fontsize));
@@ -551,7 +630,7 @@ public class Mainsite extends javax.swing.JFrame {
     }
 
     public void setDeleteButtonListener(ActionListener e) {
-        deleteButton.addActionListener(e);
+        deleteToDoButton.addActionListener(e);
     }
 
     public void setArchivButtonListener(ActionListener e) {
@@ -559,6 +638,11 @@ public class Mainsite extends javax.swing.JFrame {
     }
     public void setProdButtonListener(ActionListener e) {
         prodButton.addActionListener(e);
+
+    }
+
+    public void setEditMilestoneButtonListener(ActionListener e) {
+        editMilestoneButton.addActionListener(e);
 
     }
 

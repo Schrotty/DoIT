@@ -135,8 +135,6 @@ public class DatabaseManager {
      */
     public static boolean updateMilestone(Milestone milestone) throws SQLException {
 
-        boolean[] error = new boolean[1];
-        error[0] = false;
 
         if(milestone != null)
         {
@@ -146,15 +144,15 @@ public class DatabaseManager {
             for(ToDo t : todosToAdd)
                 storeMilestoneToDo(MilestoneToDo.create(t, milestone));
 
-            List<ToDo> filtered =  currentAssignedToDos.stream().map(x->x.todo).filter(x -> !todosToAdd.contains(x)).collect(Collectors.toList());
+            List<MilestoneToDo> filtered =  currentAssignedToDos.stream().filter(x -> !todosToAdd.contains(x.todo)).collect(Collectors.toList());
 
-            for(ToDo t :  filtered)
+            for(MilestoneToDo t :  filtered)
                 t.delete();
 
 
         }
 
-        return  !error[0] && getInstance().milestoneAccess.update(milestone) == 1;
+        return  getInstance().milestoneAccess.update(milestone) == 1;
     }
 
     /**
