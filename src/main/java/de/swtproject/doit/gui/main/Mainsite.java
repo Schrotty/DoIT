@@ -505,7 +505,7 @@ public class Mainsite extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(leftPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE))
+                                .addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
