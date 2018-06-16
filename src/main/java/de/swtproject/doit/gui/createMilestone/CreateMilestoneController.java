@@ -153,6 +153,7 @@ public class CreateMilestoneController
                 }
 
                 parent.updateMilestoneList();
+                parent.displayToDo(parent.getCurrentToDo());
 
                 createView.dispose();
                 return;

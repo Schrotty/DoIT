@@ -54,6 +54,10 @@ public class MainController {
         this.updateMilestoneList();
     }
 
+    public ToDo getCurrentToDo() {
+        return this.current;
+    }
+
     /**
      * Load the production {@link ToDo}s from database
      * and display them in a JList.
