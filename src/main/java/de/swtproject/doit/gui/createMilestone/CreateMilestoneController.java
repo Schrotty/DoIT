@@ -1,5 +1,6 @@
 package de.swtproject.doit.gui.createMilestone;
 
+import de.swtproject.doit.Main;
 import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Milestone;
@@ -163,8 +164,11 @@ public class CreateMilestoneController
                     e1.printStackTrace();
                 }
 
+                MainController.setCurrentMilestone(m);
+
                 parent.updateMilestoneList();
                 parent.displayToDo(parent.getCurrentToDo());
+
 
                 createView.dispose();
                 return;

@@ -43,6 +43,20 @@ public class MainController {
     private static Milestone currentMilestone;
 
     /**
+     * Sets the current selected milestone
+     * @param ms the milstone
+     */
+    public static void setCurrentMilestone(Milestone ms)
+    {
+        currentMilestone = ms;
+    }
+
+    public static Milestone getCurrentMilestone()
+    {
+        return currentMilestone;
+    }
+
+    /**
      * The managed {@link Mainsite}.
      */
     public static Mainsite mainView;
@@ -198,6 +212,8 @@ public class MainController {
     public void updateMilestoneList() {
         try {
             mainView.setMilestoneList(DatabaseManager.getAllMilestones(true));
+            if(currentMilestone != null)
+                alterToDoList(currentMilestone.getAssignedToDos());
         } catch (SQLException e) {
             e.printStackTrace();
         }

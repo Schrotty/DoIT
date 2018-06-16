@@ -233,6 +233,15 @@ public class Mainsite extends javax.swing.JFrame {
             milestoneComboBox.addItem(m.toString());
         }
 
+        for(int i = 0; i < this.milestones.size(); i++)
+        {
+            if(this.milestones.get(i).equals(MainController.getCurrentMilestone()))
+                milestoneComboBox.setSelectedIndex(i+1);
+
+        }
+
+
+
     }
 
     /**
