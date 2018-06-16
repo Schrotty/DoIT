@@ -1,9 +1,6 @@
 package de.swtproject.doit.gui.main;
 
-import de.swtproject.doit.core.DatabaseManager;
-import de.swtproject.doit.core.IntervalType;
-import de.swtproject.doit.core.Priority;
-import de.swtproject.doit.core.ToDo;
+import de.swtproject.doit.core.*;
 import de.swtproject.doit.gui.create.CreateController;
 
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
@@ -90,6 +87,7 @@ public class MainController {
     public void displayToDo(ToDo todo) {
         if (todo != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+            String milestones = getReferencedMilestonesAsString(todo);
 
             mainView.title.setText(todo.getTitle());
             mainView.description.setText(todo.getDescription());
@@ -97,6 +95,8 @@ public class MainController {
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
+
+            mainView.affilationLabel.setText(milestones);
         } else {
             mainView.title.setText("");
             mainView.description.setText("");
@@ -105,6 +105,32 @@ public class MainController {
             mainView.dateLabel.setText("-");
             mainView.notifypointLabel.setText("-");
         }
+    }
+
+    /**
+     * Gets all referenced milestones to the given todo as a String
+     * @param todo
+     * @return
+     */
+    private String getReferencedMilestonesAsString(ToDo todo) {
+        StringBuilder ref = new StringBuilder("<html>");
+
+        try {
+            List<Milestone> milestones = DatabaseManager.getAllMilestones(true);
+            for (Milestone m : milestones) {
+                if (m.getAssignedToDos().contains(todo)) {
+                    if (ref.toString().equals("<html>")) {
+                        ref.append(m.getTitle());
+                    } else {
+                        ref.append("<br>" + m.getTitle());
+                    }
+                }
+            }
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+        }
+        ref.append("</html>");
+        return ref.toString();
     }
 
     public void alterToDoList(List<ToDo> toDos) {
@@ -280,7 +306,7 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            current = (ToDo)mainView.todoTable.getSelectedValue();
+            current = (ToDo) mainView.todoTable.getSelectedValue();
             displayToDo(current);
 
             switchCurrentButtonsState();
