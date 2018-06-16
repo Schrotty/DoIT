@@ -274,6 +274,7 @@ public class MainController {
         mainView.setFilterButtonListener(new FilterListener(this));
         mainView.setMilestoneSelectListener(new MilestoneSelectListener());
         mainView.setEditMilestoneButtonListener(new OpenEditMilestoneViewListener(this));
+        mainView.setDeleteMilestoneButtonListener(new DeleteMilestoneListener( this));
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -341,6 +342,41 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             if(MainController.currentMilestone != null)
                 CreateMilestoneController.showView(parent, MainController.currentMilestone);
+        }
+    }
+
+    /**
+     * Listener delete milestone.
+     *
+     */
+    class DeleteMilestoneListener implements ActionListener {
+        private MainController parent;
+        DeleteMilestoneListener(MainController mainController)
+        {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if(MainController.currentMilestone != null)
+            {
+                try
+                {
+                    boolean success = MainController.currentMilestone.delete();
+
+                    if(success)
+                    {
+                        MainController.currentMilestone = null;
+
+                        parent.updateMilestoneList();
+                        parent.displayToDo(parent.getCurrentToDo());
+                    }
+                }
+                catch (SQLException e1)
+                {
+                    e1.printStackTrace();
+                }
+
+            }
         }
     }
 

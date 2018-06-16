@@ -646,6 +646,11 @@ public class Mainsite extends javax.swing.JFrame {
 
     }
 
+    public void setDeleteMilestoneButtonListener(ActionListener e) {
+        deleteMilestoneButton.addActionListener(e);
+
+    }
+
     void setFinishButtonListener(ActionListener e) {
         finishButton.addActionListener(e);
     }
