@@ -172,6 +172,24 @@ public class DatabaseManagerTest {
     }
 
     @org.junit.Test
+    public void deleteToDo() throws SQLException
+    {
+        List<ToDo> ts = new LinkedList<>();
+
+        ToDo td = DatabaseManager.storeToDo(ToDo.create("bernd"));
+
+        ts.add(td);
+        ts.add(DatabaseManager.storeToDo(ToDo.create("brot")));
+
+        Milestone m = Milestone.create("bockwurstpresse");
+        m.setAssignedToDos(ts);
+
+        m = DatabaseManager.storeMilestone(m);
+
+        assertTrue(td.delete());
+    }
+
+    @org.junit.Test
     public void getAllMilestones() throws SQLException {
 
         List<ToDo> ts = new LinkedList<>();
