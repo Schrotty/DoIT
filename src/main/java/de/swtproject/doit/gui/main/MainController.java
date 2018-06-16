@@ -108,7 +108,8 @@ public class MainController {
     }
 
     /**
-     * Gets all referenced milestones to the given todo as a String
+     * Gets the first 9 (!!!) referenced milestones to the given todo as a String
+     *
      * @param todo
      * @return
      */
@@ -117,13 +118,21 @@ public class MainController {
 
         try {
             List<Milestone> milestones = DatabaseManager.getAllMilestones(true);
+            int i = 0;
             for (Milestone m : milestones) {
                 if (m.getAssignedToDos().contains(todo)) {
                     if (ref.toString().equals("<html>")) {
                         ref.append(m.getTitle());
                     } else {
-                        ref.append("<br>" + m.getTitle());
+                        if(i % 3 == 0) {
+                            ref.append("<br>" + m.getTitle());
+                        } else {
+                        ref.append(", " + m.getTitle());
+                        }
                     }
+                    i++;
+                    // bewusst nur 9 werden angezeigt
+                    if (9 == i) break;
                 }
             }
         } catch (SQLException sql) {

@@ -386,7 +386,7 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(dataPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(milestoneLabel, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(affilationLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(affilationLabel, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
