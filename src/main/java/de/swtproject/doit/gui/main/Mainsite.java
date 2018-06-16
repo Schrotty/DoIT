@@ -41,11 +41,14 @@ public class Mainsite extends javax.swing.JFrame {
      * The Todo table.
      */
 // Variables declaration - do not modify
+    /**
+     * The ToDo Tavble
+     */
     javax.swing.JList todoTable;
     /**
      * The Affilation label.
      */
-    private javax.swing.JLabel affilationLabel;
+     javax.swing.JLabel  affilationLabel;
     /**
      * The Archiv button.
      */
@@ -123,7 +126,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Milestone combo box.
      */
-    private javax.swing.JComboBox<String> milestoneComboBox;
+    protected javax.swing.JComboBox<String> milestoneComboBox;
     /**
      * The Milestone label.
      */
@@ -205,7 +208,7 @@ public class Mainsite extends javax.swing.JFrame {
         this.milestones = l;
 
         milestoneComboBox.removeAllItems();
-
+        milestoneComboBox.addItem("No Milestone selected");
         for(Milestone m : l)
         {
             milestoneComboBox.addItem(m.toString());
@@ -341,7 +344,6 @@ public class Mainsite extends javax.swing.JFrame {
         milestoneLabel.setText("Milestone:");
 
         affilationLabel.setFont(new Font("Tahoma", 1, fontsize));
-        affilationLabel.setText("-");
 
         deadlineLabel.setFont(new Font("Tahoma", 1, fontsize)); // NOI18N
         deadlineLabel.setText("Deadline:");
@@ -384,7 +386,7 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(dataPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(milestoneLabel, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(affilationLabel, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(affilationLabel, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
@@ -547,7 +549,7 @@ public class Mainsite extends javax.swing.JFrame {
     public void setCreateMilestoneListener(ActionListener e) {
         createMilestoneMenu.addActionListener(e);
     }
-  
+
     public void setDeleteButtonListener(ActionListener e) {
         deleteButton.addActionListener(e);
     }
@@ -569,5 +571,9 @@ public class Mainsite extends javax.swing.JFrame {
 
         filterButton.addActionListener(e);
 
+    }
+
+    public void setMilestoneSelectListener(ActionListener e) {
+        this.milestoneComboBox.addActionListener(e);
     }
 }

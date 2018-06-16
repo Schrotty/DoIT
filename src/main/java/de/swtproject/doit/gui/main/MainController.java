@@ -1,9 +1,6 @@
 package de.swtproject.doit.gui.main;
 
-import de.swtproject.doit.core.DatabaseManager;
-import de.swtproject.doit.core.IntervalType;
-import de.swtproject.doit.core.Priority;
-import de.swtproject.doit.core.ToDo;
+import de.swtproject.doit.core.*;
 import de.swtproject.doit.gui.create.CreateController;
 
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
@@ -17,6 +14,7 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -42,6 +40,8 @@ public class MainController {
 
     private static ToDo current;
 
+    private static Milestone currentMilestone;
+
     /**
      * The managed {@link Mainsite}.
      */
@@ -55,6 +55,10 @@ public class MainController {
         this.registerListener();
         this.fillToDoList(true);
         this.updateMilestoneList();
+    }
+
+    public ToDo getCurrentToDo() {
+        return this.current;
     }
 
     /**
@@ -90,6 +94,7 @@ public class MainController {
     public void displayToDo(ToDo todo) {
         if (todo != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+            String milestones = getReferencedMilestonesAsString(todo);
 
             mainView.title.setText(todo.getTitle());
             mainView.description.setText(todo.getDescription());
@@ -97,6 +102,8 @@ public class MainController {
 
             mainView.dateLabel.setText(todo.getStart() != null ? formatter.format(todo.getStart()) : "-");
             mainView.notifypointLabel.setText(todo.getDeadline() != null ? formatter.format(todo.getDeadline()) : "-");
+
+            mainView.affilationLabel.setText(milestones);
         } else {
             mainView.title.setText("");
             mainView.description.setText("");
@@ -105,6 +112,41 @@ public class MainController {
             mainView.dateLabel.setText("-");
             mainView.notifypointLabel.setText("-");
         }
+    }
+
+    /**
+     * Gets the first 9 (!!!) referenced milestones to the given todo as a String
+     *
+     * @param todo
+     * @return
+     */
+    private String getReferencedMilestonesAsString(ToDo todo) {
+        StringBuilder ref = new StringBuilder("<html>");
+
+        try {
+            List<Milestone> milestones = DatabaseManager.getAllMilestones(true);
+            int i = 0;
+            for (Milestone m : milestones) {
+                if (m.getAssignedToDos().contains(todo)) {
+                    if (ref.toString().equals("<html>")) {
+                        ref.append(m.getTitle());
+                    } else {
+                        if (i % 3 == 0) {
+                            ref.append("<br>" + m.getTitle());
+                        } else {
+                            ref.append(", " + m.getTitle());
+                        }
+                    }
+                    i++;
+                    // bewusst nur 9 werden angezeigt
+                    if (9 == i) break;
+                }
+            }
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+        }
+        ref.append("</html>");
+        return ref.toString();
     }
 
     public void alterToDoList(List<ToDo> toDos) {
@@ -213,6 +255,7 @@ public class MainController {
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
         mainView.setFilterButtonListener(new FilterListener(this));
+        mainView.setMilestoneSelectListener(new MilestoneSelectListener());
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -280,7 +323,7 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            current = (ToDo)mainView.todoTable.getSelectedValue();
+            current = (ToDo) mainView.todoTable.getSelectedValue();
             displayToDo(current);
 
             switchCurrentButtonsState();
@@ -406,6 +449,33 @@ public class MainController {
 
         public void actionPerformed(ActionEvent e) {
             FilterController.showView(parent);
+        }
+    }
+
+    class MilestoneSelectListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            try {
+                if (0 == mainView.milestoneComboBox.getSelectedIndex()) {
+                    alterToDoList(DatabaseManager.getCollection(mainView.isProd()));
+                } else {
+                    List<Milestone> milestones = DatabaseManager.getAllMilestones(false);
+                    for (Milestone m : milestones) {
+                        if (m.getTitle().equals(mainView.milestoneComboBox.getSelectedItem())) {
+                            currentMilestone = DatabaseManager.getSingleMilestone(m.getId(), true);
+                            currentMilestone.getAssignedToDos().forEach(ms -> System.out.println(m.getTitle()));
+                            break;
+                        }
+                    }
+                    if (null != currentMilestone)
+                        alterToDoList(currentMilestone.getAssignedToDos());
+                }
+            } catch (SQLException sql) {
+                sql.printStackTrace();
+            }
+
         }
     }
 
