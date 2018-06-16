@@ -310,7 +310,7 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(milestonePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(todoScrollPane, GroupLayout.PREFERRED_SIZE, 714, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(todoScrollPane, GroupLayout.PREFERRED_SIZE, 384, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(filterButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
@@ -424,7 +424,7 @@ public class Mainsite extends javax.swing.JFrame {
                                 .addComponent(title, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(priorityLabel)
-                                .addComponent(scrollDescription, GroupLayout.PREFERRED_SIZE, 512, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(scrollDescription, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
 
@@ -512,8 +512,8 @@ public class Mainsite extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(23, 23, 23)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(leftPanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
-                                        .addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)))
+                                        .addComponent(leftPanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                                        .addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)))
         );
 
         pack();
