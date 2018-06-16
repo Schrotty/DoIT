@@ -108,6 +108,7 @@ public class CreateMilestone extends javax.swing.JDialog {
      * Instantiates a new Create to do.
      */
     CreateMilestone(List<ToDo> toDos, Milestone optMilestone) {
+        this.optMilestone = optMilestone;
         setToDoList(toDos);
         initComponents();
     }
