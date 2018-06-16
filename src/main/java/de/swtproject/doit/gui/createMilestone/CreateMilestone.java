@@ -150,6 +150,8 @@ public class CreateMilestone extends javax.swing.JDialog {
 
         todoCreateLabel = new javax.swing.JLabel();
 
+
+        // init if is modifying milestone
         if(optMilestone != null)
         {
             titleTextField.setText(optMilestone.getTitle());
@@ -157,11 +159,9 @@ public class CreateMilestone extends javax.swing.JDialog {
             deadlineButton.setDate(optMilestone.getDeadline());
             descriptionTextArea.setText(optMilestone.getDescription());
 
-            for(int i = 0; i < todosInDatabase.size(); i++)
-            {
-                if(this.optMilestone.getAssignedToDos().contains(this.todosInDatabase.get(i)))
-                    this.todoList.setSelectedIndex(i);
-            }
+            int[] selectedIdc = this.optMilestone.getAssignedToDos().stream().map(x -> this.todosInDatabase.indexOf(x)).mapToInt(Integer::intValue).toArray();
+
+            this.todoList.setSelectedIndices(selectedIdc);
         }
 
         setTitle("Create Milestone");
