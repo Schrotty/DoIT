@@ -126,7 +126,7 @@ public class Mainsite extends javax.swing.JFrame {
     /**
      * The Milestone combo box.
      */
-    private javax.swing.JComboBox<String> milestoneComboBox;
+    protected javax.swing.JComboBox<String> milestoneComboBox;
     /**
      * The Milestone label.
      */
@@ -208,7 +208,7 @@ public class Mainsite extends javax.swing.JFrame {
         this.milestones = l;
 
         milestoneComboBox.removeAllItems();
-
+        milestoneComboBox.addItem("No Milestone selected");
         for(Milestone m : l)
         {
             milestoneComboBox.addItem(m.toString());
@@ -571,5 +571,9 @@ public class Mainsite extends javax.swing.JFrame {
 
         filterButton.addActionListener(e);
 
+    }
+
+    public void setMilestoneSelectListener(ActionListener e) {
+        this.milestoneComboBox.addActionListener(e);
     }
 }

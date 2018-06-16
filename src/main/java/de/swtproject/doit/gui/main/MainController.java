@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -38,6 +39,8 @@ import java.util.List;
 public class MainController {
 
     private static ToDo current;
+
+    private static Milestone currentMilestone;
 
     /**
      * The managed {@link Mainsite}.
@@ -128,10 +131,10 @@ public class MainController {
                     if (ref.toString().equals("<html>")) {
                         ref.append(m.getTitle());
                     } else {
-                        if(i % 3 == 0) {
+                        if (i % 3 == 0) {
                             ref.append("<br>" + m.getTitle());
                         } else {
-                        ref.append(", " + m.getTitle());
+                            ref.append(", " + m.getTitle());
                         }
                     }
                     i++;
@@ -252,6 +255,7 @@ public class MainController {
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
         mainView.setFilterButtonListener(new FilterListener(this));
+        mainView.setMilestoneSelectListener(new MilestoneSelectListener());
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -445,6 +449,33 @@ public class MainController {
 
         public void actionPerformed(ActionEvent e) {
             FilterController.showView(parent);
+        }
+    }
+
+    class MilestoneSelectListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            try {
+                if (0 == mainView.milestoneComboBox.getSelectedIndex()) {
+                    alterToDoList(DatabaseManager.getCollection(mainView.isProd()));
+                } else {
+                    List<Milestone> milestones = DatabaseManager.getAllMilestones(false);
+                    for (Milestone m : milestones) {
+                        if (m.getTitle().equals(mainView.milestoneComboBox.getSelectedItem())) {
+                            currentMilestone = DatabaseManager.getSingleMilestone(m.getId(), true);
+                            currentMilestone.getAssignedToDos().forEach(ms -> System.out.println(m.getTitle()));
+                            break;
+                        }
+                    }
+                    if (null != currentMilestone)
+                        alterToDoList(currentMilestone.getAssignedToDos());
+                }
+            } catch (SQLException sql) {
+                sql.printStackTrace();
+            }
+
         }
     }
 
