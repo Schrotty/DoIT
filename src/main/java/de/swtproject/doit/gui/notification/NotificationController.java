@@ -44,7 +44,8 @@ public class NotificationController {
     private void fillForm() {
         dialog.notifyTypeComb.addItem(NotificationPoint.create("Hours", Calendar.HOUR_OF_DAY));
         dialog.notifyTypeComb.addItem(NotificationPoint.create("Days", Calendar.DAY_OF_YEAR));
-        dialog.notifyTypeComb.addItem(NotificationPoint.create("Week", Calendar.WEEK_OF_YEAR));
+        dialog.notifyTypeComb.addItem(NotificationPoint.create("Weeks", Calendar.WEEK_OF_YEAR));
+        dialog.notifyTypeComb.addItem(NotificationPoint.create("Months", Calendar.MONTH));
         dialog.notiyValueField.setText(String.valueOf(Settings.getNotificationPoint().getRawValue()));
 
         for (int i = 0; i < dialog.notifyTypeComb.getModel().getSize(); i++) {

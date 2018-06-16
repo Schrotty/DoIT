@@ -1,6 +1,9 @@
+import de.swtproject.doit.core.DatabaseManager;
 import de.swtproject.doit.core.NotificationPoint;
+import de.swtproject.doit.core.ToDo;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
@@ -38,5 +41,77 @@ public class NotifyPointTest {
         assertEquals(-5, p.getValue());
         assertEquals(5, p.getRawValue());
         assertEquals("Months", p.toString());
+    }
+
+    @Test
+    public void hourNotifyType() throws SQLException {
+        NotificationPoint p = NotificationPoint.create("Days", String.valueOf(Calendar.HOUR_OF_DAY), "1");
+
+        for (ToDo todo : DatabaseManager.getNotNotifiedTasks()) {
+            if(todo.getStart() != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(todo.getStart());
+                calendar.add(p.getCalenderType(), p.getValue());
+
+                Calendar c = Calendar.getInstance();
+                c.roll(Calendar.HOUR_OF_DAY, -1);
+
+                assertEquals(c.getTime().getDay(), calendar.getTime().getDay());
+            }
+        }
+    }
+
+    @Test
+    public void dailyNotifyType() throws SQLException {
+        NotificationPoint p = NotificationPoint.create("Days", String.valueOf(Calendar.DAY_OF_YEAR), "1");
+
+        for (ToDo todo : DatabaseManager.getNotNotifiedTasks()) {
+            if(todo.getStart() != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(todo.getStart());
+                calendar.add(p.getCalenderType(), p.getValue());
+
+                Calendar c = Calendar.getInstance();
+                c.roll(Calendar.DAY_OF_YEAR, -1);
+
+                assertEquals(c.getTime().getDay(), calendar.getTime().getDay());
+            }
+        }
+    }
+
+    @Test
+    public void weekNotifyType() throws SQLException {
+        NotificationPoint p = NotificationPoint.create("Days", String.valueOf(Calendar.WEEK_OF_YEAR), "1");
+
+        for (ToDo todo : DatabaseManager.getNotNotifiedTasks()) {
+            if(todo.getStart() != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(todo.getStart());
+                calendar.add(p.getCalenderType(), p.getValue());
+
+                Calendar c = Calendar.getInstance();
+                c.roll(Calendar.WEEK_OF_YEAR, -1);
+
+                assertEquals(c.getTime().getMonth(), calendar.getTime().getMonth());
+            }
+        }
+    }
+
+    @Test
+    public void monthlyNotifyType() throws SQLException {
+        NotificationPoint p = NotificationPoint.create("Days", String.valueOf(Calendar.MONTH), "1");
+
+        for (ToDo todo : DatabaseManager.getNotNotifiedTasks()) {
+            if(todo.getStart() != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(todo.getStart());
+                calendar.add(p.getCalenderType(), p.getValue());
+
+                Calendar c = Calendar.getInstance();
+                c.roll(Calendar.MONTH, -1);
+
+                assertEquals(c.getTime().getMonth(), calendar.getTime().getMonth());
+            }
+        }
     }
 }

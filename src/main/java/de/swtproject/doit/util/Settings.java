@@ -65,7 +65,8 @@ public class Settings {
             try {
                 usrConfig.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
+                return false;
             }
         }
 
