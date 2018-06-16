@@ -1,9 +1,11 @@
 package de.swtproject.doit.util;
 
+import de.swtproject.doit.core.NotificationPoint;
 import de.swtproject.doit.core.ToDo;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -25,6 +27,21 @@ public class Settings {
      * The loaded properties
      */
     private Properties properties = new Properties();
+
+    /**
+     * Keyword for the notify display preference.
+     */
+    private static final String NOTIFY_DISPLAY = "display";
+
+    /**
+     * Keyword for the notify display preference.
+     */
+    private static final String NOTIFY_TYPE = "type";
+
+    /**
+     * Keyword for the notify value preference.
+     */
+    private static final String NOTIFY_VALUE = "value";
 
     /**
      * Constructor for new settings singleton.
@@ -62,6 +79,24 @@ public class Settings {
      */
     public static int getNotificationInterval() {
         return Integer.parseInt(self.get("notificationInterval")) * 1000;
+    }
+
+    /**
+     * Get the stored notification point.
+     *
+     * @return the notification point
+     */
+    public static NotificationPoint getNotificationPoint() {
+        return NotificationPoint.create("Days", Calendar.DAY_OF_YEAR);
+    }
+
+    /**
+     * Set the stored notification point.
+     *
+     * @param point the notification point to store
+     */
+    public static void setNotificationPoint(NotificationPoint point) {
+        //nothing
     }
 
     /**

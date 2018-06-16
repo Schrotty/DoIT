@@ -555,6 +555,7 @@ public class Mainsite extends javax.swing.JFrame {
     public void setArchivButtonListener(ActionListener e) {
         archivButton.addActionListener( e);
     }
+
     public void setProdButtonListener(ActionListener e) {
         prodButton.addActionListener(e);
 
@@ -564,10 +565,12 @@ public class Mainsite extends javax.swing.JFrame {
         finishButton.addActionListener(e);
     }
 
-
     public void setFilterButtonListener(ActionListener e) {
-
         filterButton.addActionListener(e);
 
+    }
+
+    public void setNotificationPointButtonListener(ActionListener e) {
+        createNotifiyPointMenu.addActionListener(e);
     }
 }

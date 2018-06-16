@@ -5,14 +5,12 @@ import de.swtproject.doit.core.IntervalType;
 import de.swtproject.doit.core.Priority;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.gui.create.CreateController;
-
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
-
 import de.swtproject.doit.gui.filter.FilterController;
+import de.swtproject.doit.gui.notification.NotificationController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -213,6 +211,7 @@ public class MainController {
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
         mainView.setFilterButtonListener(new FilterListener(this));
+        mainView.setNotificationPointButtonListener(new NotificationListener());
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -409,4 +408,22 @@ public class MainController {
         }
     }
 
+    /**
+     * Listener for set the notification point
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     */
+    class NotificationListener implements ActionListener {
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event that characterizes the action.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            NotificationController.create(mainView).render();
+        }
+    }
 }
