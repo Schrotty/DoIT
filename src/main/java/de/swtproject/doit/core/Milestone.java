@@ -69,7 +69,7 @@ public class Milestone {
      */
     public Milestone(String title) {
         this.title = title;
-        this.assignedToDos = new LinkedList<>();
+        this.assignedToDos = new LinkedList<ToDo>();
     }
 
     /**

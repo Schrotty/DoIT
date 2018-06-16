@@ -39,7 +39,6 @@ import java.util.List;
 public class MainController {
 
     private static ToDo current;
-    private static Milestone currSelectedMilestone = null;
 
     private static Milestone currentMilestone;
 
@@ -258,6 +257,7 @@ public class MainController {
         mainView.setImportJSONMenuListener(new ImportJSONListener());
         mainView.setFilterButtonListener(new FilterListener(this));
         mainView.setMilestoneSelectListener(new MilestoneSelectListener());
+        mainView.setEditMilestoneButtonListener(new OpenEditMilestoneViewListener(this));
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -306,7 +306,25 @@ public class MainController {
         }
 
         public void actionPerformed(ActionEvent e) {
-            CreateMilestoneController.showView(parent, MainController.currSelectedMilestone);
+            CreateMilestoneController.showView(parent, null);
+        }
+    }
+
+    /**
+     * Listener edit milestone.
+     *
+     */
+    class OpenEditMilestoneViewListener implements ActionListener {
+        private MainController parent;
+
+
+        OpenEditMilestoneViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if(MainController.currentMilestone != null)
+                CreateMilestoneController.showView(parent, MainController.currentMilestone);
         }
     }
 

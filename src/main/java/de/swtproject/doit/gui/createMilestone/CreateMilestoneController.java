@@ -153,7 +153,10 @@ public class CreateMilestoneController
 
                     m.setAssignedToDos(milestoneToDos);
 
-                    DatabaseManager.storeMilestone(m);
+                    if(currentMilestoneToEdit != null)
+                        currentMilestoneToEdit.update();
+                    else
+                        DatabaseManager.storeMilestone(m);
 
 
                 } catch (SQLException e1) {
