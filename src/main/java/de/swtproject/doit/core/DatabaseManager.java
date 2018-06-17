@@ -356,14 +356,16 @@ public class DatabaseManager {
     }
 
     /**
+     * @deprecated
+     *
+     * Use Settings.createDataDirIfMissing()
+     *
      * Create the data directory if it's missing
      *
      * @throws IllegalStateException the illegal state exception
      */
+    @Deprecated
     private void createDataDirIfMissing() throws IllegalStateException {
-        File directory = new File(Settings.getDataDir());
-        if (!directory.exists()) {
-            if (!directory.mkdir()) throw new IllegalStateException("data directory not created!");
-        }
+        Settings.createDataDirIfMissing();
     }
 }

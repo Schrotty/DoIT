@@ -2,7 +2,9 @@ package de.swtproject.doit.util;
 
 import de.swtproject.doit.core.NotificationPoint;
 import de.swtproject.doit.core.ToDo;
+import de.swtproject.doit.gui.main.MainController;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.Calendar;
 import java.util.Properties;
@@ -58,14 +60,20 @@ public class Settings {
         }
     }
 
+    /**
+     * Init the user settings file
+     *
+     * @return was init successful?
+     */
     public static boolean initUsrSettings() {
+        Settings.createDataDirIfMissing();
         File usrConfig = new File(Settings.getUserPropertiesPath());
 
         if (!usrConfig.exists()) {
             try {
                 usrConfig.createNewFile();
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(MainController.mainView, "Unable to initiliaze the user settings storage!", "Failure!", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
@@ -73,7 +81,7 @@ public class Settings {
         try (InputStream usrProps = new FileInputStream(usrConfig)) {
             self.usrProps.load(usrProps);
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(MainController.mainView, "Unable to read from user settings storage!", "Failure!", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -98,7 +106,7 @@ public class Settings {
      *
      * @return the data dir path
      */
-    public static String getDataDir() {
+    private static String getDataDir() {
         return self.get("dataDir");
     }
 
@@ -150,6 +158,18 @@ public class Settings {
         }
 
         return true;
+    }
+
+    /**
+     * Create the data directory if it's missing
+     *
+     * @throws IllegalStateException the illegal state exception
+     */
+    public static void createDataDirIfMissing() throws IllegalStateException {
+        File directory = new File(Settings.getDataDir());
+        if (!directory.exists()) {
+            if (!directory.mkdir()) throw new IllegalStateException("data directory not created!");
+        }
     }
 
     /**
