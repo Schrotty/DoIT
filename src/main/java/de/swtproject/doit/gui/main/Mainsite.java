@@ -2,7 +2,7 @@ package de.swtproject.doit.gui.main;
 
 
 import de.swtproject.doit.core.Milestone;
-
+import de.swtproject.doit.gui.edit.Edit;
 import de.swtproject.doit.gui.create.CreateToDo;
 import de.swtproject.doit.gui.filter.Filter;
 
@@ -636,6 +636,11 @@ public class Mainsite extends javax.swing.JFrame {
     public void setArchivButtonListener(ActionListener e) {
         archivButton.addActionListener( e);
     }
+
+    public void setEditToDoButtonListener(ActionListener e){
+        editToDoButton.addActionListener(e);
+    }
+
     public void setProdButtonListener(ActionListener e) {
         prodButton.addActionListener(e);
 

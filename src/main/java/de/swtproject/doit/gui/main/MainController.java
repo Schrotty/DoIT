@@ -5,6 +5,7 @@ import de.swtproject.doit.gui.create.CreateController;
 
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
 
+import de.swtproject.doit.gui.edit.EditController;
 import de.swtproject.doit.gui.filter.FilterController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
@@ -14,7 +15,6 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -38,12 +38,12 @@ import java.util.List;
  */
 public class MainController {
 
-    private static ToDo current;
+    private static ToDo getCurrentToDo;
 
     private static Milestone currentMilestone;
 
     /**
-     * Sets the current selected milestone
+     * Sets the getCurrentToDo selected milestone
      * @param ms the milstone
      */
     public static void setCurrentMilestone(Milestone ms)
@@ -73,7 +73,7 @@ public class MainController {
     }
 
     public static ToDo getCurrentToDo() {
-        return current;
+        return getCurrentToDo;
     }
 
     /**
@@ -275,6 +275,7 @@ public class MainController {
         mainView.setMilestoneSelectListener(new MilestoneSelectListener());
         mainView.setEditMilestoneButtonListener(new OpenEditMilestoneViewListener(this));
         mainView.setDeleteMilestoneButtonListener(new DeleteMilestoneListener( this));
+        mainView.setEditToDoButtonListener(new OpenEditViewListener(this));
     }
 
     private void switchButtonHighlight(JButton activate, JButton deactivate) {
@@ -283,9 +284,9 @@ public class MainController {
     }
 
     private void switchCurrentButtonsState() {
-        mainView.finishButton.setEnabled(current != null);
-        mainView.editToDoButton.setEnabled(current != null);
-        mainView.deleteToDoButton.setEnabled(current != null);
+        mainView.finishButton.setEnabled(getCurrentToDo != null);
+        mainView.editToDoButton.setEnabled(getCurrentToDo != null);
+        mainView.deleteToDoButton.setEnabled(getCurrentToDo != null);
     }
 
     /**
@@ -324,6 +325,21 @@ public class MainController {
 
         public void actionPerformed(ActionEvent e) {
             CreateMilestoneController.showView(parent, null);
+        }
+    }
+
+    /**
+     * Listener edit todo
+     */
+    class OpenEditViewListener implements ActionListener {
+        private MainController parent;
+
+        OpenEditViewListener(MainController mainController) {
+            this.parent = mainController;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditController.showView(parent);
         }
     }
 
@@ -396,8 +412,8 @@ public class MainController {
          */
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            current = (ToDo) mainView.todoTable.getSelectedValue();
-            displayToDo(current);
+            getCurrentToDo = (ToDo) mainView.todoTable.getSelectedValue();
+            displayToDo(getCurrentToDo);
 
             switchCurrentButtonsState();
         }
@@ -408,8 +424,8 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                if (current != null)
-                    current.delete();
+                if (getCurrentToDo != null)
+                    getCurrentToDo.delete();
             } catch (SQLException sql) {
                 sql.printStackTrace();
             }
@@ -503,7 +519,7 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                current.finish();
+                getCurrentToDo.finish();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
