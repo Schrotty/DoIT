@@ -1,9 +1,12 @@
 package de.swtproject.doit.util;
 
+import de.swtproject.doit.core.NotificationPoint;
 import de.swtproject.doit.core.ToDo;
+import de.swtproject.doit.gui.main.MainController;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.swing.*;
+import java.io.*;
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -22,19 +25,71 @@ public class Settings {
     private static Settings self = new Settings();
 
     /**
-     * The loaded properties
+     * The loaded system properties
      */
-    private Properties properties = new Properties();
+    private Properties sysProps = new Properties();
+
+    /**
+     * The loaded user properties
+     */
+    private Properties usrProps = new Properties();
+
+    /**
+     * Keyword for the notify display preference.
+     */
+    private static final String NOTIFY_DISPLAY = "USER_NOTIFICATION_DISPLAY";
+
+    /**
+     * Keyword for the notify display preference.
+     */
+    private static final String NOTIFY_TYPE = "USER_NOTIFICATION_TYPE";
+
+    /**
+     * Keyword for the notify value preference.
+     */
+    private static final String NOTIFY_VALUE = "USER_NOTIFICATION_VALUE";
 
     /**
      * Constructor for new settings singleton.
      */
     private Settings() {
-        try (InputStream input = ToDo.class.getClassLoader().getResourceAsStream("config.properties")) {
-            properties.load(input);
+        try (InputStream sysProps = ToDo.class.getClassLoader().getResourceAsStream("config.properties")) {
+            this.sysProps.load(sysProps);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    /**
+     * Init the user settings file
+     *
+     * @return was init successful?
+     */
+    public static boolean initUsrSettings() {
+        Settings.createDataDirIfMissing();
+        File usrConfig = new File(Settings.getUserPropertiesPath());
+
+        if (!usrConfig.exists()) {
+            try {
+                usrConfig.createNewFile();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(MainController.mainView, "Unable to initiliaze the user settings storage!", "Failure!", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
+        try (InputStream usrProps = new FileInputStream(usrConfig)) {
+            self.usrProps.load(usrProps);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(MainController.mainView, "Unable to read from user settings storage!", "Failure!", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isUsrSettingsInit() {
+        return new File(Settings.getUserPropertiesPath()).exists();
     }
 
     /**
@@ -51,7 +106,7 @@ public class Settings {
      *
      * @return the data dir path
      */
-    public static String getDataDir() {
+    private static String getDataDir() {
         return self.get("dataDir");
     }
 
@@ -65,12 +120,65 @@ public class Settings {
     }
 
     /**
+     * Get the users properties file path.
+     *
+     * @return the file path
+     */
+    public static String getUserPropertiesPath() {
+        return self.get("usrFile");
+    }
+
+    /**
+     * Get the stored notification point.
+     *
+     * @return the notification point
+     */
+    public static NotificationPoint getNotificationPoint() {
+        return NotificationPoint.create(
+                self.usrProps.getProperty(NOTIFY_DISPLAY, "Days"),
+                self.usrProps.getProperty(NOTIFY_TYPE, String.valueOf(Calendar.DAY_OF_YEAR)),
+                self.usrProps.getProperty(NOTIFY_VALUE, "1")
+        );
+    }
+
+    /**
+     * Set the stored notification point.
+     *
+     * @param point the notification point to store
+     */
+    public static boolean setNotificationPoint(NotificationPoint point) {
+        self.usrProps.setProperty(NOTIFY_DISPLAY, point.getDisplayName());
+        self.usrProps.setProperty(NOTIFY_TYPE, String.valueOf(point.getCalenderType()));
+        self.usrProps.setProperty(NOTIFY_VALUE, String.valueOf(point.getRawValue()));
+
+        try {
+            self.usrProps.store(new FileOutputStream(Settings.getUserPropertiesPath()), null);
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Create the data directory if it's missing
+     *
+     * @throws IllegalStateException the illegal state exception
+     */
+    public static void createDataDirIfMissing() throws IllegalStateException {
+        File directory = new File(Settings.getDataDir());
+        if (!directory.exists()) {
+            if (!directory.mkdir()) throw new IllegalStateException("data directory not created!");
+        }
+    }
+
+    /**
      * Get the value of a given property.
      *
      * @param key the property
      * @return the loaded value
      */
     private String get(String key) {
-        return properties.getProperty(key);
+        return sysProps.getProperty(key);
     }
 }

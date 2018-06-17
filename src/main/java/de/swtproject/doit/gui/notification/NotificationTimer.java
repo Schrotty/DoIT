@@ -1,6 +1,7 @@
-package de.swtproject.doit.gui.main;
+package de.swtproject.doit.gui.notification;
 
 import de.swtproject.doit.core.DatabaseManager;
+import de.swtproject.doit.core.NotificationPoint;
 import de.swtproject.doit.core.ToDo;
 import de.swtproject.doit.util.Settings;
 
@@ -31,11 +32,12 @@ public class NotificationTimer {
      * @throws SQLException when a sql exception occurs
      */
     private static void checkToDos() throws SQLException {
+        NotificationPoint npoint = Settings.getNotificationPoint();
         for (ToDo todo : DatabaseManager.getNotNotifiedTasks()) {
             if(todo.getStart() != null){
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(todo.getStart());
-                calendar.add(Calendar.DAY_OF_YEAR, -1);
+                calendar.add(npoint.getCalenderType(), npoint.getValue());
 
                 if(calendar.before(Calendar.getInstance())){
                     renderNotification(todo);

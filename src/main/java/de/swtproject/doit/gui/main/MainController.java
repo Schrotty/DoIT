@@ -2,15 +2,13 @@ package de.swtproject.doit.gui.main;
 
 import de.swtproject.doit.core.*;
 import de.swtproject.doit.gui.create.CreateController;
-
 import de.swtproject.doit.gui.createMilestone.CreateMilestoneController;
-
 import de.swtproject.doit.gui.edit.EditController;
 import de.swtproject.doit.gui.filter.FilterController;
+import de.swtproject.doit.gui.notification.NotificationController;
 import de.swtproject.doit.gui.util.PriorityCellRenderer;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -272,6 +270,7 @@ public class MainController {
         mainView.setExportJSONMenuListener(new ExportJSONListener());
         mainView.setImportJSONMenuListener(new ImportJSONListener());
         mainView.setFilterButtonListener(new FilterListener(this));
+        mainView.setNotificationPointButtonListener(new NotificationListener());
         mainView.setMilestoneSelectListener(new MilestoneSelectListener());
         mainView.setEditMilestoneButtonListener(new OpenEditMilestoneViewListener(this));
         mainView.setDeleteMilestoneButtonListener(new DeleteMilestoneListener( this));
@@ -541,6 +540,25 @@ public class MainController {
         }
     }
 
+    /**
+     * Listener for set the notification point
+     *
+     * @author Ruben Maurer
+     * @version 1.0
+     */
+    class NotificationListener implements ActionListener {
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event that characterizes the action.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            NotificationController.create(mainView).render();
+        }
+    }
+  
     class MilestoneSelectListener implements ActionListener {
 
         @Override
@@ -567,5 +585,4 @@ public class MainController {
 
         }
     }
-
 }
