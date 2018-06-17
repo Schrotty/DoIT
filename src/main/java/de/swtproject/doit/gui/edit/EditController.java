@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,11 +64,19 @@ public class EditController {
              fillSelects(controller);
              fillSelectsIntv(controller);
 
-             for (Milestone mile : DatabaseManager.getAllMilestones(false)) {
-                 for (int i = 0; i < controller.editView.milestonesOptionsComboBox.getModel().getSize(); i++) {
-                     if (Objects.equals(mile.toString(), controller.editView.milestonesOptionsComboBox.getItemAt(i))) {
-                         controller.editView.milestonesOptionsComboBox.setSelectedIndex(i);
+             List<Milestone> milestones = DatabaseManager.getAllMilestones(true);
+             ComboBoxModel<String> model = controller.editView.milestonesOptionsComboBox.getModel();
+             int modelSize = model.getSize();
+
+             for (Milestone m : milestones) {
+                 if (m.getAssignedToDos().contains(MainController.getCurrentToDo())) {
+                     for (int i = 0; i < modelSize; i++) {
+                         if (model.getElementAt(i).equals(m.getTitle())) {
+                             controller.editView.milestonesOptionsComboBox.setSelectedIndex(i);
+                             break;
+                         }
                      }
+                     break;
                  }
              }
              controller.editView.setVisible(true);
@@ -162,8 +171,22 @@ public class EditController {
                         MainController.getCurrentToDo().setInterval(IntervalType.valueOf(editView.intervalComboBox.getSelectedItem().toString().toUpperCase()));
                         MainController.getCurrentToDo().setStart(editView.dateToStartButton.getDate());
                         MainController.getCurrentToDo().setDeadline(editView.deadlineButton.getDate());
+
                         MainController.getCurrentToDo().update();
 
+                        Milestone milestone = null;
+
+                        if (0 != editView.milestonesOptionsComboBox.getSelectedIndex()) {
+                            for (Milestone m : DatabaseManager.getAllMilestones(true)) {
+                                if (m.getTitle().equals(editView.milestonesOptionsComboBox.getSelectedItem())) {
+                                    milestone = m;
+                                    milestone.getAssignedToDos().add(MainController.getCurrentToDo());
+                                }
+                            }
+                        }
+                        if (null != milestone) {
+                            milestone.update();
+                        }
 
                         parent.updateList(parent.mainView.isProd());
                     } catch (Exception exception) {
