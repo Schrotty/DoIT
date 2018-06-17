@@ -167,7 +167,7 @@ public class CreateMilestoneController
                 MainController.setCurrentMilestone(m);
 
                 parent.updateMilestoneList();
-                parent.displayToDo(parent.getCurrentToDo());
+                parent.displayToDo(MainController.getCurrentToDo());
 
 
                 createView.dispose();

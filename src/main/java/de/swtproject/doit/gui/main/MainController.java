@@ -72,8 +72,8 @@ public class MainController {
 
     }
 
-    public ToDo getCurrentToDo() {
-        return this.current;
+    public static ToDo getCurrentToDo() {
+        return current;
     }
 
     /**
